@@ -1,4 +1,3 @@
-// src/componentes/CardProduto/CardProduto.jsx
 import { Button } from '../Button/Button';
 import './CardProduct.css'; 
 

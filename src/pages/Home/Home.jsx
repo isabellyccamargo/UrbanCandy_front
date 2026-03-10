@@ -11,7 +11,6 @@ const Home = () => {
     const fetchItems = async () => {
       try {
         const data = await getFeaturedProducts();
-        // Acessando data.data conforme seu código anterior
         const onlyFeatured = data.data.filter(p => Number(p.featured) === 1);
         setProducts(onlyFeatured);
       } catch {
@@ -32,7 +31,7 @@ const Home = () => {
 
       <div className="carousel-container">
         <div className="products-slider">
-          {/* Renderizamos a lista duas vezes ([...products, ...products]) para o loop infinito visual */}
+          {}
           {[...products, ...products].map((product, index) => (
             <CardProduct key={`${product.id_product}-${index}`} product={product} />
           ))}

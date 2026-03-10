@@ -4,7 +4,6 @@
   box-shadow: 0 10px 20px rgba(0,0,0,0.05);
   width: 400px;
   overflow: hidden; 
-  flex: 0 0 auto;
   margin-bottom: 10px;
   margin-top: 20px;
   transition: box-shadow 0.3s ease;
@@ -50,9 +49,3 @@
     font-size: 1.4rem;
 }
 
-.product-footer .btn-universal {
-    padding: 8px 25px;
-    border-radius: 50px; 
-    font-size: 0.9rem;
-    font-weight: 600;
-}

@@ -1,4 +1,4 @@
-/* Limpeza total das margens e paddings */
+
 * {
   margin: 0;
   padding: 0;
@@ -7,7 +7,7 @@
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #ffffff; /* Fundo branco do Figma */
+  background-color: #ffffff;
   color: #333333;
 }
 
