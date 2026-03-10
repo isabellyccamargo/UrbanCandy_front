@@ -1,26 +1,38 @@
 .highlights-section {
-  padding: 60px 20px;
+  padding: 60px 0;
   text-align: center;
-  background-color: #FFF5F7; 
+  background-color: #FFF5F7;
+  overflow: hidden; 
 }
 
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+}
+
+.products-slider {
+  display: flex;
+  gap: 30px; 
+  padding: 20px;
+  width: max-content; 
+  animation: slideInfinito 30s linear infinite;
+}
+
+.products-slider:hover {
+  animation-play-state: paused;
+}
 
 .products-grid {
   display: flex;
   justify-content: flex-start;
-  gap: 32px; 
+  gap: 30px; 
   flex-wrap: nowrap; 
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   overflow-x: auto;
   padding-bottom: 20px;
-}
-
-.products-grid::-webkit-scrollbar {
-  display: none;
-}
-.highlights-header {
-  margin-bottom: 50px;
 }
 
 .highlights-header h2 {
@@ -33,4 +45,13 @@
 .highlights-header p {
   color: #888;
   font-size: 1.1rem;
+}
+
+@keyframes slideInfinito {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-50% - 15px)); 
+  }
 }
