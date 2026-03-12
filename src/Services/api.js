@@ -5,6 +5,11 @@ const api = axios.create({
 });
 
 export const getFeaturedProducts = async () => {
-  const response = await api.get('/produto/listar'); 
-  return response.data;
+  try {
+    const response = await api.get('/produto/listar'); 
+    return response.data; 
+  } catch (error) {
+    console.error("Erro ao buscar produtos:", error);
+    throw error;
+  }
 };

@@ -28,6 +28,7 @@ export const Header = () => {
             <div className="dropdown-menu">
               <Link to="/perfil" className="dropdown-item">Meu Perfil</Link>
               <Link to="/pedidos" className="dropdown-item">Meus Pedidos</Link>
+              <Link to="/admin" className="dropdown-item">Área do Administrador</Link>
               <hr />
               <button className="dropdown-item logout">Sair</button>
             </div>
