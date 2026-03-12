@@ -1,10 +1,10 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getFeaturedProducts } from '../../../Services/api'; 
-import { CardProduct } from '../../../componentes/CardProduct/CardProduct';
+import { getFeaturedProducts } from '../../Services/Api';
+import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 
 export const MenuByCategory = () => {
-  const { categoryName } = useParams(); 
+  const { categoryName } = useParams();
   const [products, setProducts] = useState([]);
 
   useEffect(() => {

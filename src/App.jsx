@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './componentes/Header/Header';
-import  Home  from './pages/Home/Home'; 
-import { MenuByCategory } from './pages/Home/Menu/MenuByCategory';
+import Home from './pages/Home/Home';
+import { MenuByCategory } from './pages/Menu/MenuByCategory';
 
 function App() {
   return (
