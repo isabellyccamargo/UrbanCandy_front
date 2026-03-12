@@ -3,6 +3,7 @@ import { getFeaturedProducts } from '../../Services/api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 import { CategoryCard } from '../../componentes/Category/CategoryCard';
 import { FeatureCard } from '../../componentes/Featured/FeaturedCard';
+import { Link } from 'react-router-dom'; 
 import imgIngredientes from '../../assets/ingredientes.png';
 import imgComAmor from '../../assets/comAmor.png';
 import sabor from '../../assets/sabor.png';
@@ -26,29 +27,32 @@ const Home = () => {
     const fetchItems = async () => {
       try {
         const response = await getFeaturedProducts();
-        const rawData = response.data ? response.data : response;
+        const rawData = response?.data || response || [];
 
         if (Array.isArray(rawData)) {
-          setProducts(rawData.filter(p => Number(p.featured) === 1));
+          setProducts(rawData.filter(p => p && Number(p.featured) === 1));
 
           const listaUnica = [];
           const jaAdicionadas = new Set();
 
           rawData.forEach(p => {
-            const categoryName = typeof p.category === 'object' ? p.category.name_category : p.category;
+            const categoryObj = p?.category;
+            const categoryName = typeof categoryObj === 'object' && categoryObj !== null
+              ? categoryObj.name_category
+              : (typeof p?.category === 'string' ? p.category : "Geral");
 
-            if (!jaAdicionadas.has(categoryName)) {
+            if (categoryName && !jaAdicionadas.has(categoryName)) {
               jaAdicionadas.add(categoryName);
               listaUnica.push({
                 name: categoryName,
-                image: fotosDasCategorias[categoryName] || p.image
+                image: fotosDasCategorias[categoryName] || p?.image
               });
             }
           });
           setCategories(listaUnica);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Erro na Home:", err);
       }
     };
     fetchItems();
@@ -138,8 +142,12 @@ const Home = () => {
               para presentear ou se presentear.
             </p>
             <div className="about-buttons">
-              <button className="btn-filled">Fazer Pedido</button>
-              <button className="btn-outline">Ver Cardápio</button>
+              <Link to="/cardapio/brigadeiros" className="btn-filled">
+                Fazer Pedido
+              </Link>
+              <Link to="/cardapio/brigadeiros" className="btn-outline">
+                Ver Cardápio
+              </Link>
             </div>
           </div>
 

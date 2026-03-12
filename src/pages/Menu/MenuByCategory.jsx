@@ -1,29 +1,80 @@
-import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getFeaturedProducts } from '../../Services/Api';
+import { useParams } from 'react-router-dom';
+import { getProductsByCategory } from '../../Services/Api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
+import { NavLink } from 'react-router-dom';
+import './MenuByCategory.css';
 
 export const MenuByCategory = () => {
   const { categoryName } = useParams();
+  const categoriesMenu = ["Cookies", "Brigadeiros", "Brownies"];
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await getFeaturedProducts();
-      const filtered = data.data.filter(
-        p => p.category.toLowerCase() === categoryName.toLowerCase()
-      );
-      setProducts(filtered);
+      setLoading(true);
+      try {
+        const response = await getProductsByCategory(categoryName);
+        const rawData = response.data?.data || response.data || response;
+
+        if (Array.isArray(rawData)) {
+          setProducts(rawData);
+        } else {
+          setProducts([]);
+        }
+      } catch (err) {
+        console.error("Erro ao carregar categoria:", err);
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchProducts();
+
+    if (categoryName) {
+      fetchProducts();
+    }
+    window.scrollTo(0, 0);
   }, [categoryName]);
 
   return (
-    <section className="menu-section">
-      <h2>Produtos: {categoryName}</h2>
-      <div className="products-grid">
-        {products.map(p => <CardProduct key={p.id_product} product={p} />)}
-      </div>
-    </section>
+    <main className="menu-container">
+      
+      <nav className="category-nav">
+        <ul>
+          {categoriesMenu.map((cat) => (
+            <li key={cat}>
+              <NavLink 
+                to={`/cardapio/${cat.toLowerCase()}`}
+                className={({ isActive }) => isActive ? "active-link" : ""}
+              >
+                {cat}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav> 
+      
+      <header className="menu-header">
+        <h1 style={{ textTransform: 'capitalize' }}>{categoryName}</h1>
+        
+        <div className="divider"></div>
+        <h2 className="menu-subtitle">Escolha seu sabor favorito</h2>
+      </header>
+
+      {loading ? (
+        <div className="loading">Carregando doces...</div>
+      ) : (
+        <section className="products-grid">
+          {products.length > 0 ? (
+            products.map((product) => (
+              <CardProduct key={product.id_product} product={product} showDescription={true} />
+            ))
+          ) : (
+            <p className="no-products">Nenhum doce encontrado nesta categoria.</p>
+          )}
+        </section>
+      )}
+    </main>
   );
 };
