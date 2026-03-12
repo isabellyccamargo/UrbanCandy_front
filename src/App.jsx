@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Header } from './componentes/Header/Header';
 import Home from './pages/Home/Home';
 import { MenuByCategory } from './pages/Menu/MenuByCategory';
+import { Footer } from './componentes/Footer/Footer';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/carrinho" element={<div>Página do Carrinho</div>} />
         <Route path="/perfil" element={<div>Página do Perfil</div>} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
