@@ -1,9 +1,8 @@
 .menu-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 10px; 
-  padding-bottom: 60px;
-  min-height: 80vh; 
+  padding: 10px 0 60px;
+  min-height: 80vh;
 }
 
 .menu-header {
@@ -15,40 +14,34 @@
   color: #D81B60;
   font-size: 3rem;
   text-transform: capitalize;
-  margin-bottom: 10px;
+  margin: 20px 0 10px; 
+}
+
+.menu-subtitle {
+  color: #777;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 20px;
+  letter-spacing: 0.5px;
 }
 
 .divider {
-  width: 80px;
+  width: 60px;
   height: 4px;
   background: #D81B60;
   margin: 0 auto;
   border-radius: 2px;
 }
 
-.products-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 40px;
-  justify-items: center;
-}
-
-.loading, .no-products {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #666;
-  margin-top: 50px;
-}
-
 .category-nav {
   display: flex;
   justify-content: center;
   margin: 0 auto 40px;
-  background-color: #fef0f5; 
+  background-color: #fef0f5;
   padding: 15px 30px;
-  border-radius: 50px; 
-  max-width: fit-content; 
-  box-shadow: 0 4px 15px rgba(216, 27, 96, 0.08); 
+  border-radius: 50px;
+  max-width: fit-content;
+  box-shadow: 0 4px 15px rgba(216, 27, 96, 0.08);
   border: 1px solid rgba(216, 27, 96, 0.1);
 }
 
@@ -63,36 +56,30 @@
   color: #666;
   font-weight: 600;
   font-size: 1.1rem;
-  transition: color 0.3s;
+  transition: 0.3s;
   padding: 5px 10px;
 }
 
-.category-nav a:hover {
+.category-nav a:hover, 
+.category-nav .active-link {
   color: #D81B60;
 }
 
 .category-nav .active-link {
-  color: #D81B60;
   border-bottom: 3px solid #D81B60;
 }
 
-.menu-header h1 {
-  text-transform: capitalize;
-  margin-top: 20px;
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 40px;
+  justify-items: center;
 }
 
-.menu-subtitle {
-  color: #777; 
+.loading, 
+.no-products {
+  text-align: center;
   font-size: 1.2rem;
-  font-weight: 600; 
-  margin-top: 20px;
-  letter-spacing: 0.5px;
-}
-
-.divider {
-  width: 60px;
-  height: 4px;
-  background: #D81B60;
-  margin: 0 auto;
-  border-radius: 2px;
+  color: #666;
+  margin-top: 50px;
 }

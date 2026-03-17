@@ -74,3 +74,27 @@
     background-color: #fce4ec;
     color: #E91E63;
 }
+
+.user-menu-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaço entre o ícone e o nome */
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+.user-name-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5D4037;
+  max-width: 120px; /* Evita nomes gigantes quebrando o layout */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-menu-trigger:hover {
+  background-color: rgba(93, 64, 55, 0.05);
+}

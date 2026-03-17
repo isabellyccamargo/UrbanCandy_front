@@ -6,11 +6,6 @@
   overflow: hidden; 
   margin-bottom: 10px;
   margin-top: 20px;
-  transition: box-shadow 0.3s ease;
-}
-
-.product-card:hover {
-  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
 }
 
 .product-image {
@@ -21,7 +16,7 @@
 }
 
 .product-card:hover .product-image {
-  transform: scale(1.15);
+  transform: scale(1.10);
 }
 
 .product-info {

@@ -1,15 +1,30 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getProductsByCategory } from '../../Services/Api';
+import { getAllCategory } from '../../Services/Api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 import { NavLink } from 'react-router-dom';
 import './MenuByCategory.css';
 
 export const MenuByCategory = () => {
   const { categoryName } = useParams();
-  const categoriesMenu = ["Cookies", "Brigadeiros", "Brownies"];
+  const [categoriesMenu, setCategoriesMenu] = useState([])
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await getAllCategory()
+        const listaDeCategorias = response.data?.data || response.data || response;
+        setCategoriesMenu(listaDeCategorias);
+      } catch (err) {
+        console.error("Erro ao buscar categorias", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -39,25 +54,25 @@ export const MenuByCategory = () => {
 
   return (
     <main className="menu-container">
-      
+
       <nav className="category-nav">
         <ul>
           {categoriesMenu.map((cat) => (
-            <li key={cat}>
-              <NavLink 
-                to={`/cardapio/${cat.toLowerCase()}`}
+            <li key={cat.id_category}>
+              <NavLink
+                to={`/cardapio/${cat.name_category.toLowerCase()}`} 
                 className={({ isActive }) => isActive ? "active-link" : ""}
               >
-                {cat}
+                {cat.name_category} 
               </NavLink>
             </li>
           ))}
         </ul>
-      </nav> 
-      
+      </nav>
+
       <header className="menu-header">
         <h1 style={{ textTransform: 'capitalize' }}>{categoryName}</h1>
-        
+
         <div className="divider"></div>
         <h2 className="menu-subtitle">Escolha seu sabor favorito</h2>
       </header>

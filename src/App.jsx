@@ -3,6 +3,7 @@ import { Header } from './componentes/Header/Header';
 import Home from './pages/Home/Home';
 import { MenuByCategory } from './pages/Menu/MenuByCategory';
 import { Footer } from './componentes/Footer/Footer';
+import MeusDados from './pages/MeusDados/MeusDados'; 
 
 function App() {
   return (
@@ -12,7 +13,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/cardapio/:categoryName" element={<MenuByCategory />} />
         <Route path="/carrinho" element={<div>Página do Carrinho</div>} />
-        <Route path="/perfil" element={<div>Página do Perfil</div>} />
+        <Route path="/perfil" element={<MeusDados />} />
       </Routes>
       <Footer />
     </BrowserRouter>
