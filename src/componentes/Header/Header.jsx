@@ -2,27 +2,31 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Users } from 'lucide-react';
 import LoginModal from '../../componentes/Login/LoginModal';
+import { Button } from '../Button/Button';
 import './Header.css';
 
+import { useCart } from "../../Hooks/UseCart";
+
 export const Header = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { setIsCartOpen, cart, isLoginModalOpen, setIsLoginModalOpen, clearCart } = useCart();
   const navigate = useNavigate();
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = localStorage.getItem('@UrbanCandy:user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
   const handleProtectedLink = (e, path) => {
     e.preventDefault();
     if (!user) {
-      setIsModalOpen(true);
+      setIsLoginModalOpen(true);
     } else {
       navigate(path);
     }
   };
-
   const handleLogout = () => {
-    localStorage.removeItem('user');
+    localStorage.removeItem('@UrbanCandy:user');
+    localStorage.removeItem('@UrbanCandy:token');
+    clearCart();
     setUser(null);
     navigate('/');
   };
@@ -35,10 +39,10 @@ export const Header = () => {
         </Link>
 
         <div className="header-actions">
-          <Link to="/carrinho" className="icon-btn">
+          <div className="icon-btn" onClick={() => setIsCartOpen(true)} style={{ cursor: 'pointer' }}>
             <ShoppingCart size={24} color="#5D4037" />
-            <span className="cart-badge">0</span>
-          </Link>
+            <span className="cart-badge">{cart.items.length}</span>
+          </div>
 
           <div className="user-menu-container">
             <div className="user-menu-trigger">
@@ -56,16 +60,18 @@ export const Header = () => {
               <a href="#" onClick={(e) => handleProtectedLink(e, '/pedidos')} className="dropdown-item">
                 Meus Pedidos
               </a>
-
-              {user?.administrator === '1' && (
-                <Link to="/admin" className="dropdown-item">Área do Administrador</Link>
-              )}
-
+              <a href="#" onClick={(e) => handleProtectedLink(e, '/admin')} className="dropdown-item">
+                Área Administrador
+              </a>
               <hr />
               {user ? (
-                <button onClick={handleLogout} className="dropdown-item logout">Sair</button>
+                <Button onClick={handleLogout} variant="primary">
+                  Sair
+                </Button>
               ) : (
-                <button onClick={() => setIsModalOpen(true)} className="dropdown-item">Entrar</button>
+                <Button onClick={() => setIsLoginModalOpen(true)} variant="primary">
+                  Entrar
+                </Button>
               )}
             </div>
           </div>
@@ -73,9 +79,13 @@ export const Header = () => {
       </div>
 
       <LoginModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onLoginSuccess={(userData) => setUser(userData)}
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        onLoginSuccess={(userData) => {
+          setUser(userData);
+          setIsLoginModalOpen(false);
+          navigate('/checkout');
+        }}
       />
     </header>
   );

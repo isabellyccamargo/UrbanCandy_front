@@ -29,7 +29,7 @@
 
 .categories-header { text-align: center; margin-bottom: 60px; }
 
-.carousel-container, .about-buttons { display: flex; margin-top: 30px; }
+.carousel-container, .about-buttons { display: flex; margin-top: 30px; gap: 15px;}
 .carousel-container { width: 100%; overflow: hidden; position: relative; }
 
 .products-slider {
@@ -75,6 +75,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
+  text-decoration: none;
 }
 
 .btn-filled { background-color: #d12f7a; color: white; border: none; }

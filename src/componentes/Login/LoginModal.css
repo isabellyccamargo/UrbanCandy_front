@@ -73,7 +73,7 @@
   user-select: none;
 }
 
-.btn-entrar {
+.btn-entrar-login {
   background: #ff007f;
   color: #fff;
   border: none;
@@ -83,6 +83,7 @@
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
+  align-self: center;
 }
 
 .btn-entrar:hover, .close-x:hover { background: #e60073; opacity: 1; }
@@ -105,3 +106,4 @@
 }
 
 .footer-text a { color: #ff007f; font-weight: bold; text-decoration: none; }
+

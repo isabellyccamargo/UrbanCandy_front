@@ -1,0 +1,29 @@
+/* AdminLayout.css */
+
+.admin-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #fdf2f5; /* Um fundo levemente rosado para combinar com a marca */
+}
+
+.admin-main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    /* 260px é a largura que definimos para o sidebar */
+    margin-left: 260px; 
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.admin-page-content {
+    padding: 0 30px 30px 30px;
+    flex: 1;
+}
+
+/* Garante que o conteúdo não fique escondido embaixo do sidebar em telas menores */
+@media (max-width: 768px) {
+    .admin-main-content {
+        margin-left: 0;
+    }
+}

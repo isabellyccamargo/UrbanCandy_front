@@ -1,0 +1,43 @@
+.admin-top-header {
+    background-color: white;
+    height: 70px;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+    border-radius: 8px; /* Opcional, se quiser ele "flutuando" */
+}
+
+.header-info span {
+    font-size: 0.75rem;
+    color: #E91E63;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.page-title {
+    font-size: 1.2rem;
+    color: #333;
+    margin: 0;
+}
+
+.header-user {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 35px;
+    height: 35px;
+    background-color: #fce4ec;
+    color: #E91E63;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}

@@ -1,0 +1,148 @@
+/* Container Principal */
+.checkout-container {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px 8%;
+  background-color: #F9FAFB; /* Cinza bem clarinho para o fundo */
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Coluna da Esquerda */
+.checkout-content {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Cards de Seção */
+.checkout-section {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 25px;
+  border: 1px solid #E5E7EB; /* Bordas em cinza suave */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.checkout-section h3 {
+  background-color: #FFF0F6; /* Rosa clarinho para o destaque do título */
+  padding: 12px 15px;
+  border-radius: 8px;
+  color: #D63384; /* Rosa mais forte para o texto */
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  border-left: 5px solid #FF85B3; /* Detalhe em rosa lateral */
+}
+
+.checkout-section p {
+  color: #4B5563; /* Cinza escuro para leitura clara */
+  margin: 8px 0;
+  font-size: 0.95rem;
+}
+
+/* Coluna da Direita (Resumo) */
+.checkout-summary {
+  flex: 1;
+  background: #FFFFFF;
+  border-radius: 15px;
+  padding: 25px;
+  border: 2px solid #FFF0F6;
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.checkout-summary h2 {
+  text-align: center;
+  color: #374151; /* Cinza grafite */
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #FFF0F6;
+  padding-bottom: 10px;
+}
+
+.summary-items {
+  max-height: 250px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.summary-item img {
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.summary-item p {
+  margin: 0;
+  font-weight: 500;
+  color: #1F2937;
+  font-size: 0.9rem;
+}
+
+/* Totais */
+.total-box {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 2px solid #F3F4F6;
+}
+
+.total-box p {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  color: #1F2937;
+}
+
+.total-box strong {
+  color: #D63384; /* Preço em destaque rosa */
+}
+
+/* Botão Finalizar */
+.btn-finalize {
+  width: 100%;
+  background-color: #FF85B3; /* Rosa do botão principal */
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 15px;
+}
+
+.btn-finalize:hover {
+  background-color: #D63384;
+  transform: translateY(-1px);
+}
+
+/* Opções de rádio */
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.radio-label:hover {
+  background-color: #FFF0F6;
+}
+
+input[type="radio"] {
+  accent-color: #D63384; /* Cor do rádio em rosa */
+}

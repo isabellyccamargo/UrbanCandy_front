@@ -1,14 +1,40 @@
 import React, { useState } from 'react';
 import { loginUser } from '../../Services/Api';
 import { Link } from 'react-router-dom';
+import { useCart } from '../../Hooks/UseCart';
+import { Button } from '../Button/Button';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
+    const { syncCart } = useCart();
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [showPass, setShowPass] = useState(false);
     const [error, setError] = useState('');
 
     if (!isOpen) return null;
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError('');
+
+        try {
+            const data = await loginUser(credentials.email, credentials.password);
+            console.log("Dados do Login:", data);
+
+            localStorage.setItem('@UrbanCandy:token', data.token);
+            localStorage.setItem('@UrbanCandy:user', JSON.stringify(data.user || data));
+
+            if (data.id_people) {
+                await syncCart(data.id_people);
+            }
+
+            onLoginSuccess(data);
+            handleClose();
+        } catch (err) {
+            setError(err.mensagem || 'E-mail ou senha inválidos');
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,19 +46,6 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         setError('');
         setShowPass(false);
         onClose();
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError('');
-        try {
-            const data = await loginUser(credentials.email, credentials.password);
-            localStorage.setItem('user', JSON.stringify(data));
-            onLoginSuccess(data);
-            handleClose();
-        } catch (err) {
-            setError(err.mensagem || 'E-mail ou senha inválidos');
-        }
     };
 
     return (
@@ -78,7 +91,11 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
                         </div>
                     </div>
 
-                    <button type="submit" className="btn-entrar">Entrar</button>
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
+                        <Button type="submit" variant="primary">
+                            Entrar
+                        </Button>
+                    </div>
                 </form>
 
                 <p className="footer-text">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUserProfile, createUser, updateUser } from '../../Services/Api';
-import './MeusDados.css';
+import { Button } from '../../componentes/Button/Button';
+import './MyData.css';
 
 const FormField = ({ label, name, value, onChange, type = "text", required, ...props }) => (
     <div className="form-group">
@@ -9,7 +10,7 @@ const FormField = ({ label, name, value, onChange, type = "text", required, ...p
     </div>
 );
 
-const MeusDados = () => {
+const MeusDados = ({ onOpenLogin }) => {
     const [formData, setFormData] = useState({
         name: '', email: '', cpf: '', telephone: '', password: '', confirmPassword: '',
         cep: '', city: '', neighborhood: '', road: '', number: '', complement: ''
@@ -37,7 +38,7 @@ const MeusDados = () => {
 
     useEffect(() => {
         (async () => {
-            const storedUser = JSON.parse(localStorage.getItem('user'));
+            const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
             if (storedUser?.id_user) {
                 try {
                     const res = await getUserProfile(storedUser.id_user);
@@ -66,7 +67,6 @@ const MeusDados = () => {
             return setError(`Os seguintes campos são obrigatórios: ${emptyFields.join(', ')}`);
         }
 
-        // 2. Validação de Senha
         if (!isEditMode || formData.password) {
             if (formData.password !== formData.confirmPassword) {
                 return setError("As senhas não coincidem.");
@@ -86,11 +86,14 @@ const MeusDados = () => {
                 alert("Perfil atualizado!");
             } else {
                 await createUser(cleanData);
-                alert("Cadastro realizado!");
-                window.location.href = '/';
+                alert("Cadastro realizado! Agora faça login para acessar sua conta.");
+
+                if (onOpenLogin) {
+                    onOpenLogin();
+                }
             }
         } catch (err) {
-            setError(err.response?.data?.mensagem || "Preencha todos os campos!");
+            setError(err.response?.data?.mensagem || "Erro ao salvar. Verifique se os dados estão corretos.");
         }
     };
 
@@ -128,7 +131,7 @@ const MeusDados = () => {
                             <div className="form-group">
                                 <label>Confirmar Senha <span style={{ color: 'red' }}>*</span></label>
                                 <div className="input-container-simples">
-                                    <input name="confirmPassword" type={showConfirm ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} className="input-com-botao" required/>
+                                    <input name="confirmPassword" type={showConfirm ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} className="input-com-botao" required />
                                     <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>
                                         {showConfirm ? "Ocultar" : "Mostrar"}
                                     </span>
@@ -150,9 +153,11 @@ const MeusDados = () => {
                     <FormField label="Número" name="number" value={formData.number} onChange={handleChange} required type="number" />
                 </div>
 
-                <button type="submit" className="btn-entrar">
-                    {isEditMode ? 'Salvar Alterações' : 'Finalizar Cadastro'}
-                </button>
+                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '30px', maxHeight: '100px' }}>
+                    <Button type="submit" variant="primary">
+                        {isEditMode ? 'Salvar Alterações' : 'Finalizar Cadastro'}
+                    </Button>
+                </div>
             </form >
         </div >
     );
