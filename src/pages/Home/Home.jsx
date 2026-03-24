@@ -46,7 +46,7 @@ const Home = () => {
 
   return (
     <main className="home-container">
-      <section className="highlights-section">
+      <section className="highlights-section animate-entrance">
         <SectionHeader title="Destaques da Casa" sub="Os produtos mais amados pelos nossos clientes" />
         <div className="carousel-container">
           <div className="products-slider">
@@ -57,7 +57,7 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="categories-section">
+      <section className="categories-section animate-entrance">
         <SectionHeader title="Nosso Cardápio" sub="Escolha sua categoria favorita e descubra os sabores" />
         <div className="categories-grid">
           {categories.map((cat, i) => (
@@ -66,14 +66,14 @@ const Home = () => {
         </div>
       </section>
 
-      <section className="features-section">
+      <section className="features-section animate-entrance">
         <SectionHeader title="Por que nos escolher?" sub="Qualidade, sabor e carinho em cada mordida" />
         <div className="features-grid">
           {FEATURES.map((f, i) => <FeatureCard key={i} {...f} />)}
         </div>
       </section>
 
-      <section className="about-section">
+      <section className="about-section animate-entrance">
         <div className="about-container">
           <div className="about-text">
             <h2>Doces feitos com <span>amor e dedicação</span></h2>

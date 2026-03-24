@@ -5,7 +5,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('@UrbanCandy:token'); 
+  const token = localStorage.getItem('@UrbanCandy:token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -14,14 +14,10 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-export const getFeaturedProducts = async () => {
-  try {
-    const response = await api.get('/produto/listar');
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao buscar produtos:", error);
-    throw error;
-  }
+export const getFeaturedProducts = (page = 1, size = 6) => {
+  return api.get(`/produto/listar`, {
+    params: { page, size }
+  });
 };
 
 export const getProductsByCategory = async (categoryName) => {
@@ -92,19 +88,16 @@ export const createOrder = async (orderData) => {
   }
 };
 
-// ... suas outras funções (getAllCategory, etc)
 
 export const createCategory = async (categoryData) => {
   try {
     const response = await api.post('/categoria/salvar', categoryData);
     return response.data;
   } catch (error) {
-    // Aqui capturamos o erro do back (ex: "Já existe uma categoria com este nome")
     throw error.response?.data || { mensagem: "Erro ao criar categoria" };
   }
 };
 
-// Se quiser já deixar o de excluir pronto também:
 export const deleteCategory = async (id_category) => {
   try {
     await api.delete(`/categoria/excluir/${id_category}`);
@@ -120,6 +113,50 @@ export const updateCategory = async (id_category, categoryData) => {
   } catch (error) {
     console.error("Erro ao atualizar categoria:", error);
     throw error.response?.data || { mensagem: "Erro ao atualizar categoria" };
+  }
+};
+
+export const getAllOrders = async () => {
+  try {
+    const response = await api.get('/pedido/listar');
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar pedidos:", error);
+    throw error;
+  }
+};
+
+export const deleteProduct = async (id_product) => {
+  try {
+    await api.delete(`/produto/excluir/${id_product}`);
+  } catch (error) {
+    throw error.response?.data || { mensagem: "Erro ao excluir produto" };
+  }
+};
+
+export const createProduct = async (productFormData) => {
+  try {
+    const response = await api.post('/produto/salvar', productFormData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { mensagem: "Erro ao criar produto" };
+  }
+};
+
+export const updateProduct = async (id_product, productFormData) => {
+  try {
+    const response = await api.put(`/produto/atualizar/${id_product}`, productFormData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { mensagem: "Erro ao atualizar produto" };
   }
 };
 

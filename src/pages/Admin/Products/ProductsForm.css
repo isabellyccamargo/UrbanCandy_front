@@ -1,0 +1,87 @@
+/* Layout interno para dividir esquerda/direita */
+.product-layout-split {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.fields-column {
+    flex: 1.5;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.image-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Dropzone de Imagem */
+.image-dropzone {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background: #f9f9f9;
+    border: 2px dashed #eee;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: 0.3s;
+}
+
+.image-dropzone:hover { border-color: #E91E63; }
+
+.img-preview-full {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-msg { text-align: center; color: #ccc; }
+.upload-msg i { font-size: 2rem; font-style: normal; display: block; }
+
+/* Box do Destaque (Favorito) */
+.featured-toggle-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.custom-check {
+    width: 22px;
+    height: 22px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.custom-check.active {
+    background: #E91E63;
+    border-color: #E91E63;
+}
+
+.featured-toggle-box span {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* Reaproveitando seus estilos globais de input se necessário */
+.custom-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: white;
+}

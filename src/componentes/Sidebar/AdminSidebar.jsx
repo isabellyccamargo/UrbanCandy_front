@@ -6,8 +6,12 @@ import './AdminSidebar.css';
 export const AdminSidebar = () => {
   const location = useLocation();
 
-  // Função para verificar se a rota está ativa e aplicar estilo
-  const isActive = (path) => location.pathname === path ? 'active' : '';
+  const isActive = (path) => {
+    if (path === '/admin') {
+      return location.pathname === '/admin' ? 'active' : '';
+    }
+    return location.pathname.startsWith(path) ? 'active' : '';
+  };
 
   return (
     <aside className="admin-sidebar">

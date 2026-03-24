@@ -9,6 +9,9 @@ import Checkout from './pages/Checkout/Checkout';
 import { AdminLayout } from './pages/Admin/AdminLayout';
 import { Categorias } from './pages/Admin/Categories/CategoriesList';
 import { CategoriesForm } from './pages/Admin/Categories/CategoriesForm';
+import Dashboard from './pages/Admin/Dashboard/Dashboard';
+import ProductList from './pages/Admin/Products/ProductsList';
+import  ProductsForm  from './pages/Admin/Products/ProductsForm';
 
 function App() {
   return (
@@ -49,9 +52,17 @@ function App() {
       } />
 
       <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<div>Dashboard em breve</div>} />
+        <Route index element={<Dashboard />} />
         <Route path="categorias" element={<Categorias />} />
         <Route path="categorias/form" element={<CategoriesForm />} />
+
+        <Route path="produtos" element={<ProductList />} />
+        
+        {/* 2. ADICIONE ESTA LINHA: Rota para NOVO produto */}
+        <Route path="produtos/form" element={<ProductsForm />} />
+        
+        {/* Rota para EDITAR produto (com ID) */}
+        <Route path="produtos/form/:id" element={<ProductsForm />} />
       </Route>
     </Routes>
   );
