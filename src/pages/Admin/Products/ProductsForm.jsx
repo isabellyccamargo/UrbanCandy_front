@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getAllCategory, createProduct, updateProduct } from '../../../Services/Api';
 import './ProductsForm.css';
+import { Button } from '../../../componentes/Button/Button';
+import { toast } from 'react-toastify'; // Importação do Toast
 
 const ProductsForm = () => {
     const navigate = useNavigate();
@@ -22,8 +24,12 @@ const ProductsForm = () => {
 
     useEffect(() => {
         const loadCategories = async () => {
-            const res = await getAllCategory();
-            setCategories(res.data || res || []);
+            try {
+                const res = await getAllCategory();
+                setCategories(res.data || res || []);
+            } catch {
+                toast.error("Erro ao carregar categorias.");
+            }
         };
         loadCategories();
 
@@ -63,27 +69,28 @@ const ProductsForm = () => {
         try {
             if (produtoParaEditar) {
                 await updateProduct(produtoParaEditar.id_product, formData);
-                alert('Produto atualizado!');
+                toast.success("Produto atualizado com sucesso! 🍫", { theme: "colored" });
             } else {
                 await createProduct(formData);
-                alert('Produto criado!');
+                toast.success("Produto salvo com sucesso! ✨", { theme: "colored" });
             }
             navigate('/admin/produtos');
-        } catch  {
-            alert('Erro ao salvar produto.');
+        } catch (err) {
+            const msgErro = err.response?.data?.message || 'Erro ao salvar produto.';
+            toast.error(msgErro, { theme: "colored" });
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="category-form-container"> {/* Classe do seu padrão original */}
+        <div className="category-form-container">
             <h1 className="form-title">{produtoParaEditar ? 'Editar Doce' : 'Novo Doce'}</h1>
             <p className="form-subtitle">Cadastre as delícias da UrbanCandy no sistema</p>
 
-            <form onSubmit={handleSubmit} className="category-card-form"> {/* Classe do seu card original */}
+            <form onSubmit={handleSubmit} className="category-card-form">
                 <div className="product-layout-split">
-                    
+
                     {/* COLUNA DA ESQUERDA: CAMPOS TEXTUAIS */}
                     <div className="fields-column">
                         <div className="input-group">
@@ -117,7 +124,6 @@ const ProductsForm = () => {
                             </select>
                         </div>
 
-                        {/* CHECKBOX ESTILIZADO (FAVORITO) */}
                         <div className="featured-toggle-box" onClick={() => setFeatured(!featured)}>
                             <div className={`custom-check ${featured ? 'active' : ''}`}>
                                 {featured && "✓"}
@@ -144,10 +150,13 @@ const ProductsForm = () => {
                 </div>
 
                 <div className="form-actions" style={{ marginTop: '30px' }}>
-                    <button type="button" className="btn-cancel" onClick={() => navigate('/admin/produtos')}>Cancelar</button>
-                    <button type="submit" className="btn-save" disabled={loading}>
+                    <Button type="button" variant="secondary" onClick={() => navigate('/admin/produtos')}>
+                        Cancelar
+                    </Button>
+
+                    <Button  type="submit" variant="primary" disabled={loading}>
                         {loading ? 'Salvando...' : 'Salvar Produto'}
-                    </button>
+                    </Button>
                 </div>
             </form>
         </div>

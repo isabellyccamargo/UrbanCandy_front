@@ -3,12 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { getFeaturedProducts, deleteProduct } from '../../../Services/Api';
 import { Button } from '../../../componentes/Button/Button';
 import './ProductsList.css';
+import { toast } from 'react-toastify';
 
 const ProductList = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+
+    const [showModal, setShowModal] = useState(false);
+    const [idParaDeletar, setIdParaDeletar] = useState(null);
+
     const navigate = useNavigate();
 
     const loadProducts = async (page = 1) => {
@@ -20,23 +25,27 @@ const ProductList = () => {
             setTotalPages(total || 1);
         } catch (error) {
             console.error("Erro ao buscar produtos:", error);
+            toast.error("Não foi possível carregar a lista de produtos. 🍬");
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-loadProducts(currentPage);
+        loadProducts(currentPage);
     }, [currentPage]);
 
-    const handleDelete = async (id) => {
-        if (window.confirm("Deseja realmente excluir este produto?")) {
-            try {
-                await deleteProduct(id);
-                loadProducts(currentPage);
-            } catch {
-                alert("Erro ao excluir produto.");
-            }
+    const confirmarExclusao = async () => {
+        try {
+            await deleteProduct(idParaDeletar);
+            toast.success("Produto removido com sucesso! ✨", { theme: "colored" });
+            loadProducts(currentPage);
+        } catch (err) {
+            const msgErro = err.response?.data?.message || 'Erro ao excluir produto.';
+            toast.error(msgErro, { theme: "colored" });
+        } finally {
+            setShowModal(false);
+            setIdParaDeletar(null);
         }
     };
 
@@ -104,7 +113,10 @@ loadProducts(currentPage);
                                         </button>
                                         <button
                                             className="btn-delete"
-                                            onClick={() => handleDelete(product.id_product)}
+                                            onClick={() => {
+                                                setIdParaDeletar(product.id_product);
+                                                setShowModal(true);
+                                            }}
                                         >
                                             Excluir
                                         </button>
@@ -117,24 +129,44 @@ loadProducts(currentPage);
                     </tbody>
                 </table>
 
+                {/* Paginação */}
                 <div className="pagination-controls">
-                    <button
-                        disabled={currentPage === 1}
-                        onClick={() => setCurrentPage(prev => prev - 1)}
-                    >
+                    <Button variant="secondary" disabled={currentPage === 1} onClick={() => setCurrentPage(prev => prev - 1)} >
                         Anterior
-                    </button>
+                    </Button>
 
                     <span>Página {currentPage} de {totalPages}</span>
 
-                    <button
-                        disabled={currentPage === totalPages}
-                        onClick={() => setCurrentPage(prev => prev + 1)}
-                    >
+                    <Button variant="secondary" disabled={currentPage === totalPages} onClick={() => setCurrentPage(prev => prev + 1)}>
                         Próximo
-                    </button>
+                    </Button>
                 </div>
             </section>
+
+
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal-confirmacao">
+                        <h3>Confirmar Exclusão</h3>
+                        <p>Deseja realmente excluir este produto? Esta ação não pode ser desfeita.</p>
+                        <div className="modal-buttons">
+                            <Button
+                                variant="secondary"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Cancelar
+                            </Button>
+
+                            <Button
+                                variant="primary"
+                                onClick={confirmarExclusao}
+                            >
+                                Sim, Excluir
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
