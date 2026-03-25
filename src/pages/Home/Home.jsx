@@ -24,16 +24,16 @@ const Home = () => {
     const loadHomeData = async () => {
       try {
         const response = await getFeaturedProducts();
-        const rawData = response?.data || response || [];
-        if (!Array.isArray(rawData)) return;
+        const productsArray = response?.data?.data || [];
+        if (!Array.isArray(productsArray)) return;
 
-        setProducts(rawData.filter(p => Number(p.featured) === 1));
+        setProducts(productsArray.filter(p => Number(p.featured) === 1));
 
-        const uniqueCategories = Array.from(new Set(rawData.map(p =>
+        const uniqueCategories = Array.from(new Set(productsArray.map(p =>
           p.category?.name_category || p.category || "Geral"
         ))).map(name => ({
           name,
-          image: CATEGORY_IMAGES[name] || rawData.find(p => (p.category?.name_category || p.category) === name)?.image
+          image: CATEGORY_IMAGES[name] || productsArray.find(p => (p.category?.name_category || p.category) === name)?.image
         }));
 
         setCategories(uniqueCategories);

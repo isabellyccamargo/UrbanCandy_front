@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import React, {  useState } from 'react'; 
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Users } from 'lucide-react';
 import LoginModal from '../../componentes/Login/LoginModal';
 import { Button } from '../Button/Button';
 import './Header.css';
-
 import { useCart } from "../../Hooks/UseCart";
 
 export const Header = () => {
@@ -14,6 +13,14 @@ export const Header = () => {
     const savedUser = localStorage.getItem('@UrbanCandy:user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('login') === 'true') {
+      setIsLoginModalOpen(true);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [setIsLoginModalOpen]);
 
   const handleProtectedLink = (e, path) => {
     e.preventDefault();
@@ -30,6 +37,8 @@ export const Header = () => {
     setUser(null);
     navigate('/');
   };
+
+  
 
   return (
     <header className="main-header">
