@@ -3,21 +3,24 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../Hooks/UseCart';
 import { createOrder, getUserProfile } from '../../Services/Api';
 import { Button } from '../../componentes/Button/Button';
+import { toast } from 'react-toastify';
 import './Checkout.css';
 
 const Checkout = () => {
     const navigate = useNavigate();
-    const { cart, clearCart, } = useCart();
+    const { cart, clearCart } = useCart();
     const [paymentMethod, setPaymentMethod] = useState('');
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isSubmitting, setIsSubmitting] = useState(false); 
 
     useEffect(() => {
         const loadUserData = async () => {
             const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user') || localStorage.getItem('user'));
 
             if (!storedUser || !storedUser.id_user) {
-                navigate('/');
+                toast.info("Por favor, faça login para finalizar seu pedido. 🍬");
+                navigate('/login');
                 return;
             }
 
@@ -30,12 +33,13 @@ const Checkout = () => {
                     setUserData({
                         ...person,
                         email: res.email,
-                        addressFull: `${addr.road || ''}, ${addr.number || ''} - ${addr.neighborhood || ''}`,
-                        cityState: `${addr.city || ''} / ${addr.neighborhood || ''}`
+                        addressFull: addr.road ? `${addr.road}, ${addr.number || 'S/N'} - ${addr.neighborhood || ''}` : "Endereço incompleto",
+                        cityState: `${addr.city || ''} / ${addr.state || ''}`
                     });
                 }
             } catch (error) {
                 console.error("Erro ao carregar dados do checkout:", error);
+                toast.error("Não conseguimos carregar seus dados. Verifique sua conexão. 🌐");
             } finally {
                 setLoading(false);
             }
@@ -44,83 +48,107 @@ const Checkout = () => {
         loadUserData();
     }, [navigate]);
 
-    if (loading) return <div className="loading">Carregando dados do pedido...</div>;
-    if (!userData) return null;
-
     const handleFinalizeOrder = async () => {
         if (!paymentMethod) {
-            alert("Por favor, selecione uma forma de pagamento antes de finalizar.");
+            toast.warning("Selecione uma forma de pagamento para continuar! 💳");
             return;
         }
 
         try {
+            setIsSubmitting(true); 
             const orderPayload = {
                 id_people: userData.id_user || userData.id_people,
-                cart: cart,
-                type_payment: paymentMethod
+                cart: cart.items, 
+                type_payment: paymentMethod,
+                total: cart.total
             };
 
             await createOrder(orderPayload);
-            alert("Pedido realizado com sucesso!");
+            
+            toast.success("Pedido realizado com sucesso! Prepare o coração (e o estômago)! ✨", {
+                icon: "🎉",
+                theme: "colored"
+            });
+            
             clearCart();
-            navigate('/');
+            navigate('/perfil'); 
         } catch (error) {
-            alert(error.mensagem || "Erro ao finalizar pedido");
+            const msg = error.response?.data?.message || "Erro ao finalizar pedido. Tente novamente.";
+            toast.error(msg);
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
+    if (loading) return <div className="loading">Carregando dados do pedido...</div>;
+    if (!userData) return null;
+
     return (
-        <div className="checkout-container">
+        <div className="checkout-container animate-entrance">
             <div className="checkout-content">
-                <section className="checkout-section">
-                    <h3>Dados Pessoais</h3>
-                    <p><strong>Nome:</strong> {userData.name}</p>
-                    <p><strong>CPF:</strong> {userData.cpf}</p>
-                    <p><strong>Telefone:</strong> {userData.telephone || userData.phone}</p>
-                    <p><strong>E-mail:</strong> {userData.email}</p>
+                <section className="checkout-section card-candy">
+                    <h3><i className="fas fa-user"></i> Dados Pessoais</h3>
+                    <div className="info-grid">
+                        <p><strong>Nome:</strong> {userData.name}</p>
+                        <p><strong>CPF:</strong> {userData.cpf}</p>
+                        <p><strong>Telefone:</strong> {userData.telephone || userData.phone}</p>
+                        <p><strong>E-mail:</strong> {userData.email}</p>
+                    </div>
                 </section>
 
-                <section className="checkout-section">
-                    <h3>Entrega</h3>
-                    <p>{userData.addressFull || "Endereço não localizado"}</p>
-                    <p>{userData.cityState}</p>
+                <section className="checkout-section card-candy">
+                    <h3><i className="fas fa-truck"></i> Entrega</h3>
+                    <p className="address-text">{userData.addressFull}</p>
+                    <p className="city-text">{userData.cityState}</p>
                 </section>
 
-                <section className="checkout-section">
-                    <h3>Pagamento</h3>
+                <section className="checkout-section card-candy">
+                    <h3><i className="fas fa-credit-card"></i> Pagamento</h3>
                     <div className="payment-options">
                         {['PIX', 'Cartão de Crédito', 'Boleto Bancário'].map(method => (
-                            <label key={method} className="radio-label">
+                            <label key={method} className={`radio-label ${paymentMethod === method ? 'selected' : ''}`}>
                                 <input
                                     type="radio"
                                     name="payment"
                                     checked={paymentMethod === method}
                                     onChange={() => setPaymentMethod(method)}
                                 />
-                                {method}
+                                <span>{method}</span>
                             </label>
                         ))}
                     </div>
                 </section>
             </div>
 
-            <aside className="checkout-summary">
+            <aside className="checkout-summary card-candy">
                 <h2>Resumo do pedido</h2>
                 <div className="summary-items">
                     {cart.items.map(item => (
                         <div key={item.id_product} className="summary-item">
-                            <img src={`http://localhost:3030/uploads/${item.products?.image}`} alt={item.products?.name} />
-                            <div>
-                                <p>{item.quantity} x {item.products?.name}</p>
-                                <span>R$ {Number(item.products?.price).toFixed(2)}</span>
+                            <img 
+                                src={`http://localhost:3030/uploads/${item.products?.image}`} 
+                                alt={item.products?.name} 
+                                onError={(e) => e.target.src = 'https://via.placeholder.com/50'}
+                            />
+                            <div className="item-details">
+                                <p>{item.quantity}x {item.products?.name}</p>
+                                <span>R$ {(Number(item.products?.price) * item.quantity).toFixed(2)}</span>
                             </div>
                         </div>
                     ))}
                 </div>
+                
                 <div className="total-box">
-                    <p>Total: <strong>R$ {cart.total.toFixed(2)}</strong></p>
+                    <span>Total a pagar</span>
+                    <strong>R$ {cart.total.toFixed(2)}</strong>
                 </div>
-                <Button onClick={handleFinalizeOrder} variant="primary" disabled={!paymentMethod} >
-                    Finalizar Pedido
+
+                <Button 
+                    onClick={handleFinalizeOrder} 
+                    variant="primary" 
+                    disabled={!paymentMethod || isSubmitting}
+                >
+                    {isSubmitting ? 'Processando...' : 'Finalizar Pedido'}
                 </Button>
             </aside>
         </div>

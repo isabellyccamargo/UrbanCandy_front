@@ -67,15 +67,12 @@ export const createUser = async (userData) => {
   }
 };
 
-export const updateUser = async (id_user, userData, personData) => {
+export const updateUser = async (id_people, peopleData) => {
   try {
-    const response = await api.put(`/usuario/atualizar/${id_user}`, {
-      userData,
-      personData
-    });
+    const response = await api.put(`/pessoa/atualizar/${id_people}`, peopleData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Error updating user" };
+    throw error.response?.data || { message: "Erro ao atualizar usuário" };
   }
 };
 
@@ -159,6 +156,15 @@ export const updateProduct = async (id_product, productFormData) => {
     throw error.response?.data || { mensagem: "Erro ao atualizar produto" };
   }
 };
+
+export const updateAddress = async (id_address, addressData) => {
+  try {
+    const response = await api.put(`/endereco/atualizar/${id_address}`, addressData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { message: "Erro ao atualizar endereço" };
+  }
+};  
 
 export default api;
 

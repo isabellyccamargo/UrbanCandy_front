@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getUserProfile, createUser, updateUser } from '../../Services/Api';
+import { getUserProfile, createUser, updateUser, updateAddress } from '../../Services/Api';
 import { Button } from '../../componentes/Button/Button';
-
-
+import { toast } from 'react-toastify';
 import './MyData.css';
 
 const FormField = ({ label, name, value, onChange, type = "text", required, ...props }) => (
@@ -22,7 +21,7 @@ const MeusDados = () => {
     const [showConfirm, setShowConfirm] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+    const [isSaving, setIsSaving] = useState(false);
 
     const applyCPFMask = (v) => v.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2').slice(0, 14);
     const applyPhoneMask = (v) => v.replace(/\D/g, '').replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2').replace(/(-\d{4})\d+?$/, '$1').slice(0, 15);
@@ -45,12 +44,13 @@ const MeusDados = () => {
             const data = await res.json();
             if (!data.erro) {
                 setFormData(prev => ({ ...prev, road: data.logradouro, neighborhood: data.bairro, city: data.localidade }));
+                toast.success("Endereço preenchido automaticamente! 📍");
             }
         } catch { console.error("Erro CEP"); }
     };
 
     useEffect(() => {
-        (async () => {
+        const loadUserData = async () => {
             const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
             if (storedUser?.id_user) {
                 try {
@@ -58,30 +58,35 @@ const MeusDados = () => {
                     if (res) {
                         const person = res.people || {};
                         const addr = person.address || person.Addresses?.[0] || {};
-                        setFormData({
-                            ...formData,
+                        setFormData(prev => ({
+                            ...prev,
+                            id_people: person.id_people,
+                            id_address: addr.id_address,
                             ...person,
                             ...addr,
                             email: res.email,
                             cpf: person.cpf ? applyCPFMask(person.cpf) : '',
                             telephone: person.telephone ? applyPhoneMask(person.telephone) : '',
                             cep: addr.cep ? applyCEPMask(addr.cep) : ''
-                        });
+                        }));
                         setIsEditMode(true);
                     }
-                } catch { setError("Erro ao carregar perfil."); }
+                } catch {
+                    toast.error("Não conseguimos carregar seus dados. 😟");
+                }
             }
             setLoading(false);
-        })();
+        };
+        loadUserData();
     }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setIsSaving(true);
 
-        // Validação básica de confirmação de senha (opcional, mas recomendado)
         if (!isEditMode && formData.password !== formData.confirmPassword) {
-            setError("As senhas não coincidem.");
+            toast.warning("As senhas não coincidem! 🔑");
+            setIsSaving(false);
             return;
         }
 
@@ -89,60 +94,80 @@ const MeusDados = () => {
         const rawPhone = formData.telephone.replace(/\D/g, '');
         const rawCep = formData.cep.replace(/\D/g, '');
 
-        const payload = {
-            name: formData.name,
-            email: formData.email,
-            cpf: rawCpf,
-            telephone: rawPhone,
-            password: formData.password,
-            cep: rawCep,
-            city: formData.city,
-            neighborhood: formData.neighborhood,
-            road: formData.road,
-            number: formData.number,
-            complement: formData.complement || ""
-        };
-
         try {
             if (isEditMode) {
+                const idPeople = formData.id_people;
+
+                const peopleData = {
+                    name: formData.name,
+                    cpf: rawCpf,
+                    telephone: rawPhone,
+                    road: formData.road,
+                    number: formData.number,
+                    neighborhood: formData.neighborhood,
+                    city: formData.city,
+                    cep: rawCep,
+                    complement: formData.complement
+                };
+                console.log("ID:", idPeople);
+                console.log("Password:", { password: formData.password || undefined });
+                console.log("PeopleData:", peopleData);
+
+                await updateUser(idPeople, {
+                    password: formData.password || undefined,
+                    ...peopleData
+                });
+
+                await updateAddress(formData.id_address, {
+                    road: formData.road,
+                    number: parseInt(formData.number, 10),
+                    neighborhood: formData.neighborhood,
+                    city: formData.city,
+                    cep: rawCep,
+                    complement: formData.complement
+                });
+
                 const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
-                await updateUser(
-                    storedUser.id_user,
-                    { email: formData.email, password: formData.password || undefined },
-                    {
-                        name: formData.name,
-                        cpf: rawCpf,
-                        telephone: rawPhone,
-                        cep: rawCep,
-                        city: formData.city,
-                        neighborhood: formData.neighborhood,
-                        road: formData.road,
-                        number: formData.number,
-                        complement: formData.complement
-                    }
-                );
-                alert("Perfil atualizado com sucesso!");
+                const updatedUserData = {
+                    ...storedUser,
+                    name: formData.name,
+                };
+
+
+                localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
+
+                toast.success("Dados atualizados com sucesso! ✨");
+
+                try {
+
+
+                    localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
+
+                    toast.success("Dados atualizados com sucesso! ✨");
+                } catch (err) {
+                    console.error("Erro na API:", err);
+                    toast.error("Erro ao salvar no servidor.");
+                }
+
+
             } else {
-                // 1. Cria o usuário no backend
+                const payload = { ...formData, cpf: rawCpf, telephone: rawPhone, cep: rawCep };
                 await createUser(payload);
-
-                // 2. Avisa o usuário
-                alert("Cadastro realizado com sucesso! Redirecionando para o login...");
-
-                // 3. O SEGREDO: Redireciona para a Home com o sinalizador na URL
-                // Isso fará a página recarregar e o Header abrir o Modal
-                window.location.href = '/?login=true';
+                toast.success("Bem-vindo(a) à Urban Candy! 🍬");
+                setTimeout(() => window.location.href = '/?login=true', 2000);
             }
         } catch (err) {
-            console.error("Erro no cadastro:", err);
-            const msgErro = err.toString().includes('INVALID_PASSWORD')
-                ? "Senha fraca! Use letras maiúsculas, números e símbolos."
-                : (err.mensagem || "Erro ao salvar. Verifique se o e-mail ou CPF já existem.");
-            setError(msgErro);
+            console.error(err);
+            const msg = isEditMode
+                ? "Erro ao atualizar dados. Tente novamente mais tarde."
+                : "Verifique se este e-mail ou CPF já estão cadastrados.";
+            toast.error(msg);
+        } finally {
+            setIsSaving(false);
         }
-    }
+    };
 
-    if (loading) return <div className="loading">Carregando...</div>;
+    if (loading) return <div className="loading-container"><p>Carregando seus dados... 🍫</p></div>;
 
     return (
         <div className="meus-dados-container">
@@ -150,18 +175,16 @@ const MeusDados = () => {
                 <h1>{isEditMode ? 'Meus Dados' : 'Criar Conta'}</h1>
             </header>
 
-            {error && <div className="error-banner">{error}</div>}
-
             <form onSubmit={handleSubmit} className="grid-form">
                 <h2 className='section-title'>Dados Pessoais</h2>
                 <div className="form-row triple-row">
                     <FormField label="Nome" name="name" value={formData.name} onChange={handleChange} required />
-                    <FormField label="CPF" name="cpf" value={formData.cpf} onChange={handleChange} readOnly={isEditMode} required maxLength="14" />
+                    <FormField label="CPF" name="cpf" value={formData.cpf} onChange={handleChange} readOnly={isEditMode} required maxLength="14" style={isEditMode ? { backgroundColor: '#f0f0f0', cursor: 'not-allowed' } : {}} />
                     <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15" />
                 </div>
 
                 <div className="form-row triple-row">
-                    <FormField label="E-mail" name="email" value={formData.email} onChange={handleChange} readOnly={isEditMode} required />
+                    <FormField label="E-mail" name="email" value={formData.email} onChange={handleChange} readOnly={isEditMode} required style={isEditMode ? { backgroundColor: '#f0f0f0', cursor: 'not-allowed' } : {}} />
                     {!isEditMode && (
                         <>
                             <div className="form-group">
@@ -195,8 +218,8 @@ const MeusDados = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '30px' }}>
-                    <Button type="submit" variant="primary">
-                        {isEditMode ? 'Salvar Alterações' : 'Finalizar Cadastro'}
+                    <Button type="submit" variant="primary" disabled={isSaving}>
+                        {isSaving ? 'Salvando...' : (isEditMode ? 'Salvar Alterações' : 'Finalizar Cadastro')}
                     </Button>
                 </div>
             </form >
