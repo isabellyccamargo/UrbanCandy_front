@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getUserProfile, createUser, updateUser, updateAddress } from '../../Services/Api';
 import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../Hooks/AuthContext';
 import './MyData.css';
 
 const FormField = ({ label, name, value, onChange, type = "text", required, ...props }) => (
@@ -12,6 +13,7 @@ const FormField = ({ label, name, value, onChange, type = "text", required, ...p
 );
 
 const MeusDados = () => {
+    const { setUser } = useAuth();
     const [formData, setFormData] = useState({
         name: '', email: '', cpf: '', telephone: '', password: '', confirmPassword: '',
         cep: '', city: '', neighborhood: '', road: '', number: '', complement: ''
@@ -96,28 +98,15 @@ const MeusDados = () => {
 
         try {
             if (isEditMode) {
-                const idPeople = formData.id_people;
-
-                const peopleData = {
+                // 1. Atualiza Usuário/Pessoa
+                await updateUser(formData.id_people, {
+                    password: formData.password || undefined,
                     name: formData.name,
                     cpf: rawCpf,
-                    telephone: rawPhone,
-                    road: formData.road,
-                    number: formData.number,
-                    neighborhood: formData.neighborhood,
-                    city: formData.city,
-                    cep: rawCep,
-                    complement: formData.complement
-                };
-                console.log("ID:", idPeople);
-                console.log("Password:", { password: formData.password || undefined });
-                console.log("PeopleData:", peopleData);
-
-                await updateUser(idPeople, {
-                    password: formData.password || undefined,
-                    ...peopleData
+                    telephone: rawPhone
                 });
 
+                // 2. Atualiza Endereço
                 await updateAddress(formData.id_address, {
                     road: formData.road,
                     number: parseInt(formData.number, 10),
@@ -127,21 +116,14 @@ const MeusDados = () => {
                     complement: formData.complement
                 });
 
+                // 3. Atualiza Estado Global e LocalStorage (para o Header mudar na hora)
                 const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
-                const updatedUserData = {
-                    ...storedUser,
-                    name: formData.name,
-                };
+                const updatedUserData = { ...storedUser, name: formData.name };
+                
+                setUser(updatedUserData);
+                localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
 
-                try {
-                    localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
-
-                    toast.success("Dados atualizados com sucesso! ✨");
-                } catch (err) {
-                    console.error("Erro na API:", err);
-                    toast.error("Erro ao salvar no servidor.");
-                }
-
+                toast.success("Dados atualizados com sucesso! ✨");
 
             } else {
                 const payload = { ...formData, cpf: rawCpf, telephone: rawPhone, cep: rawCep };
@@ -151,10 +133,7 @@ const MeusDados = () => {
             }
         } catch (err) {
             console.error(err);
-            const msg = isEditMode
-                ? "Erro ao atualizar dados. Tente novamente mais tarde."
-                : "Verifique se este e-mail ou CPF já estão cadastrados.";
-            toast.error(msg);
+            toast.error(isEditMode ? "Erro ao atualizar dados." : "Verifique seus dados.");
         } finally {
             setIsSaving(false);
         }

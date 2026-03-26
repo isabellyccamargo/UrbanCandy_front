@@ -4,9 +4,11 @@ import { useCart } from '../../Hooks/UseCart';
 import { createOrder, getUserProfile } from '../../Services/Api';
 import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../Hooks/AuthContext';
 import './Checkout.css';
 
 const Checkout = () => {
+    const { user } = useAuth();
     const navigate = useNavigate();
     const { cart, clearCart } = useCart();
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -16,16 +18,14 @@ const Checkout = () => {
 
     useEffect(() => {
         const loadUserData = async () => {
-            const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user') || localStorage.getItem('user'));
-
-            if (!storedUser || !storedUser.id_user) {
+            if (!user || !user.id_user) {
                 toast.info("Por favor, faça login para finalizar seu pedido. 🍬");
-                navigate('/login');
+                navigate('/');
                 return;
             }
 
             try {
-                const res = await getUserProfile(storedUser.id_user);
+                const res = await getUserProfile(user.id_user);
                 if (res) {
                     const person = res.people || {};
                     const addr = person.address || person.Addresses?.[0] || {};
@@ -46,7 +46,7 @@ const Checkout = () => {
         };
 
         loadUserData();
-    }, [navigate]);
+    }, [user, navigate]);
 
     const handleFinalizeOrder = async () => {
         if (!paymentMethod) {
@@ -75,7 +75,7 @@ const Checkout = () => {
             toast.success("Pedido realizado com sucesso! ✨", { icon: "🎉" });
 
             clearCart();
-            navigate('/perfil');
+            navigate('/pedidos');
         } catch (error) {
             const msg = error.response?.data?.message || "Erro ao finalizar pedido.";
             toast.error(msg);

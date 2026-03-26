@@ -13,12 +13,13 @@ import { CategoriesForm } from './pages/Admin/Categories/CategoriesForm';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import ProductList from './pages/Admin/Products/ProductsList';
 import ProductsForm from './pages/Admin/Products/ProductsForm';
+import { AuthProvider } from './Hooks/AuthContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -82,7 +83,7 @@ function App() {
           <Route path="produtos/form/:id" element={<ProductsForm />} />
         </Route>
       </Routes>
-    </>
+      </AuthProvider>
   );
 }
 

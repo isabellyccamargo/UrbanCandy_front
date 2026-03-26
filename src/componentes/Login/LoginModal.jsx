@@ -4,9 +4,11 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../../Hooks/UseCart';
 import { Button } from '../Button/Button';
 import { toast } from 'react-toastify';
+import { useAuth } from '../../Hooks/AuthContext';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
+    const { login } = useAuth();
     const { syncCart } = useCart();
     const [credentials, setCredentials] = useState({ email: '', password: '' });
     const [showPass, setShowPass] = useState(false);
@@ -25,8 +27,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
             const data = await loginUser(credentials.email, credentials.password);
             console.log("Dados do Login:", data);
 
-            localStorage.setItem('@UrbanCandy:token', data.token);
-            localStorage.setItem('@UrbanCandy:user', JSON.stringify(data.user || data));
+            login(data);
 
             if (data.id_people) {
                 await syncCart(data.id_people);

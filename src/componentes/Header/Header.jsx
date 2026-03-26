@@ -1,44 +1,54 @@
-import React, {  useState } from 'react'; 
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingCart, User, Users } from 'lucide-react';
 import LoginModal from '../../componentes/Login/LoginModal';
 import { Button } from '../Button/Button';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../Hooks/AuthContext';
 import './Header.css';
 import { useCart } from "../../Hooks/UseCart";
 
 export const Header = () => {
   const { setIsCartOpen, cart, isLoginModalOpen, setIsLoginModalOpen, clearCart } = useCart();
+  const { user, setUser, logout } = useAuth();
   const navigate = useNavigate();
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('@UrbanCandy:user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
 
-  React.useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('login') === 'true') {
-      setIsLoginModalOpen(true);
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }
-  }, [setIsLoginModalOpen]);
+  const [intendedPath, setIntendedPath] = useState(null);
+
 
   const handleProtectedLink = (e, path) => {
     e.preventDefault();
     if (!user) {
+      setIntendedPath(path);
       setIsLoginModalOpen(true);
     } else {
       navigate(path);
     }
   };
+
   const handleLogout = () => {
+    toast.info("Até logo! Sua sessão foi encerrada. 👋", {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "colored",
+    });
+
+    // 2. Limpa os dados (como você já fazia)
     localStorage.removeItem('@UrbanCandy:user');
     localStorage.removeItem('@UrbanCandy:token');
     clearCart();
     setUser(null);
+
+    // 3. Redireciona para a Home
+    logout();
     navigate('/');
   };
 
-  
+
 
   return (
     <header className="main-header">
@@ -89,11 +99,23 @@ export const Header = () => {
 
       <LoginModal
         isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
+        onClose={() => {
+          setIsLoginModalOpen(false);
+          setIntendedPath(null); // Limpa ao fechar
+        }}
         onLoginSuccess={(userData) => {
           setUser(userData);
           setIsLoginModalOpen(false);
-          navigate('/checkout');
+
+          // 3. LÓGICA DE REDIRECIONAMENTO DINÂMICO:
+          // Se ele clicou em algo específico, vai para lá. 
+          // Se não (clicou só em 'Entrar'), vai para a Home ou Checkout.
+          if (intendedPath) {
+            navigate(intendedPath);
+            setIntendedPath(null); // Limpa o estado
+          } else {
+            navigate('/'); // Ou para onde preferir como padrão
+          }
         }}
       />
     </header>
