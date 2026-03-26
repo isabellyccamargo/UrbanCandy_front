@@ -3,7 +3,8 @@ import { Header } from './componentes/Header/Header';
 import Home from './pages/Home/Home';
 import { MenuByCategory } from './pages/Menu/MenuByCategory';
 import { Footer } from './componentes/Footer/Footer';
-import MyData from './pages/MeusDados/MyData';
+import MyData from './pages/MyData/MyData';
+import {MyOrders} from './pages/MyOrders/MyOrders';
 import { CartModal } from './componentes/Cart/CartModal';
 import Checkout from './pages/Checkout/Checkout';
 import { AdminLayout } from './pages/Admin/AdminLayout';
@@ -47,6 +48,14 @@ function App() {
           <>
             <Header />
             <MyData />
+            <Footer />
+          </>
+        } />
+
+        <Route path="/pedidos" element={
+          <>
+            <Header />
+            <MyOrders />
             <Footer />
           </>
         } />

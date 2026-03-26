@@ -3,6 +3,7 @@ import { loginUser } from '../../Services/Api';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../Hooks/UseCart';
 import { Button } from '../Button/Button';
+import { toast } from 'react-toastify';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
@@ -18,6 +19,8 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         e.preventDefault();
         setError('');
 
+        const idToast = toast.loading("Autenticando...");
+
         try {
             const data = await loginUser(credentials.email, credentials.password);
             console.log("Dados do Login:", data);
@@ -29,10 +32,26 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
                 await syncCart(data.id_people);
             }
 
+            toast.update(idToast, {
+                render: `Bem-vindo(a), ${data.user?.name || 'Candy Lover'}! 🍬`,
+                type: "success",
+                isLoading: false,
+                autoClose: 3000
+            });
+
             onLoginSuccess(data);
             handleClose();
         } catch (err) {
-            setError(err.mensagem || 'E-mail ou senha inválidos');
+            const msgErro = err.response?.data?.mensagem || 'E-mail ou senha inválidos';
+
+            toast.update(idToast, {
+                render: msgErro,
+                type: "error",
+                isLoading: false,
+                autoClose: 3000
+            });
+
+            setError(msgErro);
         }
     };
 

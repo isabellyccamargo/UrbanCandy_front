@@ -11,7 +11,6 @@ export const CartModal = () => {
 
   if (!isCartOpen) return null;
 
-  // Carrinho está vazio?
   const isCartEmpty = !cart.items || cart.items.length === 0;
 
   const handleCheckout = () => {

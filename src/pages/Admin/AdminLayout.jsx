@@ -1,11 +1,9 @@
-// No seu arquivo AdminLayout.jsx
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { AdminSidebar } from '../../componentes/Sidebar/AdminSidebar'; 
 import { AdminHeader } from '../../componentes/AdminHeader/AdminHeader';  
 import './AdminLayout.css'
 
-// USE O "EXPORT" ANTES DA CONSTANTE
 export const AdminLayout = () => {
   return (
     <div className="admin-container">

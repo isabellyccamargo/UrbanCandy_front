@@ -12,7 +12,7 @@ const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState('');
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [isSubmitting, setIsSubmitting] = useState(false); 
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         const loadUserData = async () => {
@@ -55,26 +55,31 @@ const Checkout = () => {
         }
 
         try {
-            setIsSubmitting(true); 
+            setIsSubmitting(true);
+
             const orderPayload = {
-                id_people: userData.id_user || userData.id_people,
-                cart: cart.items, 
+                id_people: userData.id_people,
                 type_payment: paymentMethod,
-                total: cart.total
+                cart: {
+                    total: cart.total,
+                    items: cart.items.map(item => ({
+                        id_product: item.id_product,
+                        quantity: item.quantity,
+                        sub_total: item.sub_total || (item.quantity * Number(item.products?.price))
+                    }))
+                }
             };
 
             await createOrder(orderPayload);
-            
-            toast.success("Pedido realizado com sucesso! Prepare o coração (e o estômago)! ✨", {
-                icon: "🎉",
-                theme: "colored"
-            });
-            
+
+            toast.success("Pedido realizado com sucesso! ✨", { icon: "🎉" });
+
             clearCart();
-            navigate('/perfil'); 
+            navigate('/perfil');
         } catch (error) {
-            const msg = error.response?.data?.message || "Erro ao finalizar pedido. Tente novamente.";
+            const msg = error.response?.data?.message || "Erro ao finalizar pedido.";
             toast.error(msg);
+            console.error("Detalhes do erro 400:", error.response?.data);
         } finally {
             setIsSubmitting(false);
         }
@@ -125,9 +130,9 @@ const Checkout = () => {
                 <div className="summary-items">
                     {cart.items.map(item => (
                         <div key={item.id_product} className="summary-item">
-                            <img 
-                                src={`http://localhost:3030/uploads/${item.products?.image}`} 
-                                alt={item.products?.name} 
+                            <img
+                                src={`http://localhost:3030/uploads/${item.products?.image}`}
+                                alt={item.products?.name}
                                 onError={(e) => e.target.src = 'https://via.placeholder.com/50'}
                             />
                             <div className="item-details">
@@ -137,15 +142,15 @@ const Checkout = () => {
                         </div>
                     ))}
                 </div>
-                
+
                 <div className="total-box">
                     <span>Total a pagar</span>
                     <strong>R$ {cart.total.toFixed(2)}</strong>
                 </div>
 
-                <Button 
-                    onClick={handleFinalizeOrder} 
-                    variant="primary" 
+                <Button
+                    onClick={handleFinalizeOrder}
+                    variant="primary"
                     disabled={!paymentMethod || isSubmitting}
                 >
                     {isSubmitting ? 'Processando...' : 'Finalizar Pedido'}

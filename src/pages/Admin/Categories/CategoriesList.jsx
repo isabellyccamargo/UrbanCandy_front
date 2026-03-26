@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../../componentes/Button/Button';
 import { useNavigate } from 'react-router-dom';
-import { getAllCategory } from '../../../Services/Api';
-import api from '../../../Services/Api';
+import api, { getAllCategory } from '../../../Services/Api'; // Importe api e getAllCategory
+import { toast } from 'react-toastify'; // Faltava este import
 
 import './CategoriesList.css';
 
 export const Categorias = () => {
     const [categorias, setCategorias] = useState([]);
     const [loading, setLoading] = useState(true);
+    
+    // 1. Estados para o Modal que faltavam
+    const [showModal, setShowModal] = useState(false);
+    const [idParaDeletar, setIdParaDeletar] = useState(null);
+    
     const navigate = useNavigate();
 
     const carregarCategorias = async () => {
@@ -18,7 +23,7 @@ export const Categorias = () => {
             setCategorias(response.data || []);
         } catch (error) {
             console.error("Erro ao carregar categorias:", error);
-            alert("Erro ao buscar categorias do servidor.");
+            toast.error("Erro ao buscar categorias do servidor. 🍬", { theme: "colored" });
         } finally {
             setLoading(false);
         }
@@ -28,21 +33,47 @@ export const Categorias = () => {
         carregarCategorias();
     }, []);
 
-    const handleExcluir = async (id) => {
-        if (window.confirm("Tem certeza que deseja excluir esta categoria?")) {
-            try {
-                await api.delete(`/categoria/excluir/${id}`);
-                alert("Categoria excluída com sucesso!");
-                carregarCategorias();
-            } catch (error) {
-                console.error("Erro ao excluir:", error);
-                alert("Não foi possível excluir a categoria.");
-            }
+    // 2. Função que abre o modal (chamada pelo botão da tabela)
+    const handleExcluir = (id) => {
+        setIdParaDeletar(id);
+        setShowModal(true);
+    };
+
+    // 3. Função que deleta de fato (chamada pelo botão "Sim" do modal)
+    const confirmarExclusao = async () => {
+        const idToast = toast.loading("Removendo categoria...");
+
+        try {
+            await api.delete(`/categoria/excluir/${idParaDeletar}`);
+
+            toast.update(idToast, {
+                render: "Categoria removida com sucesso! ✨",
+                type: "success",
+                isLoading: false,
+                autoClose: 2000,
+                theme: "colored"
+            });
+
+            carregarCategorias(); // Recarrega a lista após deletar
+        } catch (err) {
+            console.error("Erro na exclusão:", err);
+            const msgErro = err.response?.data?.message || 'Erro ao excluir categoria.';
+
+            toast.update(idToast, {
+                render: msgErro,
+                type: "error",
+                isLoading: false,
+                autoClose: 3000,
+                theme: "colored"
+            });
+        } finally {
+            setShowModal(false);
+            setIdParaDeletar(null);
         }
     };
 
     return (
-        <div className="admin-page">
+        <div className="admin-page animate-entrance">
             <header className="admin-header">
                 <div>
                     <h1>Categorias</h1>
@@ -55,7 +86,7 @@ export const Categorias = () => {
 
             <section className="admin-table-container">
                 {loading ? (
-                    <p>Carregando categorias...</p>
+                    <p style={{ padding: '20px' }}>Carregando categorias...</p>
                 ) : (
                     <table className="admin-table">
                         <thead>
@@ -72,7 +103,10 @@ export const Categorias = () => {
                                         <td>#{cat.id_category}</td>
                                         <td>{cat.name_category}</td>
                                         <td style={{ textAlign: 'right' }}>
-                                            <button className="btn-edit" onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}>
+                                            <button 
+                                                className="btn-edit" 
+                                                onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}
+                                            >
                                                 Editar
                                             </button>
                                             <button
@@ -95,6 +129,31 @@ export const Categorias = () => {
                     </table>
                 )}
             </section>
+
+            {/* 4. JSX DO MODAL (Igual ao de produtos) */}
+            {showModal && (
+                <div className="modal-overlay">
+                    <div className="modal-confirmacao">
+                        <h3>Confirmar Exclusão</h3>
+                        <p>Deseja realmente excluir esta categoria? Esta ação não pode ser desfeita.</p>
+                        <div className="modal-buttons">
+                            <Button
+                                variant="secondary"
+                                onClick={() => setShowModal(false)}
+                            >
+                                Cancelar
+                            </Button>
+
+                            <Button
+                                variant="primary"
+                                onClick={confirmarExclusao}
+                            >
+                                Sim, Excluir
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

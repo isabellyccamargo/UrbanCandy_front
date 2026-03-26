@@ -133,14 +133,7 @@ const MeusDados = () => {
                     name: formData.name,
                 };
 
-
-                localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
-
-                toast.success("Dados atualizados com sucesso! ✨");
-
                 try {
-
-
                     localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
 
                     toast.success("Dados atualizados com sucesso! ✨");

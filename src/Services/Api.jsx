@@ -164,7 +164,16 @@ export const updateAddress = async (id_address, addressData) => {
   } catch (error) {
     throw error.response?.data || { message: "Erro ao atualizar endereço" };
   }
-};  
+};
+
+export const getMyOrders = async (page = 1, size = 5) => {
+    try {
+        const response = await api.get(`/pedido/listar?page=${page}&size=${size}`);
+        return response;
+    } catch (error) {
+        throw error.response?.data || { message: "Erro ao buscar pedidos" };
+    }
+};
 
 export default api;
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { CartContext } from "./CartContext";
 
-// utilizamos uma função de inicialização onde vai dentro do navegador e busca @UrbanCandy:cart para ver se existe algo guardado
+// usando uma função de inicialização onde vai dentro do navegador e busca @UrbanCandy:cart para ver se existe algo guardado
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(() => {
         const localData = localStorage.getItem('@UrbanCandy:cart');
