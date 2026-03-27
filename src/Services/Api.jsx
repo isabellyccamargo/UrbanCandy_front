@@ -4,15 +4,32 @@ const api = axios.create({
   baseURL: 'http://localhost:3030',
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('@UrbanCandy:token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+let openLoginModalCallback = null;
+
+export const setOpenLoginModalCallback = (callback) => {
+  openLoginModalCallback = callback;
+};
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      localStorage.removeItem('@UrbanCandy:token');
+      localStorage.removeItem('@UrbanCandy:user');
+
+
+      if (openLoginModalCallback) {
+        openLoginModalCallback();
+      }
+    }
+    return Promise.reject(error);
   }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+);
+export const setHeaderToken = (token) => {
+  if (token) {
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+  }
+}
 
 export const getFeaturedProducts = (page = 1, size = 6) => {
   return api.get(`/produto/listar`, {
@@ -167,12 +184,12 @@ export const updateAddress = async (id_address, addressData) => {
 };
 
 export const getMyOrders = async (page = 1, size = 5) => {
-    try {
-        const response = await api.get(`/pedido/listar?page=${page}&size=${size}`);
-        return response;
-    } catch (error) {
-        throw error.response?.data || { message: "Erro ao buscar pedidos" };
-    }
+  try {
+    const response = await api.get(`/pedido/listar?page=${page}&size=${size}`);
+    return response;
+  } catch (error) {
+    throw error.response?.data || { message: "Erro ao buscar pedidos" };
+  }
 };
 
 export default api;

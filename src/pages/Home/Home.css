@@ -57,11 +57,14 @@
 .features-grid { gap: 25px; max-width: 1250px; margin-top: 20px; }
 
 .about-container {
-  max-width: 1600px;
+  max-width: 1200px; /* Reduzi de 1600px para 1200px (padrão web) */
   margin: 0 auto;
   display: flex;
   align-items: center;
   gap: 40px;
+  width: 100%;       /* Garante que ocupe a tela toda */
+  padding: 0 20px;   /* Evita que o texto cole no canto da tela */
+  box-sizing: border-box; 
 }
 
 .about-text { flex: 1; }

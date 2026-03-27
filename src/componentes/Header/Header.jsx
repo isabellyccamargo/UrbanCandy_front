@@ -9,12 +9,18 @@ import './Header.css';
 import { useCart } from "../../Hooks/UseCart";
 
 export const Header = () => {
-  const { setIsCartOpen, cart, isLoginModalOpen, setIsLoginModalOpen, clearCart } = useCart();
-  const { user, setUser, logout } = useAuth();
+  const {
+    user,
+    setUser,
+    logout,
+    isLoginModalOpen,
+    setIsLoginModalOpen
+  } = useAuth();
+
+  const { setIsCartOpen, cart, clearCart } = useCart();
+
   const navigate = useNavigate();
-
   const [intendedPath, setIntendedPath] = useState(null);
-
 
   const handleProtectedLink = (e, path) => {
     e.preventDefault();
@@ -67,7 +73,7 @@ export const Header = () => {
             <div className="user-menu-trigger">
               <User size={24} color="#5D4037" />
               {user && (
-                <span>Olá, {user?.nome?.split(' ')[0] || 'Usuário'}</span>
+                <span>Olá, {user.nome?.split(' ')[0] || 'Usuário'}</span>
               )}
               <span className="arrow-down">▼</span>
             </div>

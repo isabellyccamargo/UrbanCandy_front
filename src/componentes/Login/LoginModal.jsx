@@ -5,6 +5,7 @@ import { useCart } from '../../Hooks/UseCart';
 import { Button } from '../Button/Button';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Hooks/AuthContext';
+import { setHeaderToken } from '../../Services/Api';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
@@ -25,22 +26,27 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
         try {
             const data = await loginUser(credentials.email, credentials.password);
-            console.log("Dados do Login:", data);
 
-            login(data);
+            if (data.token) {
+                localStorage.setItem('@UrbanCandy:token', data.token);
+                setHeaderToken(data.token);
+            }
+
+            const profile = data.user;
+            login(profile);
 
             if (data.id_people) {
                 await syncCart(data.id_people);
             }
 
             toast.update(idToast, {
-                render: `Bem-vindo(a), ${data.user?.name || 'Candy Lover'}! 🍬`,
+                render: `Bem-vindo(a), ${profile?.nome || 'Candy Lover'}! 🍬`,
                 type: "success",
                 isLoading: false,
                 autoClose: 3000
             });
 
-            onLoginSuccess(data);
+            onLoginSuccess(profile);
             handleClose();
         } catch (err) {
             const msgErro = err.response?.data?.mensagem || 'E-mail ou senha inválidos';
