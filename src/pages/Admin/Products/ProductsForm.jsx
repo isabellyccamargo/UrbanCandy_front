@@ -14,7 +14,6 @@ const ProductsForm = () => {
     const [price, setPrice] = useState('');
     const [idCategory, setIdCategory] = useState('');
     const [description, setDescription] = useState('');
-    const [stockNumber, setStockNumber] = useState(0);
     const [featured, setFeatured] = useState(false);
     const [imageFile, setImageFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -38,7 +37,6 @@ const ProductsForm = () => {
             setPrice(produtoParaEditar.price);
             setIdCategory(produtoParaEditar.id_category);
             setDescription(produtoParaEditar.description || '');
-            setStockNumber(produtoParaEditar.stock_number || 0);
             setFeatured(produtoParaEditar.featured || false);
             setPreview(`http://localhost:3030/uploads/${produtoParaEditar.image}`);
         }
@@ -61,7 +59,6 @@ const ProductsForm = () => {
         formData.append('price', Math.max(0, parseFloat(price)));
         formData.append('id_category', idCategory);
         formData.append('description', description);
-        formData.append('stock_number', Math.max(0, parseInt(stockNumber)));
         formData.append('featured', featured);
 
         if (imageFile) formData.append('image', imageFile);
@@ -107,10 +104,6 @@ const ProductsForm = () => {
                             <div className="input-group" style={{ flex: 1 }}>
                                 <label>Preço (R$)</label>
                                 <input type="number" step="0.01" min="0" value={price} onChange={(e) => setPrice(e.target.value)} required />
-                            </div>
-                            <div className="input-group" style={{ flex: 1 }}>
-                                <label>Estoque Inicial</label>
-                                <input type="number" min="0" value={stockNumber} onChange={(e) => setStockNumber(e.target.value)} required />
                             </div>
                         </div>
 

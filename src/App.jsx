@@ -37,6 +37,7 @@ function AppContent() {
       <Route path="/perfil" element={<PrivateRoute><Header /><MyData /><Footer /></PrivateRoute>} />
       <Route path="/pedidos" element={<PrivateRoute><Header /><MyOrders /><Footer /></PrivateRoute>} />
       <Route path="/checkout" element={<PrivateRoute><Header /><Checkout /><Footer /></PrivateRoute>} />
+      
 
       {/* ADMIN PROTEGIDO */}
       <Route path="/admin" element={<PrivateRoute><AdminLayout /></PrivateRoute>}>

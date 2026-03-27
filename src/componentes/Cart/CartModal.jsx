@@ -2,10 +2,12 @@ import { useCart } from "../../Hooks/UseCart";
 import { useNavigate } from "react-router-dom";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "../Button/Button";
+import { useAuth } from "../../Hooks/AuthContext";
 import "./CartModal.css";
 
 export const CartModal = () => {
-  const { cart, isCartOpen, setIsCartOpen, removeItem, updateQuantity, setIsLoginModalOpen } = useCart();
+  const { setIsLoginModalOpen } = useAuth();
+  const { cart, isCartOpen, setIsCartOpen, removeItem, updateQuantity } = useCart();
   const navigate = useNavigate();
   const baseImgUrl = "http://localhost:3030/uploads/";
 
@@ -15,7 +17,9 @@ export const CartModal = () => {
 
   const handleCheckout = () => {
     const user = localStorage.getItem("@UrbanCandy:user");
-    setIsCartOpen(false);
+
+    setIsCartOpen(false); 
+
     if (!user) {
       setIsLoginModalOpen(true);
     } else {

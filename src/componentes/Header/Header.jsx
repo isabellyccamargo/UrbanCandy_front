@@ -105,22 +105,15 @@ export const Header = () => {
 
       <LoginModal
         isOpen={isLoginModalOpen}
-        onClose={() => {
-          setIsLoginModalOpen(false);
-          setIntendedPath(null); // Limpa ao fechar
-        }}
+        onClose={() => setIsLoginModalOpen(false)}
         onLoginSuccess={(userData) => {
-          setUser(userData);
           setIsLoginModalOpen(false);
 
-          // 3. LÓGICA DE REDIRECIONAMENTO DINÂMICO:
-          // Se ele clicou em algo específico, vai para lá. 
-          // Se não (clicou só em 'Entrar'), vai para a Home ou Checkout.
+          setUser(userData);
+
           if (intendedPath) {
             navigate(intendedPath);
-            setIntendedPath(null); // Limpa o estado
-          } else {
-            navigate('/'); // Ou para onde preferir como padrão
+            setIntendedPath(null);
           }
         }}
       />
