@@ -4,6 +4,11 @@ const api = axios.create({
   baseURL: 'http://localhost:3030',
 });
 
+const token = localStorage.getItem('@UrbanCandy:token');
+if (token) {
+  api.defaults.headers.Authorization = `Bearer ${token}`;
+}
+
 let openLoginModalCallback = null;
 
 export const setOpenLoginModalCallback = (callback) => {
@@ -189,6 +194,44 @@ export const getMyOrders = async (page = 1, size = 5) => {
     return response;
   } catch (error) {
     throw error.response?.data || { message: "Erro ao buscar pedidos" };
+  }
+};
+
+export const getAllTypeOfPayment = async () => {
+  try {
+    const response = await api.get('/pagamento/listar', {
+      params: { page: 1, size: 100 }
+    });
+    return response.data;;
+  } catch (error) {
+    throw error.response?.data || { mensagem: "Erro ao buscar tipos de pagamento" };
+  }
+};
+
+export const createTypeOfPayment = async (paymentData) => {
+  try {
+    const response = await api.post('/pagamento/salvar', paymentData);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || { mensagem: "Erro ao criar tipo de pagamento" };
+  }
+};
+
+export const updateTypeOfPayment = async (id_type_of_payment, paymentData) => {
+  try {
+    const response = await api.put(`/pagamento/atualizar/${id_type_of_payment}`, paymentData);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar tipo de pagamento:", error);
+    throw error.response?.data || { mensagem: "Erro ao atualizar tipo de pagamento" };
+  }
+};
+
+export const deleteTypeOfPayment = async (id_type_of_payment) => {
+  try {
+    await api.delete(`/pagamento/excluir/${id_type_of_payment}`);
+  } catch (error) {
+    throw error.response?.data || { mensagem: "Erro ao excluir tipo de pagamento" };
   }
 };
 

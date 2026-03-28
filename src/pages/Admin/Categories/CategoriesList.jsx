@@ -9,11 +9,11 @@ import './CategoriesList.css';
 export const Categorias = () => {
     const [categorias, setCategorias] = useState([]);
     const [loading, setLoading] = useState(true);
-    
+
     // 1. Estados para o Modal que faltavam
     const [showModal, setShowModal] = useState(false);
     const [idParaDeletar, setIdParaDeletar] = useState(null);
-    
+
     const navigate = useNavigate();
 
     const carregarCategorias = async () => {
@@ -103,8 +103,8 @@ export const Categorias = () => {
                                         <td>#{cat.id_category}</td>
                                         <td>{cat.name_category}</td>
                                         <td style={{ textAlign: 'right' }}>
-                                            <button 
-                                                className="btn-edit" 
+                                            <button
+                                                className="btn-edit"
                                                 onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}
                                             >
                                                 Editar

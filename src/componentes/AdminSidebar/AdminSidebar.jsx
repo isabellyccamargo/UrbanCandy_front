@@ -34,6 +34,11 @@ export const AdminSidebar = () => {
           <Package size={20} />
           <span>Produtos</span>
         </Link>
+
+        <Link to="/admin/tipos-pagamento" className={`nav-item ${isActive('/admin/tipos-pagamento')}`}>
+          <Package size={20} />
+          <span>Tipo De Pagamento</span>
+        </Link>
       </nav>
 
       <div className="sidebar-footer">

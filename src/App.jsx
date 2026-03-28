@@ -12,6 +12,8 @@ import { Categorias } from './pages/Admin/Categories/CategoriesList';
 import { CategoriesForm } from './pages/Admin/Categories/CategoriesForm';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import ProductList from './pages/Admin/Products/ProductsList';
+import {TypeOfPaymentForm} from './pages/Admin/Payment/TypeOfPaymentForm';
+import {TypeOfPaymentList} from './pages/Admin/Payment/TypeOfPaymentList';
 import ProductsForm from './pages/Admin/Products/ProductsForm';
 import { AuthProvider, useAuth } from './Hooks/AuthContext';
 import { ToastContainer } from 'react-toastify'; 
@@ -47,6 +49,9 @@ function AppContent() {
         <Route path="produtos" element={<ProductList />} />
         <Route path="produtos/form" element={<ProductsForm />} />
         <Route path="produtos/form/:id" element={<ProductsForm />} />
+        <Route path="tipos-pagamento" element={<TypeOfPaymentList />} />
+        <Route path="tipos-pagamento/form" element={<TypeOfPaymentForm />} />
+        <Route path="tipos-pagamento/form/:id" element={<TypeOfPaymentForm />} />
       </Route>
     </Routes>
   );

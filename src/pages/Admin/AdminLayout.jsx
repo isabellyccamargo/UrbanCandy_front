@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { AdminSidebar } from '../../componentes/Sidebar/AdminSidebar'; 
+import { AdminSidebar } from '../../componentes/AdminSidebar/AdminSidebar'; 
 import { AdminHeader } from '../../componentes/AdminHeader/AdminHeader';  
 import './AdminLayout.css'
 
