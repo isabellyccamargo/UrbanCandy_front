@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../Hooks/UseCart';
-import { createOrder, getUserProfile } from '../../Services/Api';
+import { createOrder, getUserProfile, getAllTypeOfPayment } from '../../Services/Api';
 import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../Hooks/AuthContext';
@@ -11,13 +11,17 @@ const Checkout = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const { cart, clearCart } = useCart();
+
     const [paymentMethod, setPaymentMethod] = useState('');
+    const [paymentOptions, setPaymentOptions] = useState([]);
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+
     useEffect(() => {
-        const loadUserData = async () => {
+        const loadInitialData = async () => {
             if (!user || !user.id_user) {
                 toast.info("Por favor, faça login para finalizar seu pedido. 🍬");
                 navigate('/');
@@ -25,64 +29,79 @@ const Checkout = () => {
             }
 
             try {
-                const res = await getUserProfile(user.id_user);
-                if (res) {
-                    const person = res.people || {};
-                    const addr = person.address || person.Addresses?.[0] || {};
+                const [resProfile, resPayments] = await Promise.all([
+                    getUserProfile(user.id_user),
+                    getAllTypeOfPayment()
+                ]);
 
+                if (resProfile) {
+                    const person = resProfile.people || {};
+                    const addr = person.address || person.Addresses?.[0] || {};
                     setUserData({
                         ...person,
-                        email: res.email,
+                        email: resProfile.email,
                         addressFull: addr.road ? `${addr.road}, ${addr.number || 'S/N'} - ${addr.neighborhood || ''}` : "Endereço incompleto",
                         cityState: `${addr.city || ''} / ${addr.state || ''}`
                     });
                 }
+
+                setPaymentOptions(resPayments || []);
+
             } catch (error) {
                 console.error("Erro ao carregar dados do checkout:", error);
-                toast.error("Não conseguimos carregar seus dados. Verifique sua conexão. 🌐");
+                toast.error("Não conseguimos carregar os dados necessários. 🌐");
             } finally {
                 setLoading(false);
             }
         };
 
-        loadUserData();
+        loadInitialData();
     }, [user, navigate]);
 
     const handleFinalizeOrder = async () => {
         if (!paymentMethod) {
-            toast.warning("Selecione uma forma de pagamento para continuar! 💳");
+            toast.warning("Selecione uma forma de pagamento! 💳");
             return;
         }
 
         try {
             setIsSubmitting(true);
-
+            
             const orderPayload = {
-                id_people: userData.id_people,
-                type_payment: paymentMethod,
+                id_people: Number(userData.id_people),
+                id_payment: Number(paymentMethod),
                 cart: {
-                    total: cart.total,
+                    total: Number(cart.total),
                     items: cart.items.map(item => ({
-                        id_product: item.id_product,
-                        quantity: item.quantity,
-                        sub_total: item.sub_total || (item.quantity * Number(item.products?.price))
+                        id_product: Number(item.id_product),
+                        quantity: Number(item.quantity),
+                        sub_total: Number(item.sub_total || (item.quantity * Number(item.products?.price))),
+                        products: {
+                            price: Number(item.products?.price),
+                            name: item.products?.name
+                        }
                     }))
                 }
             };
 
+            console.log("Payload Final:", orderPayload);
+
             await createOrder(orderPayload);
 
-            toast.success("Pedido realizado com sucesso! ✨", { icon: "🎉" });
-
             clearCart();
-            navigate('/pedidos');
+            setShowSuccessModal(true);
+
         } catch (error) {
-            const msg = error.response?.data?.message || "Erro ao finalizar pedido.";
-            toast.error(msg);
-            console.error("Detalhes do erro 400:", error.response?.data);
+            console.error("Erro no Servidor:", error.response?.data);
+            toast.error("Erro ao processar no banco de dados. Verifique os campos.");
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    const handleCloseSuccessModal = () => {
+        setShowSuccessModal(false);
+        navigate('/pedidos');
     };
 
     if (loading) return <div className="loading">Carregando dados do pedido...</div>;
@@ -110,15 +129,17 @@ const Checkout = () => {
                 <section className="checkout-section card-candy">
                     <h3><i className="fas fa-credit-card"></i> Pagamento</h3>
                     <div className="payment-options">
-                        {['PIX', 'Cartão de Crédito', 'Boleto Bancário'].map(method => (
-                            <label key={method} className={`radio-label ${paymentMethod === method ? 'selected' : ''}`}>
+                        {/* MAPEANDO PAGAMENTOS DO BANCO */}
+                        {paymentOptions.map(option => (
+                            <label key={option.id_payment} className={`radio-label ${paymentMethod === option.id_payment ? 'selected' : ''}`}>
                                 <input
                                     type="radio"
                                     name="payment"
-                                    checked={paymentMethod === method}
-                                    onChange={() => setPaymentMethod(method)}
+                                    // IMPORTANTE: Agora comparamos e salvamos pelo ID (número)
+                                    checked={paymentMethod === option.id_payment}
+                                    onChange={() => setPaymentMethod(option.id_payment)}
                                 />
-                                <span>{method}</span>
+                                <span>{option.name_payment}</span>
                             </label>
                         ))}
                     </div>
@@ -156,6 +177,27 @@ const Checkout = () => {
                     {isSubmitting ? 'Processando...' : 'Finalizar Pedido'}
                 </Button>
             </aside>
+
+            {/* MODAL DE SUCESSO - PADRÃO IGUAL AO DE EXCLUSÃO */}
+            {showSuccessModal && (
+                <div className="modal-overlay">
+                    <div className="modal-confirmacao success-modal">
+                        <div className="success-icon">🎉</div>
+                        <h3>Pedido Confirmado!</h3>
+                        <p>Obrigada pela preferência!</p>
+                        <p>Seu pedido entrará em produção o quanto antes e assim que sair para entrega entramos em contato.</p>
+
+                        <div className="modal-buttons">
+                            <Button
+                                variant="primary"
+                                onClick={handleCloseSuccessModal}
+                            >
+                                Entendido, ver meus pedidos
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

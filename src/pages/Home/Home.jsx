@@ -77,7 +77,7 @@ const Home = () => {
           </section>
 
           <section className="categories-section animate-entrance">
-            <SectionHeader title="Nosso Cardápio" sub="Escolha sua categoria favorita e descubra os sabores" />
+            <SectionHeader title="Nosso Cardápio" sub="Escolha sua categoria favorita e descubra os sabores. Aqui você escolhe seu doce favorito e fazemos na hora. Fresquinho e delicioso!" />
             <div className="categories-grid">
               {categories.map((cat, i) => (
                 <CategoryCard key={i} title={cat.name} image={cat.image} />
