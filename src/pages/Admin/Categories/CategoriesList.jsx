@@ -1,26 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '../../../componentes/Button/Button';
 import { useNavigate } from 'react-router-dom';
-import api, { getAllCategory } from '../../../Services/Api'; // Importe api e getAllCategory
-import { toast } from 'react-toastify'; // Faltava este import
+import api, { getAllCategory } from '../../../Services/Api'; 
+import { toast } from 'react-toastify';
 
 import './CategoriesList.css';
 
 export const Categorias = () => {
     const [categorias, setCategorias] = useState([]);
     const [loading, setLoading] = useState(true);
+    
+    // 1. Estados de Paginação (Padronizado com Produtos)
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-    // 1. Estados para o Modal que faltavam
     const [showModal, setShowModal] = useState(false);
     const [idParaDeletar, setIdParaDeletar] = useState(null);
 
     const navigate = useNavigate();
 
-    const carregarCategorias = async () => {
+    // 2. Carga de dados observando a página atual
+    const carregarCategorias = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await getAllCategory();
-            setCategorias(response.data || []);
+            // Enviando page e size (6) para manter o padrão
+            const response = await getAllCategory(page, 6); 
+            
+            // Ajuste aqui conforme o retorno do seu Back-end (data e totalPages)
+            const { data, totalPages: total } = response.data;
+            
+            setCategorias(data || []);
+            setTotalPages(total || 1);
         } catch (error) {
             console.error("Erro ao carregar categorias:", error);
             toast.error("Erro ao buscar categorias do servidor. 🍬", { theme: "colored" });
@@ -30,19 +40,16 @@ export const Categorias = () => {
     };
 
     useEffect(() => {
-        carregarCategorias();
-    }, []);
+        carregarCategorias(currentPage);
+    }, [currentPage]);
 
-    // 2. Função que abre o modal (chamada pelo botão da tabela)
     const handleExcluir = (id) => {
         setIdParaDeletar(id);
         setShowModal(true);
     };
 
-    // 3. Função que deleta de fato (chamada pelo botão "Sim" do modal)
     const confirmarExclusao = async () => {
         const idToast = toast.loading("Removendo categoria...");
-
         try {
             await api.delete(`/categoria/excluir/${idParaDeletar}`);
 
@@ -54,11 +61,9 @@ export const Categorias = () => {
                 theme: "colored"
             });
 
-            carregarCategorias(); // Recarrega a lista após deletar
+            carregarCategorias(currentPage); 
         } catch (err) {
-            console.error("Erro na exclusão:", err);
             const msgErro = err.response?.data?.message || 'Erro ao excluir categoria.';
-
             toast.update(idToast, {
                 render: msgErro,
                 type: "error",
@@ -85,69 +90,76 @@ export const Categorias = () => {
             </header>
 
             <section className="admin-table-container">
-                {loading ? (
-                    <p style={{ padding: '20px' }}>Carregando categorias...</p>
-                ) : (
-                    <table className="admin-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nome da Categoria</th>
-                                <th style={{ textAlign: 'right' }}>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {categorias.length > 0 ? (
-                                categorias.map(cat => (
-                                    <tr key={cat.id_category}>
-                                        <td>#{cat.id_category}</td>
-                                        <td>{cat.name_category}</td>
-                                        <td style={{ textAlign: 'right' }}>
-                                            <button
-                                                className="btn-edit"
-                                                onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}
-                                            >
-                                                Editar
-                                            </button>
-                                            <button
-                                                className="btn-delete"
-                                                onClick={() => handleExcluir(cat.id_category)}
-                                            >
-                                                Excluir
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="3" style={{ textAlign: 'center' }}>
-                                        Nenhuma categoria encontrada.
+                <table className="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome da Categoria</th>
+                            <th style={{ textAlign: 'right' }}>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {loading ? (
+                            <tr><td colSpan="3">Carregando categorias...</td></tr>
+                        ) : categorias.length > 0 ? (
+                            categorias.map(cat => (
+                                <tr key={cat.id_category}>
+                                    <td>#{cat.id_category}</td>
+                                    <td>{cat.name_category}</td>
+                                    <td style={{ textAlign: 'right' }}>
+                                        <button
+                                            className="btn-edit"
+                                            onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}
+                                        >
+                                            Editar
+                                        </button>
+                                        <button
+                                            className="btn-delete"
+                                            onClick={() => handleExcluir(cat.id_category)}
+                                        >
+                                            Excluir
+                                        </button>
                                     </td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-                )}
+                            ))
+                        ) : (
+                            <tr><td colSpan="3" style={{ textAlign: 'center' }}>Nenhuma categoria encontrada.</td></tr>
+                        )}
+                    </tbody>
+                </table>
+
+                {/* 3. Controles de Paginação (Idêntico ao de Produtos) */}
+                <div className="pagination-controls">
+                    <Button 
+                        variant="secondary" 
+                        disabled={currentPage === 1} 
+                        onClick={() => setCurrentPage(prev => prev - 1)}
+                    >
+                        Anterior
+                    </Button>
+
+                    <span>Página {currentPage} de {totalPages}</span>
+
+                    <Button 
+                        variant="secondary" 
+                        disabled={currentPage === totalPages} 
+                        onClick={() => setCurrentPage(prev => prev + 1)}
+                    >
+                        Próximo
+                    </Button>
+                </div>
             </section>
 
-            {/* 4. JSX DO MODAL (Igual ao de produtos) */}
             {showModal && (
                 <div className="modal-overlay">
                     <div className="modal-confirmacao">
                         <h3>Confirmar Exclusão</h3>
                         <p>Deseja realmente excluir esta categoria? Esta ação não pode ser desfeita.</p>
                         <div className="modal-buttons">
-                            <Button
-                                variant="secondary"
-                                onClick={() => setShowModal(false)}
-                            >
+                            <Button variant="secondary" onClick={() => setShowModal(false)}>
                                 Cancelar
                             </Button>
-
-                            <Button
-                                variant="primary"
-                                onClick={confirmarExclusao}
-                            >
+                            <Button variant="primary" onClick={confirmarExclusao}>
                                 Sim, Excluir
                             </Button>
                         </div>

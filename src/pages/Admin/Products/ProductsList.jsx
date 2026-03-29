@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getFeaturedProducts, deleteProduct } from '../../../Services/Api';
+import { getAllProducts, deleteProduct } from '../../../Services/Api';
 import { Button } from '../../../componentes/Button/Button';
 import './ProductsList.css';
 import { toast } from 'react-toastify';
@@ -16,10 +16,14 @@ const ProductList = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        loadProducts(currentPage);
+    }, [currentPage]);
+
     const loadProducts = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await getFeaturedProducts(page, 6);
+            const response = await getAllProducts(page, 6);
             const { data, totalPages: total } = response.data;
             setProducts(data || []);
             setTotalPages(total || 1);
@@ -30,10 +34,6 @@ const ProductList = () => {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        loadProducts(currentPage);
-    }, [currentPage]);
 
     const confirmarExclusao = async () => {
         try {

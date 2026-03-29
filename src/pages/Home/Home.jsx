@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getFeaturedProducts } from '../../Services/Api';
+import { getAllProducts } from '../../Services/Api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 import { CategoryCard } from '../../componentes/Category/CategoryCard';
 import { FeatureCard } from '../../componentes/Featured/FeaturedCard';
@@ -27,7 +27,7 @@ const Home = () => {
     const loadHomeData = async () => {
       try {
         setLoading(true);
-        const response = await getFeaturedProducts();
+        const response = await getAllProducts();
         
         const productsArray = response?.data?.data || [];
         

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCategory, getFeaturedProducts, getAllOrders } from '../../../Services/Api';
+import { getAllCategory, getAllProducts, getAllOrders } from '../../../Services/Api';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -17,7 +17,7 @@ const Dashboard = () => {
                 setLoading(true);
 
                 const resCats = await getAllCategory();
-                const resProducts = await getFeaturedProducts();
+                const resProducts = await getAllProducts();
                 const resOrders = await getAllOrders();
 
                 const listaCategorias = resCats.data?.data || resCats.data || resCats || [];

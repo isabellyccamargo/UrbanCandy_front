@@ -36,6 +36,12 @@ export const setHeaderToken = (token) => {
   }
 }
 
+export const getAllProducts = (page = 1, size = 6) => {
+  return api.get(`/produto/listar`, {
+    params: { page, size }
+  });
+};
+
 export const getFeaturedProducts = (page = 1, size = 6) => {
   return api.get(`/produto/listar`, {
     params: { page, size }
@@ -52,10 +58,11 @@ export const getProductsByCategory = async (categoryName) => {
   }
 };
 
-export const getAllCategory = async () => {
+export const getAllCategory = async (page = 1, size = 6) => {
   try {
-    const response = await api.get(`/categoria/listar`);
-    return response.data;
+    return api.get(`/categoria/listar`, {
+      params: { page, size }
+    });
   } catch (error) {
     console.error("Erro ao buscar categorias:", error);
     throw error;
@@ -188,14 +195,11 @@ export const updateAddress = async (id_address, addressData) => {
   }
 };
 
-export const getMyOrders = async (page = 1, size = 5) => {
-  try {
-    const response = await api.get(`/pedido/listar?page=${page}&size=${size}`);
-    return response;
-  } catch (error) {
-    throw error.response?.data || { message: "Erro ao buscar pedidos" };
-  }
-};
+export const getMyOrders = (page = 1, size = 5) => {
+  return api.get(`/pedido/listar`, {
+    params: { page, size }
+  });
+};  
 
 export const getAllTypeOfPayment = async () => {
   try {
