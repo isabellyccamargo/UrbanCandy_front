@@ -142,14 +142,10 @@ export const updateCategory = async (id_category, categoryData) => {
   }
 };
 
-export const getAllOrders = async () => {
-  try {
-    const response = await api.get('/pedido/listar');
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao buscar pedidos:", error);
-    throw error;
-  }
+export const getAllOrdersForDashboard = () => {
+  return api.get(`/pedido/listar`, {
+    params: { page: 1, size: 0 } 
+  });
 };
 
 export const deleteProduct = async (id_product) => {
@@ -195,11 +191,11 @@ export const updateAddress = async (id_address, addressData) => {
   }
 };
 
-export const getMyOrders = (page = 1, size = 5) => {
+export const getMyOrders = (page = 1, size = 6) => {
   return api.get(`/pedido/listar`, {
     params: { page, size }
   });
-};  
+};
 
 export const getAllTypeOfPayment = async () => {
   try {
@@ -211,6 +207,7 @@ export const getAllTypeOfPayment = async () => {
     throw error.response?.data || { mensagem: "Erro ao buscar tipos de pagamento" };
   }
 };
+
 
 export const createTypeOfPayment = async (paymentData) => {
   try {

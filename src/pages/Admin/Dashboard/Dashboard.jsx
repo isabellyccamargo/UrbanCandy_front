@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCategory, getAllProducts, getAllOrders } from '../../../Services/Api';
+import { getAllCategory, getAllProducts, getAllOrdersForDashboard } from '../../../Services/Api';
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -16,27 +16,43 @@ const Dashboard = () => {
             try {
                 setLoading(true);
 
-                const resCats = await getAllCategory();
-                const resProducts = await getAllProducts();
-                const resOrders = await getAllOrders();
+                const resCats = await getAllCategory(1, 100);
+                const resProducts = await getAllProducts(1, 100);
+                const resOrders = await getAllOrdersForDashboard();
 
-                const listaCategorias = resCats.data?.data || resCats.data || resCats || [];
-                const listaProdutos = resProducts.data?.data || resProducts.data || resProducts || [];
+                const totalOrdersCount = resOrders.data?.totalItems || 0;
+                const arrayPedidos = resOrders.data?.data || [];
 
-                const listaPedidos = resOrders.data?.data || resOrders.data || [];
-                const totalPedidosNoBanco = resOrders.data?.totalItems || listaPedidos.length || 0;
+                const totalCats = resCats.data?.totalItems ||
+                    (Array.isArray(resCats.data?.data) ? resCats.data.data.length : 0) ||
+                    (Array.isArray(resCats.data) ? resCats.data.length : 0);
 
-                const totalVendas = listaPedidos.reduce((acc, curr) => {
-                    return acc + (Number(curr.total) || 0);
+                const totalProds = resProducts.data?.totalItems ||
+                    (Array.isArray(resProducts.data?.data) ? resProducts.data.data.length : 0) ||
+                    (Array.isArray(resProducts.data) ? resProducts.data.length : 0);
+
+                const totalVendas = arrayPedidos.reduce((acc, curr) => {
+                    const valorBruto = curr.total;
+
+                    const valorNumerico = typeof valorBruto === 'string'
+                        ? parseFloat(valorBruto)
+                        : Number(valorBruto);
+
+                    return acc + (valorNumerico || 0);
                 }, 0);
 
-                setStatsData([
-                    { id: 1, label: 'Categorias', value: listaCategorias.length, icon: '🏷️', color: '#ff2d78' },
-                    { id: 2, label: 'Produtos', value: listaProdutos.length, icon: '📦', color: '#a855f7' },
-                    { id: 3, label: 'Pedidos', value: totalPedidosNoBanco, icon: '🛒', color: '#f97316' },
-                    { id: 4, label: 'Vendas', value: totalVendas.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }), icon: '💰', color: '#22c55e' },
-                ]);
-
+               setStatsData([
+    { id: 1, label: 'Categorias', value: totalCats, icon: '🏷️', color: '#ff2d78' },
+    { id: 2, label: 'Produtos', value: totalProds, icon: '📦', color: '#a855f7' },
+    { id: 3, label: 'Pedidos', value: totalOrdersCount, icon: '🛒', color: '#f97316' },
+    { 
+        id: 4, 
+        label: 'Vendas', 
+        value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalVendas), 
+        icon: '💰', 
+        color: '#22c55e' 
+    },
+]);
             } catch (error) {
                 console.error("Erro ao carregar dashboard:", error);
             } finally {
@@ -46,6 +62,7 @@ const Dashboard = () => {
 
         loadData();
     }, []);
+
 
     if (loading) return <div className="dash-container">Carregando dados reais...</div>;
 
@@ -59,7 +76,7 @@ const Dashboard = () => {
                     <div
                         key={item.id}
                         className="stat-card animate-entrance"
-                        style={{ animationDelay: `${i * 0.1}s` }} 
+                        style={{ animationDelay: `${i * 0.1}s` }}
                     >
                         <div className="stat-icon" style={{ backgroundColor: item.color + '15', color: item.color }}>
                             {item.icon}
