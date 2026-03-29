@@ -197,15 +197,10 @@ export const getMyOrders = (page = 1, size = 6) => {
   });
 };
 
-export const getAllTypeOfPayment = async () => {
-  try {
-    const response = await api.get('/pagamento/listar', {
-      params: { page: 1, size: 100 }
-    });
-    return response.data;;
-  } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao buscar tipos de pagamento" };
-  }
+export const getAllTypeOfPayment = async (page = 1, size = 6) => {
+  return api.get(`/pagamento/listar`, {
+   params: { page, size }
+ });
 };
 
 
