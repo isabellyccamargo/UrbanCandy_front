@@ -54,7 +54,8 @@ const MeusDados = () => {
     useEffect(() => {
         const loadUserData = async () => {
             const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
-            if (storedUser?.id_user) {
+            const token = localStorage.getItem('@UrbanCandy:token');
+            if (storedUser?.id_user && token) {
                 try {
                     const res = await getUserProfile(storedUser.id_user);
                     if (res) {
@@ -76,6 +77,12 @@ const MeusDados = () => {
                 } catch {
                     toast.error("Não conseguimos carregar seus dados. 😟");
                 }
+            } else {
+                setIsEditMode(false);
+                setFormData({
+                    name: '', email: '', cpf: '', telephone: '', password: '', confirmPassword: '',
+                    cep: '', city: '', neighborhood: '', road: '', number: '', complement: ''
+                });
             }
             setLoading(false);
         };
@@ -119,7 +126,7 @@ const MeusDados = () => {
                 // 3. Atualiza Estado Global e LocalStorage (para o Header mudar na hora)
                 const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
                 const updatedUserData = { ...storedUser, name: formData.name };
-                
+
                 setUser(updatedUserData);
                 localStorage.setItem('@UrbanCandy:user', JSON.stringify(updatedUserData));
 
@@ -142,60 +149,80 @@ const MeusDados = () => {
     if (loading) return <div className="loading-container"><p>Carregando seus dados... 🍫</p></div>;
 
     return (
-        <div className="meus-dados-container">
-            <header className="header-perfil">
+        <div className="orders-page animate-entrance">
+            <header className="orders-header">
                 <h1>{isEditMode ? 'Meus Dados' : 'Criar Conta'}</h1>
+                <p>{isEditMode ? 'Mantenha suas informações sempre atualizadas' : 'Junte-se ao mundo doce da UrbanCandy'}</p>
             </header>
 
-            <form onSubmit={handleSubmit} className="grid-form">
-                <h2 className='section-title'>Dados Pessoais</h2>
-                <div className="form-row triple-row">
-                    <FormField label="Nome" name="name" value={formData.name} onChange={handleChange} required />
-                    <FormField label="CPF" name="cpf" value={formData.cpf} onChange={handleChange} readOnly={isEditMode} required maxLength="14" style={isEditMode ? { backgroundColor: '#f0f0f0', cursor: 'not-allowed' } : {}} />
-                    <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15" />
-                </div>
+            <section className="admin-table-container">
+                <form onSubmit={handleSubmit} className="grid-form">
+                    <h2 className='section-title'>Dados Pessoais</h2>
+                    <div className="form-row triple-row">
+                        <FormField label="Nome" name="name" value={formData.name} onChange={handleChange} required />
+                        <FormField
+                            label="CPF"
+                            name="cpf"
+                            value={formData.cpf}
+                            onChange={handleChange}
+                            readOnly={isEditMode}
+                            required
+                            maxLength="14"
+                            className={isEditMode ? "input-readonly" : ""}
+                        />
+                        <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15" />
+                    </div>
 
-                <div className="form-row triple-row">
-                    <FormField label="E-mail" name="email" value={formData.email} onChange={handleChange} readOnly={isEditMode} required style={isEditMode ? { backgroundColor: '#f0f0f0', cursor: 'not-allowed' } : {}} />
-                    {!isEditMode && (
-                        <>
-                            <div className="form-group">
-                                <label>Senha <span style={{ color: 'red' }}>*</span></label>
-                                <div className="input-container-simples">
-                                    <input name="password" type={showPass ? "text" : "password"} value={formData.password} onChange={handleChange} className="input-com-botao" required />
-                                    <span className="texto-mostrar" onClick={() => setShowPass(!showPass)}>{showPass ? "Ocultar" : "Mostrar"}</span>
+                    <div className="form-row triple-row">
+                        <FormField
+                            label="E-mail"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            readOnly={isEditMode}
+                            required
+                            className={isEditMode ? "input-readonly" : ""}
+                        />
+                        {!isEditMode && (
+                            <>
+                                <div className="form-group">
+                                    <label>Senha <span style={{ color: 'red' }}>*</span></label>
+                                    <div className="input-container-simples">
+                                        <input name="password" type={showPass ? "text" : "password"} value={formData.password} onChange={handleChange} className="input-com-botao" required />
+                                        <span className="texto-mostrar" onClick={() => setShowPass(!showPass)}>{showPass ? "Ver" : "Ocultar"}</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="form-group">
-                                <label>Confirmar Senha <span style={{ color: 'red' }}>*</span></label>
-                                <div className="input-container-simples">
-                                    <input name="confirmPassword" type={showConfirm ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} className="input-com-botao" required />
-                                    <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? "Ocultar" : "Mostrar"}</span>
+                                <div className="form-group">
+                                    <label>Confirmar Senha <span style={{ color: 'red' }}>*</span></label>
+                                    <div className="input-container-simples">
+                                        <input name="confirmPassword" type={showConfirm ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} className="input-com-botao" required />
+                                        <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? "Ver" : "Ocultar"}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </>
-                    )}
-                </div>
+                            </>
+                        )}
+                    </div>
 
-                <h2 className='section-title'>Endereço</h2>
-                <div className="form-row address-main-row">
-                    <FormField label="CEP" name="cep" value={formData.cep} onChange={handleChange} onBlur={handleCepBlur} required maxLength="9" />
-                    <FormField label="Cidade" name="city" value={formData.city} onChange={handleChange} required />
-                    <FormField label="Bairro" name="neighborhood" value={formData.neighborhood} onChange={handleChange} />
-                </div>
+                    <h2 className='section-title' style={{ marginTop: '20px' }}>Endereço</h2>
+                    <div className="form-row address-main-row">
+                        <FormField label="CEP" name="cep" value={formData.cep} onChange={handleChange} onBlur={handleCepBlur} required maxLength="9" />
+                        <FormField label="Cidade" name="city" value={formData.city} onChange={handleChange} required />
+                        <FormField label="Bairro" name="neighborhood" value={formData.neighborhood} onChange={handleChange} />
+                    </div>
 
-                <div className="form-row address-street-row">
-                    <FormField label="Rua" name="road" value={formData.road} onChange={handleChange} required className="street-field" />
-                    <FormField label="Número" name="number" value={formData.number} onChange={handleChange} required />
-                </div>
+                    <div className="form-row address-street-row">
+                        <FormField label="Rua" name="road" value={formData.road} onChange={handleChange} required />
+                        <FormField label="Número" name="number" value={formData.number} onChange={handleChange} required />
+                    </div>
 
-                <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '30px' }}>
-                    <Button type="submit" variant="primary" disabled={isSaving}>
-                        {isSaving ? 'Salvando...' : (isEditMode ? 'Salvar Alterações' : 'Finalizar Cadastro')}
-                    </Button>
-                </div>
-            </form >
-        </div >
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '30px' }}>
+                        <Button type="submit" variant="primary" disabled={isSaving}>
+                            {isSaving ? 'Salvando...' : (isEditMode ? 'Salvar Alterações' : 'Finalizar Cadastro')}
+                        </Button>
+                    </div>
+                </form>
+            </section>
+        </div>
     );
 };
 

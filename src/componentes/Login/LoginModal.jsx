@@ -17,7 +17,6 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
     if (!isOpen) return null;
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -126,7 +125,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
 
                 <p className="footer-text">
                     Não tem cadastro?
-                    <Link to="/perfil" onClick={handleClose}> Crie sua conta aqui</Link>
+                    <Link to="/perfil/cadastrar" onClick={handleClose}> Crie sua conta aqui</Link>
                 </p>
             </div>
         </div>

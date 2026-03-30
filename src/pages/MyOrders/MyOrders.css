@@ -1,7 +1,7 @@
 /* Fundo da página inteira em rosa claro */
 .orders-page {
     background-color: #fff5f8; /* Rosa bem clarinho para destacar o card */
-    min-height: 100vh;
+    min-height: 50vh;
     padding: 40px 20px;
 }
 
@@ -13,6 +13,7 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
     max-width: 100%;
     margin: 0 auto;
+    margin-bottom: 50px;
 }
 
 /* Cabeçalho da página */

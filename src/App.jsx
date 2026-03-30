@@ -34,6 +34,7 @@ function AppContent() {
       {/* --- ROTAS PÚBLICAS --- */}
       <Route path="/" element={<><Header /><CartModal /><Home /><Footer /></>} />
       <Route path="/cardapio/:categoryName" element={<><Header /><CartModal /><MenuByCategory /><Footer /></>} />
+      <Route path="/perfil/cadastrar" element={<><Header /><MyData /><Footer /></>} />
 
       {/* --- ROTAS PROTEGIDAS --- */}
       <Route path="/perfil" element={<PrivateRoute><Header /><MyData /><Footer /></PrivateRoute>} />
