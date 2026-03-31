@@ -45,10 +45,12 @@ const Checkout = () => {
                     });
                 }
 
-                setPaymentOptions(resPayments || []);
+                const paymentsArray = resPayments.data?.data || resPayments.data || [];
+                setPaymentOptions(Array.isArray(paymentsArray) ? paymentsArray : []);
 
             } catch (error) {
                 console.error("Erro ao carregar dados do checkout:", error);
+                setPaymentOptions([]);
                 toast.error("Não conseguimos carregar os dados necessários. 🌐");
             } finally {
                 setLoading(false);
@@ -66,7 +68,7 @@ const Checkout = () => {
 
         try {
             setIsSubmitting(true);
-            
+
             const orderPayload = {
                 id_people: Number(userData.id_people),
                 id_payment: Number(paymentMethod),

@@ -189,14 +189,14 @@ const MeusDados = () => {
                                     <label>Senha <span style={{ color: 'red' }}>*</span></label>
                                     <div className="input-container-simples">
                                         <input name="password" type={showPass ? "text" : "password"} value={formData.password} onChange={handleChange} className="input-com-botao" required />
-                                        <span className="texto-mostrar" onClick={() => setShowPass(!showPass)}>{showPass ? "Ver" : "Ocultar"}</span>
+                                        <span className="texto-mostrar" onClick={() => setShowPass(!showPass)}>{showPass ? "Ocultar" : "Ver"}</span>
                                     </div>
                                 </div>
                                 <div className="form-group">
                                     <label>Confirmar Senha <span style={{ color: 'red' }}>*</span></label>
                                     <div className="input-container-simples">
                                         <input name="confirmPassword" type={showConfirm ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} className="input-com-botao" required />
-                                        <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? "Ver" : "Ocultar"}</span>
+                                        <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? "Ocultar" : "Ver"}</span>
                                     </div>
                                 </div>
                             </>

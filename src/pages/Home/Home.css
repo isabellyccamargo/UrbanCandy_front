@@ -41,6 +41,24 @@
 }
 .products-slider:hover { animation-play-state: paused; }
 
+/* O item que envolve o CardProduct no Slider */
+.slider-item {
+  /* Aumentamos de um padrão pequeno para algo mais imponente */
+  width: 350px; 
+  flex-shrink: 0; /* Impede que o flex "esmague" o card */
+  transition: transform 0.3s ease;
+}
+
+/* Ajuste específico para a imagem dentro dos destaques */
+.slider-item .product-image {
+  height: 300px; /* Deixa a imagem mais alta nos destaques */
+}
+
+/* Efeito de destaque ao passar o mouse */
+.slider-item:hover {
+  transform: scale(1.02);
+}
+
 @keyframes slideInfinito {
   0% { transform: translateX(0); }
   100% { transform: translateX(calc(-50% - 15px)); }
@@ -112,3 +130,11 @@
 .top-left { height: 300px; align-self: end; margin: 0 0 50px 70px; z-index: 2; }
 .main-right { grid-column: 2; grid-row: 1 / span 2; height: 490px; margin-left: -10px; }
 .bottom-left { height: 290px; align-self: start; margin-left: 30px; margin-top: 40px;}
+
+.products-slider {
+  display: flex;
+  gap: 30px; /* Se o gap é 30px, o calc deve ser -50% - 15px (metade do gap) */
+  padding: 40px 20px; /* Aumentei o padding para a sombra do card não cortar */
+  width: max-content;
+  animation: slideInfinito 40s linear infinite; /* Aumentei o tempo para 40s porque cards maiores precisam de mais tempo para passar */
+}

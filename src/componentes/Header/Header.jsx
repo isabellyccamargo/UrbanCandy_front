@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate,useLocation} from 'react-router-dom';
 import { ShoppingCart, User, Users } from 'lucide-react';
 import LoginModal from '../../componentes/Login/LoginModal';
 import { Button } from '../Button/Button';
@@ -20,7 +20,22 @@ export const Header = () => {
   const { setIsCartOpen, cart, clearCart } = useCart();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [intendedPath, setIntendedPath] = useState(null);
+
+  useEffect(() => {
+    // 1. Cria um objeto com os parâmetros da URL
+    const params = new URLSearchParams(location.search);
+    
+    // 2. Se o parâmetro "login" for "true", abre o modal
+    if (params.get('login') === 'true') {
+      setIsLoginModalOpen(true);
+
+      // 3. (Opcional) Limpa a URL para tirar o "?login=true" sem recarregar a página
+      // Isso evita que o modal abra de novo se o usuário der F5
+      navigate(location.pathname, { replace: true });
+    }
+  }, [location, setIsLoginModalOpen, navigate]);
 
   const handleProtectedLink = (e, path) => {
     e.preventDefault();

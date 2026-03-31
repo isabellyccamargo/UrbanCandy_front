@@ -191,8 +191,8 @@ export const updateAddress = async (id_address, addressData) => {
   }
 };
 
-export const getMyOrders = (page = 1, size = 6) => {
-  return api.get(`/pedido/listar`, {
+export const getMyOrders = (id_people, page = 1, size = 6) => {
+  return api.get(`/pedido/usuario/${id_people}`, {
     params: { page, size }
   });
 };

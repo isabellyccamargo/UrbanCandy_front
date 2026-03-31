@@ -13,17 +13,24 @@ export const MyOrders = () => {
     const loadOrders = async (page = 1) => {
         try {
             setLoading(true);
-            const response = await getMyOrders(page, 5);
+            const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
 
-            // Padronizando a extração de dados conforme o seu Controller
+            const idUser = storedUser?.id_user || storedUser?.id;
+
+            if (!idUser) {
+                toast.error("Usuário não identificado. Faça login novamente.");
+                return;
+            }
+
+            const response = await getMyOrders(idUser, page, 5);
+
             const { data, totalPages: total } = response.data;
 
             setOrders(data || []);
             setTotalPages(total || 1);
         } catch (error) {
             console.error("Erro ao buscar pedidos:", error);
-            const errorMsg = error.response?.data?.message || "Não foi possível carregar seus pedidos. 🍬";
-            toast.error(errorMsg);
+            toast.error("Erro ao carregar histórico.");
         } finally {
             setLoading(false);
         }
