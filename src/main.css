@@ -3,9 +3,9 @@ html, body {
   padding: 0;
   width: 100%;
   min-width: 100%;
-  /* O segredo para matar o espaço branco lateral: */
   overflow-x: hidden; 
   position: relative;
+  padding-top: 40px;
 }
 
 #root {

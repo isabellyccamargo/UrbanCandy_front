@@ -94,6 +94,7 @@
 /* Totais */
 .total-box {
   margin-top: 15px;
+  margin-bottom: 10px;
   padding-top: 15px;
   border-top: 2px solid #F3F4F6;
 }
@@ -121,7 +122,7 @@
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 15px;
+  margin-top: 40px;
 }
 
 .btn-finalize:hover {

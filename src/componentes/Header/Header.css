@@ -5,8 +5,15 @@
     display: flex;
     justify-content: center;
     border-bottom: 1px solid #eeeeee;
+    
+    /* Configuração Fixa */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0; /* Garante que cubra de ponta a ponta */
+    z-index: 1000;
+    margin: 0;
 }
-
 .header-container {
     width: 100%; 
     max-width: 100%;
@@ -37,8 +44,8 @@
 .user-menu-container {
     position: relative; 
     cursor: pointer;
+    z-index: 1050; 
 }
-
 .user-menu-trigger {
     display: flex;
     align-items: center;
@@ -47,15 +54,18 @@
 
 .dropdown-menu {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 5px); /* Dá um pequeno espaço, mas garante o foco */
     right: 0;
     background: white;
-    box-shadow: 0px 8px 16px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    padding: 10px 0;
-    min-width: 180px;
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.15); /* Sombra mais visível */
+    border-radius: 12px; /* Bordas mais arredondadas para combinar com a UrbanCandy */
+    padding: 12px 0;
+    min-width: 200px;
     display: none; 
     flex-direction: column;
+    /* A LINHA MÁGICA: */
+    z-index: 1100; /* Maior que o do header para não ser cortado */
+    border: 1px solid #f0f0f0;
 }
 
 .user-menu-container:hover .dropdown-menu {

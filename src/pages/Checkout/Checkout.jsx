@@ -48,7 +48,7 @@ const Checkout = () => {
                         id_people: person.id_people || userId, 
                         email: resProfile.email || person.email,
                         addressFull: addr.road ? `${addr.road}, ${addr.number || 'S/N'} - ${addr.neighborhood || ''}` : "Endereço não cadastrado",
-                        cityState: addr.city ? `${addr.city} / ${addr.state}` : "Cidade/Estado não informados"
+                        cityState: addr.city ? `${addr.city} ` : "Cidade/Estado não informados"
                     });
                 }
 

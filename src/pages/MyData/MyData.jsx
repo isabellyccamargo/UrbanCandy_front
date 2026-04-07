@@ -170,7 +170,7 @@ const MeusDados = () => {
                             maxLength="14"
                             className={isEditMode ? "input-readonly" : ""}
                         />
-                        <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15" />
+                        <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15"  required/>
                     </div>
 
                     <div className="form-row triple-row">
