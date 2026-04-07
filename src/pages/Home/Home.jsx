@@ -4,7 +4,7 @@ import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 import { CategoryCard } from '../../componentes/Category/CategoryCard';
 import { FeatureCard } from '../../componentes/Featured/FeaturedCard';
 import { Link } from 'react-router-dom';
-import { FEATURES, CATEGORY_IMAGES } from './HomeData'; 
+import { FEATURES, CATEGORY_IMAGES } from './HomeData';
 import { toast } from 'react-toastify';
 import sobre1 from '../../assets/sobre1.png';
 import sobre2 from '../../assets/sobre2.png';
@@ -27,15 +27,22 @@ const Home = () => {
     const loadHomeData = async () => {
       try {
         setLoading(true);
-        const response = await getAllProducts();
-        
+        const response = await getAllProducts(1,300);
+
         const productsArray = response?.data?.data || [];
-        
+        console.log("Produtos vindos da API:", productsArray);
+        console.log("Produtos vindos da API:", productsArray);
+        console.log("Produtos vindos da API:", productsArray);
+
         if (!Array.isArray(productsArray)) {
-            throw new Error("Formato de dados inválido");
+          throw new Error("Formato de dados inválido");
         }
 
-        setProducts(productsArray.filter(p => Number(p.featured) === 1));
+        const featuredProducts = productsArray.filter(p =>
+          p.featured == 1 || p.featured == true || p.featured === "1" || p.featured === "true"
+        );
+
+        setProducts(featuredProducts);
 
         const uniqueCategories = Array.from(new Set(productsArray.map(p =>
           p.category?.name_category || p.category || "Geral"
@@ -48,7 +55,7 @@ const Home = () => {
       } catch (err) {
         console.error("Erro na Home:", err);
         toast.error("Ops! Tivemos um problema ao carregar nossos doces. Tente atualizar a página! 🍬", {
-            theme: "colored"
+          theme: "colored"
         });
       } finally {
         setLoading(false);
@@ -66,11 +73,11 @@ const Home = () => {
             <div className="carousel-container">
               <div className="products-slider">
                 {products.length > 0 ? (
-                    [...products, ...products].map((p, i) => (
-                        <div className="slider-item" key={`${p.id_product}-${i}`}><CardProduct product={p} /></div>
-                    ))
+                  [...products, ...products].map((p, i) => (
+                    <div className="slider-item" key={`${p.id_product}-${i}`}><CardProduct product={p} /></div>
+                  ))
                 ) : (
-                    <p className="no-data-msg">Nenhum destaque disponível no momento.</p>
+                  <p className="no-data-msg">Nenhum destaque disponível no momento.</p>
                 )}
               </div>
             </div>
