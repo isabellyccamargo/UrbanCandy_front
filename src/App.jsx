@@ -49,7 +49,7 @@ function AppContent() {
         <Route path="categorias/form" element={<CategoriesForm />} />
         <Route path="produtos" element={<ProductList />} />
         <Route path="produtos/form" element={<ProductsForm />} />
-        <Route path="produtos/form/:id" element={<ProductsForm />} />
+        <Route path="produtos/form/:id_product" element={<ProductsForm />} />
         <Route path="tipos-pagamento" element={<TypeOfPaymentList />} />
         <Route path="tipos-pagamento/form" element={<TypeOfPaymentForm />} />
         <Route path="tipos-pagamento/form/:id" element={<TypeOfPaymentForm />} />

@@ -25,12 +25,22 @@ const ProductsForm = () => {
         const loadCategories = async () => {
             try {
                 const res = await getAllCategory();
-                setCategories(res.data || res || []);
-            } catch {
+                const data = res.data?.data || res.data || res;
+
+                if (Array.isArray(data)) {
+                    setCategories(data);
+                } else {
+                    console.error("A API não retornou um array:", data);
+                    setCategories([]);
+                }
+            } catch (error) {
+                console.error(error);
                 toast.error("Erro ao carregar categorias.");
+                setCategories([]);
             }
         };
         loadCategories();
+
 
         if (produtoParaEditar) {
             setName(produtoParaEditar.name);
@@ -147,7 +157,7 @@ const ProductsForm = () => {
                         Cancelar
                     </Button>
 
-                    <Button  type="submit" variant="primary" disabled={loading}>
+                    <Button type="submit" variant="primary" disabled={loading}>
                         {loading ? 'Salvando...' : 'Salvar Produto'}
                     </Button>
                 </div>

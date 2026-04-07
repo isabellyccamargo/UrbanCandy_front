@@ -2,7 +2,6 @@ import React from 'react';
 import './AdminHeader.css';
 
 export const AdminHeader = ({ title }) => {
-  // Aqui você poderia pegar o nome do usuário do localStorage se quiser exibir
   const user = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
 
   return (

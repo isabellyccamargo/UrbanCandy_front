@@ -30,6 +30,7 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 export const setHeaderToken = (token) => {
   if (token) {
     api.defaults.headers.Authorization = `Bearer ${token}`;

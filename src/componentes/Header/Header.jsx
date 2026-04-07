@@ -31,8 +31,6 @@ export const Header = () => {
     if (params.get('login') === 'true') {
       setIsLoginModalOpen(true);
 
-      // 3. (Opcional) Limpa a URL para tirar o "?login=true" sem recarregar a página
-      // Isso evita que o modal abra de novo se o usuário der F5
       navigate(location.pathname, { replace: true });
     }
   }, [location, setIsLoginModalOpen, navigate]);
