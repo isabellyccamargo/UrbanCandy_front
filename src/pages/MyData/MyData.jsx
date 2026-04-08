@@ -12,7 +12,7 @@ const FormField = ({ label, name, value, onChange, type = "text", required, ...p
     </div>
 );
 
-const MeusDados = () => {
+const MyData = () => {
     const { setUser } = useAuth();
     const [formData, setFormData] = useState({
         name: '', email: '', cpf: '', telephone: '', password: '', confirmPassword: '',
@@ -91,6 +91,20 @@ const MeusDados = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        const rawCpf = formData.cpf.replace(/\D/g, '');
+        const rawPhone = formData.telephone.replace(/\D/g, '');
+
+        if (rawCpf.length !== 11) {
+            toast.warning("O CPF deve ter 11 dígitos. 🧐");
+            return;
+        }
+
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@(gmail\.com|icloud\.com)$/;
+        if (!emailRegex.test(formData.email)) {
+            toast.warning("Use um e-mail @gmail.com ou @icloud.com 📧");
+            return;
+        }
         setIsSaving(true);
 
         if (!isEditMode && formData.password !== formData.confirmPassword) {
@@ -99,8 +113,6 @@ const MeusDados = () => {
             return;
         }
 
-        const rawCpf = formData.cpf.replace(/\D/g, '');
-        const rawPhone = formData.telephone.replace(/\D/g, '');
         const rawCep = formData.cep.replace(/\D/g, '');
 
         try {
@@ -140,7 +152,14 @@ const MeusDados = () => {
             }
         } catch (err) {
             console.error(err);
-            toast.error(isEditMode ? "Erro ao atualizar dados." : "Verifique seus dados.");
+
+            const apiMessage = err.response?.data?.message;
+
+            if (apiMessage) {
+                toast.error(`${apiMessage} ❌`);
+            } else {
+                toast.error(isEditMode ? "Erro ao atualizar dados." : "Verifique seus dados.");
+            }
         } finally {
             setIsSaving(false);
         }
@@ -170,7 +189,7 @@ const MeusDados = () => {
                             maxLength="14"
                             className={isEditMode ? "input-readonly" : ""}
                         />
-                        <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15"  required/>
+                        <FormField label="Telefone" name="telephone" value={formData.telephone} onChange={handleChange} maxLength="15" required />
                     </div>
 
                     <div className="form-row triple-row">
@@ -188,15 +207,36 @@ const MeusDados = () => {
                                 <div className="form-group">
                                     <label>Senha <span style={{ color: 'red' }}>*</span></label>
                                     <div className="input-container-simples">
-                                        <input name="password" type={showPass ? "text" : "password"} value={formData.password} onChange={handleChange} className="input-com-botao" required />
-                                        <span className="texto-mostrar" onClick={() => setShowPass(!showPass)}>{showPass ? "Ocultar" : "Ver"}</span>
+                                        <input
+                                            name="password"
+                                            type={showPass ? "text" : "password"}
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                            className="input-com-botao"
+                                            placeholder="Mín. 8 caracteres"
+                                            required
+                                        />
+                                        <span className="texto-mostrar" onClick={() => setShowPass(!showPass)}>
+                                            {showPass ? "Ocultar" : "Ver"}
+                                        </span>
                                     </div>
                                 </div>
+
                                 <div className="form-group">
                                     <label>Confirmar Senha <span style={{ color: 'red' }}>*</span></label>
                                     <div className="input-container-simples">
-                                        <input name="confirmPassword" type={showConfirm ? "text" : "password"} value={formData.confirmPassword} onChange={handleChange} className="input-com-botao" required />
-                                        <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>{showConfirm ? "Ocultar" : "Ver"}</span>
+                                        <input
+                                            name="confirmPassword"
+                                            type={showConfirm ? "text" : "password"}
+                                            value={formData.confirmPassword}
+                                            onChange={handleChange}
+                                            className="input-com-botao"
+                                            placeholder="Repita sua senha"
+                                            required
+                                        />
+                                        <span className="texto-mostrar" onClick={() => setShowConfirm(!showConfirm)}>
+                                            {showConfirm ? "Ocultar" : "Ver"}
+                                        </span>
                                     </div>
                                 </div>
                             </>
@@ -226,4 +266,4 @@ const MeusDados = () => {
     );
 };
 
-export default MeusDados;
+export default MyData;
