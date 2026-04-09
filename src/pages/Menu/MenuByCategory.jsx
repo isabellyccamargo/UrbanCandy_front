@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, NavLink } from 'react-router-dom';
 import { getProductsByCategory, getAllCategory } from '../../Services/Api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
-import { NavLink } from 'react-router-dom';
-import { toast } from 'react-toastify'; // Importação do Toast
+import { toast } from 'react-toastify';
 import './MenuByCategory.css';
 
 export const MenuByCategory = () => {
@@ -12,47 +11,41 @@ export const MenuByCategory = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getData = (res) => res.data?.data || res.data || res;
+
   useEffect(() => {
-    const fetchCategories = async () => {
+    (async () => {
       try {
         const response = await getAllCategory();
-        const listaDeCategorias = response.data?.data || response.data || response;
-        setCategoriesMenu(listaDeCategorias);
-      } catch (err) {
-        console.error("Erro ao buscar categorias", err);
-        toast.error("Não conseguimos carregar o menu de categorias. 🍫");
+        setCategoriesMenu(getData(response));
+      } catch {
+        toast.error("Erro ao carregar menu de categorias. 🍫");
       }
-    };
-    fetchCategories();
+    })();
   }, []);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    if (!categoryName) return;
+
+    (async () => {
       setLoading(true);
       try {
         const response = await getProductsByCategory(categoryName);
-        const rawData = response.data?.data || response.data || response;
-
-        if (Array.isArray(rawData)) {
-          setProducts(rawData);
-          if (rawData.length === 0) {
-            toast.info(`Ainda não temos doces na categoria ${categoryName}. Volte logo! ✨`);
-          }
-        } else {
-          setProducts([]);
+        const rawData = getData(response);
+        const productList = Array.isArray(rawData) ? rawData : [];
+        
+        setProducts(productList);
+        if (productList.length === 0) {
+          toast.info(`Ainda não temos doces em ${categoryName}. ✨`);
         }
-      } catch (err) {
-        console.error("Erro ao carregar categoria:", err);
+      } catch {
         setProducts([]);
-        toast.error(`Ops! Erro ao carregar os doces de ${categoryName}. 🍬`);
+        toast.error(`Erro ao carregar os doces de ${categoryName}. 🍬`);
       } finally {
         setLoading(false);
       }
-    };
+    })();
 
-    if (categoryName) {
-      fetchProducts();
-    }
     window.scrollTo(0, 0);
   }, [categoryName]);
 
@@ -63,10 +56,10 @@ export const MenuByCategory = () => {
           {categoriesMenu.map((cat) => (
             <li key={cat.id_category}>
               <NavLink
-                to={`/cardapio/${cat.name_category.toLowerCase()}`} 
+                to={`/cardapio/${cat.name_category.toLowerCase()}`}
                 className={({ isActive }) => isActive ? "active-link" : ""}
               >
-                {cat.name_category} 
+                {cat.name_category}
               </NavLink>
             </li>
           ))}
@@ -81,18 +74,14 @@ export const MenuByCategory = () => {
 
       {loading ? (
         <div className="loading-container">
-          <div className="candy-loader"></div> 
+          <div className="candy-loader"></div>
           <p>Buscando as melhores opções para você...</p>
         </div>
       ) : (
         <section className="products-grid">
           {products.length > 0 ? (
-            products.map((product) => (
-              <CardProduct 
-                key={product.id_product} 
-                product={product} 
-                showDescription={true} 
-              />
+            products.map((p) => (
+              <CardProduct key={p.id_product} product={p} showDescription={true} />
             ))
           ) : (
             <div className="no-products-feedback">

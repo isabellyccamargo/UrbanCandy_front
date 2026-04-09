@@ -7,10 +7,6 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../Hooks/AuthContext';
 import './Checkout.css';
 
-/** * @typedef {import('../../types/order').IOrderCheckout} IOrderCheckout 
- * Vinculando ao seu arquivo de tipos globais do Frontend
- */
-
 const Checkout = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -23,16 +19,17 @@ const Checkout = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+    const formatBRL = (val) => Number(val || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
     useEffect(() => {
-        const loadInitialData = async () => {
-            const userId = user?.id_people || user?.id_user || user?.id;
+        const userId = user?.id_people || user?.id_user || user?.id;
 
-            if (!userId) {
-                toast.info("Por favor, faça login para finalizar seu pedido. 🍬");
-                navigate('/');
-                return;
-            }
+        if (!userId) {
+            toast.info("Por favor, faça login para finalizar seu pedido. 🍬");
+            return navigate('/');
+        }
 
+        (async () => {
             try {
                 const [resProfile, resPayments] = await Promise.all([
                     getUserProfile(userId),
@@ -40,91 +37,65 @@ const Checkout = () => {
                 ]);
 
                 if (resProfile) {
-                    const person = resProfile.people || resProfile; 
+                    const person = resProfile.people || resProfile;
                     const addr = person.address || person.Addresses?.[0] || {};
-                    
                     setUserData({
                         ...person,
-                        id_people: person.id_people || userId, 
+                        id_people: person.id_people || userId,
                         email: resProfile.email || person.email,
                         addressFull: addr.road ? `${addr.road}, ${addr.number || 'S/N'} - ${addr.neighborhood || ''}` : "Endereço não cadastrado",
-                        cityState: addr.city ? `${addr.city} ` : "Cidade/Estado não informados"
+                        cityState: addr.city ? `${addr.city} ` : "Cidade não informada"
                     });
                 }
-
-                const paymentsArray = resPayments.data?.data || resPayments.data || [];
-                setPaymentOptions(Array.isArray(paymentsArray) ? paymentsArray : []);
-
-            } catch (error) {
-                console.error("Erro ao carregar dados do checkout:", error);
-                toast.error("Erro ao carregar dados necessários para o checkout. 🌐");
+                setPaymentOptions(resPayments.data?.data || resPayments.data || []);
+            } catch {
+                toast.error("Erro ao carregar dados do checkout. 🌐");
             } finally {
                 setLoading(false);
             }
-        };
-
-        loadInitialData();
+        })();
     }, [user, navigate]);
 
     const handleFinalizeOrder = async () => {
-        if (!paymentMethod) {
-            toast.warning("Selecione uma forma de pagamento! 💳");
-            return;
-        }
+        if (!paymentMethod) return toast.warning("Selecione uma forma de pagamento! 💳");
+        if (cart.items.length === 0) return toast.error("Seu carrinho está vazio!");
 
-        if (cart.items.length === 0) {
-            toast.error("Seu carrinho está vazio!");
-            return;
-        }
-
+        setIsSubmitting(true);
         try {
-            setIsSubmitting(true);
-
-            /** @type {IOrderCheckout} */
             const orderPayload = {
                 id_people: Number(userData.id_people),
                 id_payment: Number(paymentMethod),
                 cart: {
                     total: Number(cart.total),
-                    items: cart.items.map(item => {
-                        const unitPrice = Number(item.products?.price || 0);
-                        const qty = Number(item.quantity || 1);
-                        
-                        return {
-                            id_product: Number(item.id_product),
-                            quantity: qty,
-                            sub_total: Number(item.sub_total || (unitPrice * qty)),
-                            products: {
-                                price: unitPrice,
-                                name: item.products?.name || "Produto"
-                            }
-                        };
-                    })
+                    items: cart.items.map(item => ({
+                        id_product: Number(item.id_product),
+                        quantity: Number(item.quantity || 1),
+                        sub_total: Number(item.sub_total || (Number(item.products?.price || 0) * Number(item.quantity || 1))),
+                        products: {
+                            price: Number(item.products?.price || 0),
+                            name: item.products?.name || "Produto"
+                        }
+                    }))
                 }
             };
 
-            console.log("Enviando Pedido:", orderPayload);
-
             await createOrder(orderPayload);
-
             clearCart();
             setShowSuccessModal(true);
-
         } catch (error) {
-            const errorMsg = error.response?.data?.message || "Erro ao processar pedido.";
-            console.error("Erro no Servidor:", error.response?.data);
-            toast.error(`Falha no checkout: ${errorMsg}`);
+            const errorMsg = error.response?.data?.message
+                || error.response?.data?.error
+                || error.message
+                || "Erro ao processar pedido.";
+
+            toast.error(`Falha: ${errorMsg}`);
+            console.error("Detalhes do erro:", error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    const handleCloseSuccessModal = () => {
-        setShowSuccessModal(false);
-        navigate('/pedidos');
-    };
-
-    if (loading) return <div className="loading-screen">Carregando dados do pedido... 🍬</div>;
+    if (loading) return <div className="loading-screen">Carregando dados... 🍬</div>;
     if (!userData) return null;
 
     return (
@@ -149,21 +120,12 @@ const Checkout = () => {
                 <section className="checkout-section card-candy">
                     <h3><i className="fas fa-credit-card"></i> Pagamento</h3>
                     <div className="payment-options">
-                        {paymentOptions.length > 0 ? (
-                            paymentOptions.map(option => (
-                                <label key={option.id_payment} className={`radio-label ${paymentMethod === option.id_payment ? 'selected' : ''}`}>
-                                    <input
-                                        type="radio"
-                                        name="payment"
-                                        checked={paymentMethod === option.id_payment}
-                                        onChange={() => setPaymentMethod(option.id_payment)}
-                                    />
-                                    <span>{option.name_payment}</span>
-                                </label>
-                            ))
-                        ) : (
-                            <p>Nenhuma forma de pagamento disponível.</p>
-                        )}
+                        {paymentOptions.map(option => (
+                            <label key={option.id_payment} className={`radio-label ${paymentMethod === option.id_payment ? 'selected' : ''}`}>
+                                <input type="radio" name="payment" checked={paymentMethod === option.id_payment} onChange={() => setPaymentMethod(option.id_payment)} />
+                                <span>{option.name_payment}</span>
+                            </label>
+                        ))}
                     </div>
                 </section>
             </div>
@@ -173,14 +135,10 @@ const Checkout = () => {
                 <div className="summary-items">
                     {cart.items.map(item => (
                         <div key={item.id_product} className="summary-item">
-                            <img
-                                src={`http://localhost:3030/uploads/${item.products?.image}`}
-                                alt={item.products?.name}
-                                onError={(e) => { e.target.src = 'https://via.placeholder.com/50'; }}
-                            />
+                            <img src={`http://localhost:3030/uploads/${item.products?.image}`} alt={item.products?.name} onError={(e) => { e.target.src = 'https://via.placeholder.com/50'; }} />
                             <div className="item-details">
                                 <p>{item.quantity}x {item.products?.name}</p>
-                                <span>{(Number(item.products?.price || 0) * item.quantity).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span>
+                                <span>{formatBRL(Number(item.products?.price || 0) * item.quantity)}</span>
                             </div>
                         </div>
                     ))}
@@ -188,13 +146,13 @@ const Checkout = () => {
 
                 <div className="total-box">
                     <span>Total a pagar</span>
-                    <strong>{Number(cart.total).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong>
+                    <strong>{formatBRL(cart.total)}</strong>
                 </div>
 
                 <Button
                     onClick={handleFinalizeOrder}
                     variant="primary"
-                    disabled={!paymentMethod || isSubmitting || cart.items.length === 0}
+                    disabled={isSubmitting || cart.items.length === 0} 
                 >
                     {isSubmitting ? 'Processando...' : 'Finalizar Pedido'}
                 </Button>
@@ -206,12 +164,8 @@ const Checkout = () => {
                         <div className="success-icon">🎉</div>
                         <h3>Pedido Confirmado!</h3>
                         <p>Obrigada pela preferência!</p>
-                        <p>Seu pedido entrará em produção em breve.</p>
-
                         <div className="modal-buttons">
-                            <Button variant="primary" onClick={handleCloseSuccessModal}>
-                                Ver meus pedidos
-                            </Button>
+                            <Button variant="primary" onClick={() => navigate('/pedidos')}>Ver meus pedidos</Button>
                         </div>
                     </div>
                 </div>

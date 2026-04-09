@@ -4,37 +4,30 @@ import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
 import './MyOrders.css';
 
-/** * @typedef {import('../../@OrderTypes/').Order} Order 
- * Importando o tipo global via JSDoc para garantir consistência com o Back-end
- */
-
 export const MyOrders = () => {
-    /** @type {[Order[], React.Dispatch<React.SetStateAction<Order[]>>]} */
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
 
-    const loadOrders = async (page = 1) => {
+    const formatCurrency = (value) => 
+        Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    const loadOrders = async () => {
         try {
             setLoading(true);
-            const storedUser = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
-            const personId = storedUser?.id_people || storedUser?.id_user || storedUser?.id;
+            const user = JSON.parse(localStorage.getItem('@UrbanCandy:user'));
+            const personId = user?.id_people || user?.id_user || user?.id;
 
             if (!personId) {
                 toast.error("Sessão expirada. Por favor, faça login novamente.");
                 return;
             }
 
-            // Chamada para o Service passando o ID correto
-            const response = await getMyOrders(personId, page, 5);
-
-            const { data, totalPages: total } = response.data;
-
-            setOrders(data || []);
-            setTotalPages(total || 1);
-        } catch (error) {
-            console.error("Erro ao buscar pedidos:", error);
+            const { data } = await getMyOrders(personId, currentPage, 5);
+            setOrders(data.data || []);
+            setTotalPages(data.totalPages || 1);
+        } catch {
             toast.error("Não foi possível carregar seu histórico de pedidos.");
         } finally {
             setLoading(false);
@@ -42,7 +35,7 @@ export const MyOrders = () => {
     };
 
     useEffect(() => {
-        loadOrders(currentPage);
+        loadOrders();
     }, [currentPage]);
 
     return (
@@ -74,17 +67,13 @@ export const MyOrders = () => {
                                         {order.order_date ? new Date(order.order_date).toLocaleDateString('pt-BR') : '---'}
                                     </td>
                                     <td data-label="Produtos">
-                                        {(order.items || []).reduce((acc, item) => acc + (Number(item.quantity) || 0), 0)} itens
+                                        {(order.items || []).reduce((acc, i) => acc + (Number(i.quantity) || 0), 0)} itens
                                     </td>
                                     <td data-label="Total">
-                                        <strong className="order-total-value">
-                                            {Number(order.total || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                        </strong>
+                                        <strong className="order-total-value">{formatCurrency(order.total)}</strong>
                                     </td>
                                     <td data-label="Pagamento">
-                                        <span className="payment-badge">
-                                            {order.paymentType?.name_payment || 'Padrão'}
-                                        </span>
+                                        <span className="payment-badge">{order.paymentType?.name_payment || 'Padrão'}</span>
                                     </td>
                                 </tr>
                             ))
@@ -102,30 +91,24 @@ export const MyOrders = () => {
                     <Button
                         variant="secondary"
                         disabled={currentPage === 1 || loading}
-                        onClick={() => {
-                            console.log("Indo para página anterior");
-                            setCurrentPage(prev => Math.max(prev - 1, 1));
-                        }}
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                     >
                         Anterior
                     </Button>
 
                     <span className="page-info">
-                        Página <strong>{currentPage}</strong> de {totalPages || 1}
+                        Página <strong>{currentPage}</strong> de {totalPages}
                     </span>
 
                     <Button
                         variant="secondary"
                         disabled={currentPage === totalPages || loading || totalPages === 0}
-                        onClick={() => {
-                            console.log("Indo para próxima página");
-                            setCurrentPage(prev => prev + 1);
-                        }}
+                        onClick={() => setCurrentPage(prev => prev + 1)}
                     >
                         Próximo
                     </Button>
                 </div>
-            </section >
-        </div >
+            </section>
+        </div>
     );
 };

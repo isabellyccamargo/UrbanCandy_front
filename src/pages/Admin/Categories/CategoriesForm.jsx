@@ -6,9 +6,8 @@ import './CategoriesForm.css';
 
 export const CategoriesForm = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-
-    const categoriaParaEditar = location.state?.categoria;
+    const { state } = useLocation();
+    const categoriaParaEditar = state?.categoria;
 
     const [nameCategory, setNameCategory] = useState('');
     const [loading, setLoading] = useState(false);
@@ -21,63 +20,44 @@ export const CategoriesForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const trimmedName = nameCategory.trim();
 
-        if (!nameCategory.trim()) {
-            toast.warning("O nome da categoria é obrigatório! ✍️", { theme: "colored" });
-            return;
+        if (!trimmedName) {
+            return toast.warning("O nome da categoria é obrigatório! ✍️");
         }
 
         setLoading(true);
-        const idToast = toast.loading(categoriaParaEditar ? "Atualizando categoria..." : "Criando categoria...");
+        const idToast = toast.loading(categoriaParaEditar ? "Atualizando..." : "Criando...");
 
         try {
             if (categoriaParaEditar) {
                 await api.put(`/categoria/atualizar/${categoriaParaEditar.id_category}`, {
-                    name_category: nameCategory
-                });
-
-                toast.update(idToast, {
-                    render: "Categoria atualizada com sucesso! ✨",
-                    type: "success",
-                    isLoading: false,
-                    autoClose: 2000,
-                    theme: "colored"
+                    name_category: trimmedName
                 });
             } else {
-                await createCategory({ name_category: nameCategory });
-
-                toast.update(idToast, {
-                    render: "Categoria criada com sucesso! 🍫",
-                    type: "success",
-                    isLoading: false,
-                    autoClose: 2000,
-                    theme: "colored"
-                });
+                await createCategory({ name_category: trimmedName });
             }
 
-            // Delay para o usuário ler a mensagem antes de sair da tela
-            setTimeout(() => {
-                navigate('/admin/categorias');
-            }, 1500);
+            toast.update(idToast, {
+                render: `Categoria ${categoriaParaEditar ? 'atualizada' : 'criada'} com sucesso! ✨`,
+                type: "success",
+                isLoading: false,
+                autoClose: 2000,
+                theme: "colored"
+            });
+
+            setTimeout(() => navigate('/admin/categorias'), 1500);
 
         } catch (error) {
-            console.error("Erro ao salvar:", error);
+            let msgErro = "Erro ao salvar categoria.";
+            const data = error.response?.data;
 
-            let msgErro = "Erro ao conectar com o servidor.";
-
-            if (error.response) {
-                const { status, data } = error.response;
-
-                // Se for o erro de duplicidade (mesmo vindo em HTML)
-                if (status === 409 || (typeof data === 'string' && data.includes("CATEGORY_ALREADY_EXISTS"))) {
-                    msgErro = "Essa categoria já existe! Escolha outro nome. 🍫";
-                }
-                else if (data && data.message) {
-                    msgErro = data.message;
-                }
+            if (error.response?.status === 409 || (typeof data === 'string' && data.includes("CATEGORY_ALREADY_EXISTS"))) {
+                msgErro = "Essa categoria já existe! 🍫";
+            } else if (data?.message) {
+                msgErro = data.message;
             }
 
-            // Transforma o loading em erro
             toast.update(idToast, {
                 render: msgErro,
                 type: "error",
@@ -92,17 +72,20 @@ export const CategoriesForm = () => {
 
     return (
         <div className="category-form-container">
-            <h1 className="form-title">
-                {categoriaParaEditar ? 'Editar Categoria' : 'Nova Categoria'}
-            </h1>
-            <p className="form-subtitle">
-                {categoriaParaEditar ? 'Altere o nome da categoria selecionada' : 'Preencha o nome da nova categoria para o sistema'}
-            </p>
+            <header className="form-header">
+                <h1 className="form-title">
+                    {categoriaParaEditar ? 'Editar Categoria' : 'Nova Categoria'}
+                </h1>
+                <p className="form-subtitle">
+                    {categoriaParaEditar ? 'Altere o nome da categoria selecionada' : 'Preencha o nome da nova categoria'}
+                </p>
+            </header>
 
             <form onSubmit={handleSubmit} className="category-card-form">
                 <div className="input-group">
-                    <label>Nome da Categoria</label>
+                    <label htmlFor="categoryName">Nome da Categoria</label>
                     <input
+                        id="categoryName"
                         type="text"
                         placeholder="Ex: Brigadeiros, Cookies..."
                         value={nameCategory}
@@ -126,7 +109,7 @@ export const CategoriesForm = () => {
                         className="btn-save"
                         disabled={loading}
                     >
-                        {loading ? 'Salvando...' : (categoriaParaEditar ? 'Salvar Alterações' : 'Salvar')}
+                        {loading ? 'Processando...' : (categoriaParaEditar ? 'Salvar Alterações' : 'Criar Categoria')}
                     </button>
                 </div>
             </form>

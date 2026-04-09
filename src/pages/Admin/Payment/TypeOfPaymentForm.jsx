@@ -1,126 +1,64 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { createTypeOfPayment , updateTypeOfPayment  } from "../../../Services/Api";
+import { createTypeOfPayment, updateTypeOfPayment } from "../../../Services/Api";
 import { toast } from "react-toastify";
 
 export const TypeOfPaymentForm = () => {
-
   const navigate = useNavigate();
-  const location = useLocation();
+  const { state } = useLocation();
+  const paymentType = state?.paymentType;
 
-  const paymentType = location.state?.paymentType;
-
-  const [namePaymentType, setNamePaymentType] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (paymentType) {
-      setNamePaymentType(paymentType.name_payment);
-    }
-  }, [paymentType]);
-
-  const validateForm = () => {
-
-    if (!namePaymentType.trim()) {
-      toast.warning("O nome do tipo de pagamento é obrigatório");
-      return false;
-    }
-
-    return true;
-  };
+  useEffect(() => { if (paymentType) setName(paymentType.name_payment); }, [paymentType]);
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-
-    if (!validateForm()) return;
+    if (!name.trim()) return toast.warning("Nome obrigatório! 💳");
 
     setLoading(true);
-
-    const toastId = toast.loading("Salvando tipo de pagamento...");
+    const idT = toast.loading("Salvando...");
 
     try {
+      const payload = { name_payment: name };
+      paymentType 
+        ? await updateTypeOfPayment(paymentType.id_payment, payload)
+        : await createTypeOfPayment(payload);
 
-      if (paymentType) {
-
-        await updateTypeOfPayment (paymentType.id_payment, {
-          name_payment: namePaymentType
-        });
-
-      } else {
-
-        await createTypeOfPayment ({
-          name_payment: namePaymentType
-        });
-
-      }
-
-      toast.update(toastId, {
-        render: "Tipo de pagamento salvo com sucesso!",
-        type: "success",
-        isLoading: false,
-        autoClose: 2000
-      });
-
-      navigate("/admin/tipos-pagamento");
-
+      toast.update(idT, { render: "Salvo com sucesso! ✨", type: "success", isLoading: false, autoClose: 2000 });
+      setTimeout(() => navigate("/admin/tipos-pagamento"), 1000);
     } catch {
-
-      toast.update(toastId, {
-        render: "Erro ao salvar tipo de pagamento",
-        type: "error",
-        isLoading: false
-      });
-
+      toast.update(idT, { render: "Erro ao salvar", type: "error", isLoading: false, autoClose: 3000 });
     } finally {
       setLoading(false);
     }
-
   };
 
   return (
-
     <div className="category-form-container">
-
-      <h1 className="form-title">
-        {paymentType ? "Editar Tipo de Pagamento" : "Novo Tipo de Pagamento"}
-      </h1>
+      <h1 className="form-title">{paymentType ? "Editar" : "Novo"} Tipo de Pagamento</h1>
 
       <form onSubmit={handleSubmit} className="category-card-form">
-
         <div className="input-group">
-          <label>Nome do Tipo de Pagamento</label>
-
-          <input
-            type="text"
-            placeholder="Ex: Pix, Cartão, Dinheiro..."
-            value={namePaymentType}
-            onChange={(e) => setNamePaymentType(e.target.value)}
+          <label>Nome do Pagamento</label>
+          <input 
+            type="text" 
+            placeholder="Pix, Cartão..." 
+            value={name} 
+            onChange={(e) => setName(e.target.value)} 
           />
         </div>
 
         <div className="form-actions">
-
-          <button
-            type="button"
-            className="btn-cancel"
-            onClick={() => navigate("/admin/tipos-pagamento")}
-          >
+          <button type="button" className="btn-cancel" onClick={() => navigate("/admin/tipos-pagamento")}>
             Cancelar
           </button>
-
-          <button
-            type="submit"
-            className="btn-save"
-            disabled={loading}
-          >
-            {loading ? "Salvando..." : "Salvar"}
+          <button type="submit" className="btn-save" disabled={loading}>
+            {loading ? "..." : "Salvar"}
           </button>
-
         </div>
-
       </form>
-
     </div>
   );
 };

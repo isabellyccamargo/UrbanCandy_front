@@ -4,6 +4,7 @@
     display: flex;
     min-height: 100vh;
     background-color: #fdf2f5; /* Um fundo levemente rosado para combinar com a marca */
+    margin-top: -55px;
 }
 
 .admin-main-content {
