@@ -8,7 +8,7 @@
 .features-section { padding: 80px 20px; display: flex; flex-direction: column; align-items: center; }
 
 .categories-section, .about-section {
-  padding: 100px 20px;
+  padding: 50px 20px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -69,6 +69,7 @@
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
+  margin-bottom: 50px;
 }
 
 .categories-grid { gap: 40px; max-width: 1200px; }
@@ -109,6 +110,7 @@
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 230px);
   perspective: 1200px;
+  margin-bottom: 50px;
 }
 
 .img-box {
@@ -137,4 +139,24 @@
   padding: 40px 20px; /* Aumentei o padding para a sombra do card não cortar */
   width: max-content;
   animation: slideInfinito 40s linear infinite; /* Aumentei o tempo para 40s porque cards maiores precisam de mais tempo para passar */
+}
+
+.hero-banner-full {
+    width: 100%;
+    height: 450px; 
+    overflow: hidden;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Isso faz a imagem preencher o espaço sem esticar */
+    object-position: center; /* Centraliza o foco da foto */
+    display: block;
+}
+
+/* Opcional: Adicionar um arredondado suave nas pontas de baixo para combinar com os cards */
+.hero-banner-full {
+    border-radius: 0 0 10px 10px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Sombra leve para dar profundidade */
 }
