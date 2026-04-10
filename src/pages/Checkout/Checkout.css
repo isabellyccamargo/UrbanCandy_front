@@ -1,15 +1,13 @@
-/* Container Principal */
 .checkout-container {
   display: flex;
   justify-content: center;
   gap: 30px;
   padding: 40px 8%;
-  background-color: #F9FAFB; /* Cinza bem clarinho para o fundo */
+  background-color: #F9FAFB; 
   min-height: 100vh;
   font-family: 'Poppins', sans-serif;
 }
 
-/* Coluna da Esquerda */
 .checkout-content {
   flex: 2;
   display: flex;
@@ -17,32 +15,30 @@
   gap: 20px;
 }
 
-/* Cards de Seção */
 .checkout-section {
   background: #FFFFFF;
   border-radius: 12px;
   padding: 25px;
-  border: 1px solid #E5E7EB; /* Bordas em cinza suave */
+  border: 1px solid #E5E7EB; 
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .checkout-section h3 {
-  background-color: #FFF0F6; /* Rosa clarinho para o destaque do título */
+  background-color: #FFF0F6; 
   padding: 12px 15px;
   border-radius: 8px;
-  color: #D63384; /* Rosa mais forte para o texto */
+  color: #D63384;
   font-size: 1.1rem;
   margin-bottom: 20px;
-  border-left: 5px solid #FF85B3; /* Detalhe em rosa lateral */
+  border-left: 5px solid #FF85B3;
 }
 
 .checkout-section p {
-  color: #4B5563; /* Cinza escuro para leitura clara */
+  color: #4B5563;
   margin: 8px 0;
   font-size: 0.95rem;
 }
 
-/* Coluna da Direita (Resumo) */
 .checkout-summary {
   flex: 1;
   background: #FFFFFF;
@@ -56,7 +52,7 @@
 
 .checkout-summary h2 {
   text-align: center;
-  color: #374151; /* Cinza grafite */
+  color: #374151;
   font-size: 1.3rem;
   margin-bottom: 20px;
   border-bottom: 2px solid #FFF0F6;
@@ -91,7 +87,6 @@
   font-size: 0.9rem;
 }
 
-/* Totais */
 .total-box {
   margin-top: 15px;
   margin-bottom: 10px;
@@ -107,13 +102,12 @@
 }
 
 .total-box strong {
-  color: #D63384; /* Preço em destaque rosa */
+  color: #D63384; 
 }
 
-/* Botão Finalizar */
 .btn-finalize {
   width: 100%;
-  background-color: #FF85B3; /* Rosa do botão principal */
+  background-color: #FF85B3; 
   color: white;
   border: none;
   padding: 14px;
@@ -130,7 +124,6 @@
   transform: translateY(-1px);
 }
 
-/* Opções de rádio */
 .radio-label {
   display: flex;
   align-items: center;
@@ -145,5 +138,42 @@
 }
 
 input[type="radio"] {
-  accent-color: #D63384; /* Cor do rádio em rosa */
+  accent-color: #D63384; 
+}
+
+.modal-overlay {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-confirmacao.success-modal {
+    width: 95%; 
+    max-width: 480px;     
+    padding: 45px 30px;    
+    border-radius: 24px;   
+    background: #fff;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.success-modal h3 {
+    font-size: 1.6rem; 
+    margin: 15px 0 10px;
+    color: #333;
+}
+
+.success-modal p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 25px;
+}
+
+.modal-buttons button {
+    padding: 12px 35px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.modal-buttons button:hover {
+    transform: scale(1.02);
 }

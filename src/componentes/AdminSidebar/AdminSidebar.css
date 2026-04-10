@@ -1,7 +1,7 @@
 .admin-sidebar {
     width: 260px;
     height: 100vh;
-    background-color: #E91E63; /* Rosa vibrante da foto */
+    background-color: #E91E63; 
     color: white;
     display: flex;
     flex-direction: column;

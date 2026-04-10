@@ -53,7 +53,6 @@
 .btn-edit { color: #E91E63; }
 .btn-delete { color: #ff4444; }
 
-/* Estilo extra para o botão de Adicionar que combina com o seu tema */
 .btn-add-new {
     background-color: #E91E63;
     color: white;
@@ -69,7 +68,6 @@
     opacity: 0.9;
 }
 
-/* Organiza nome e descrição na mesma célula */
 .product-info-cell {
     display: flex;
     flex-direction: column;
@@ -84,7 +82,6 @@
     text-overflow: ellipsis;
 }
 
-/* Estilo para a imagem na tabela */
 .product-img-table {
     width: 40px;
     height: 40px;
@@ -92,7 +89,6 @@
     object-fit: cover;
 }
 
-/* Estilo para os Badges de Destaque */
 .badge {
     padding: 4px 8px;
     border-radius: 6px;
@@ -103,7 +99,7 @@
 
 .badge.featured {
     background-color: #E3F2FD;
-    color: #1976D2; /* Azul para destaque */
+    color: #1976D2; 
 }
 
 .badge.normal {
@@ -130,9 +126,8 @@
     text-align: center;
 }
 
-/* Botões de Navegação */
 .pagination-controls button {
-    background-color: #ff4d8d; /* Rosa UrbanCandy */
+    background-color: #ff4d8d; 
     color: white;
     border: none;
     padding: 8px 18px;
@@ -162,7 +157,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* Fundo escurecido */
+    background: rgba(0, 0, 0, 0.5); 
     display: flex;
     justify-content: center;
     align-items: center;

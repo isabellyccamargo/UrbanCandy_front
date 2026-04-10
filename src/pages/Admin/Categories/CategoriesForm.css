@@ -19,7 +19,7 @@
 }
 
 .form-title { 
-    color: #333333; /* Cor escura idêntica ao 'Categorias' da lista */
+    color: #333333;
     font-size: 1.8rem; 
     margin-bottom: 5px; 
     font-weight: 600;
@@ -48,11 +48,10 @@
     font-weight: 600;
     margin-bottom: 10px;
     font-size: 0.85rem;
-    text-transform: uppercase; /* Estilo header de tabela */
+    text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* Inputs mais finos e elegantes */
 .input-group input {
     width: 100%;
     padding: 12px 15px;
@@ -80,7 +79,6 @@
     margin-top: 10px;
 }
 
-/* Botão Cancelar arredondado igual ao da lista */
 .btn-cancel {
     flex: 1;
     background: transparent;
@@ -96,7 +94,6 @@
 
 .btn-cancel:hover { background: #fff5f8; }
 
-/* Botão Salvar exatamente igual ao '+ Nova Categoria' */
 .btn-save {
     flex: 1;
     background: #FF2D78;

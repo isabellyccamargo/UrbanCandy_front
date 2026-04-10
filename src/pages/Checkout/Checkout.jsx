@@ -163,7 +163,7 @@ const Checkout = () => {
                     <div className="modal-confirmacao success-modal">
                         <div className="success-icon">🎉</div>
                         <h3>Pedido Confirmado!</h3>
-                        <p>Obrigada pela preferência!</p>
+                        <p>Obrigada pela preferência. Em breve seu pedido entrará em produção e será entregue!</p>
                         <div className="modal-buttons">
                             <Button variant="primary" onClick={() => navigate('/pedidos')}>Ver meus pedidos</Button>
                         </div>

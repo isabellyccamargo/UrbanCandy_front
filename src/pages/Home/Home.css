@@ -41,20 +41,16 @@
 }
 .products-slider:hover { animation-play-state: paused; }
 
-/* O item que envolve o CardProduct no Slider */
 .slider-item {
-  /* Aumentamos de um padrão pequeno para algo mais imponente */
   width: 350px; 
-  flex-shrink: 0; /* Impede que o flex "esmague" o card */
+  flex-shrink: 0; 
   transition: transform 0.3s ease;
 }
 
-/* Ajuste específico para a imagem dentro dos destaques */
 .slider-item .product-image {
-  height: 300px; /* Deixa a imagem mais alta nos destaques */
+  height: 300px; 
 }
 
-/* Efeito de destaque ao passar o mouse */
 .slider-item:hover {
   transform: scale(1.02);
 }
@@ -135,10 +131,10 @@
 
 .products-slider {
   display: flex;
-  gap: 30px; /* Se o gap é 30px, o calc deve ser -50% - 15px (metade do gap) */
-  padding: 40px 20px; /* Aumentei o padding para a sombra do card não cortar */
+  gap: 30px; 
+  padding: 40px 20px; 
   width: max-content;
-  animation: slideInfinito 40s linear infinite; /* Aumentei o tempo para 40s porque cards maiores precisam de mais tempo para passar */
+  animation: slideInfinito 40s linear infinite; 
 }
 
 .hero-banner-full {
@@ -150,13 +146,48 @@
 .banner-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Isso faz a imagem preencher o espaço sem esticar */
-    object-position: center; /* Centraliza o foco da foto */
+    object-fit: cover; 
+    object-position: center; 
     display: block;
 }
-
-/* Opcional: Adicionar um arredondado suave nas pontas de baixo para combinar com os cards */
 .hero-banner-full {
     border-radius: 0 0 10px 10px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Sombra leve para dar profundidade */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.welcome-highlight {
+    text-align: center;
+    padding: 60px 20px 40px; 
+    background: #fff;
+}
+
+.welcome-tag {
+    color: #d12f7a;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.welcome-highlight h2 {
+    font-size: 2.5rem;
+    color: #333;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.2;
+}
+
+.welcome-highlight h2 span {
+    color: #d12f7a; 
+    font-style: italic; 
+}
+
+.divider-candy {
+    width: 60px;
+    height: 4px;
+    background: #d12f7a;
+    margin: 25px auto 0;
+    border-radius: 10px;
 }

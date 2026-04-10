@@ -5,12 +5,10 @@
     display: flex;
     justify-content: center;
     border-bottom: 1px solid #eeeeee;
-    
-    /* Configuração Fixa */
     position: fixed;
     top: 0;
     left: 0;
-    right: 0; /* Garante que cubra de ponta a ponta */
+    right: 0; 
     z-index: 1000;
     margin: 0;
 }
@@ -54,17 +52,16 @@
 
 .dropdown-menu {
     position: absolute;
-    top: calc(100% + 5px); /* Dá um pequeno espaço, mas garante o foco */
+    top: calc(100% + 5px); 
     right: 0;
     background: white;
-    box-shadow: 0px 8px 24px rgba(0,0,0,0.15); /* Sombra mais visível */
-    border-radius: 12px; /* Bordas mais arredondadas para combinar com a UrbanCandy */
+    box-shadow: 0px 8px 24px rgba(0,0,0,0.15); 
+    border-radius: 12px;
     padding: 12px 0;
     min-width: 200px;
     display: none; 
     flex-direction: column;
-    /* A LINHA MÁGICA: */
-    z-index: 1100; /* Maior que o do header para não ser cortado */
+    z-index: 1100;
     border: 1px solid #f0f0f0;
 }
 
@@ -88,7 +85,7 @@
 .user-menu-trigger {
   display: flex;
   align-items: center;
-  gap: 8px; /* Espaço entre o ícone e o nome */
+  gap: 8px; 
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 20px;
@@ -99,7 +96,7 @@
   font-size: 14px;
   font-weight: 600;
   color: #5D4037;
-  max-width: 120px; /* Evita nomes gigantes quebrando o layout */
+  max-width: 120px; 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

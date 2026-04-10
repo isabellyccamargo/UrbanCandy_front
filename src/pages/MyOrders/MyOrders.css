@@ -1,11 +1,10 @@
-/* Fundo da página inteira em rosa claro */
+
 .orders-page {
-    background-color: #fff5f8; /* Rosa bem clarinho para destacar o card */
+    background-color: #fff5f8; 
     min-height: 50vh;
     padding: 40px 20px;
 }
 
-/* O "Card" que envolve a tabela */
 .admin-table-container {
     background-color: #ffffff; 
     border-radius: 15px;       
@@ -16,7 +15,6 @@
     margin-bottom: 50px;
 }
 
-/* Cabeçalho da página */
 .orders-header h1 {
     color: #4a4a4a;
     font-size: 2rem;
@@ -37,7 +35,6 @@
     display: inline-block;
 }
 
-/* Suas cores personalizadas */
 .badge.status-pending { background-color: #f1c40f; color: #fff; }
 .badge.status-paid { background-color: #2ecc71; color: #fff; }
 .badge.status-canceled { background-color: #e74c3c; color: #fff; }

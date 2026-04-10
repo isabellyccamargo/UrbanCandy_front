@@ -1,16 +1,12 @@
 .admin-top-header {
     background-color: white;
-    height: 70px; /* Mantenha fixo */
+    height: 70px; 
     padding: 0 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    
-    /* REDUZA ISSO: Se o margin-bottom estiver muito grande, ele empurra o resto pra baixo */
     margin-bottom: 20px; 
-    
-    /* GARANTA ISSO: Evita que o header "estique" verticalmente além dos 70px */
     box-sizing: border-box; 
 }
 

@@ -64,7 +64,6 @@
         cursor: not-allowed;
     }
 
-    /* Botão de Mostrar Senha */
     .input-container-simples {
         position: relative;
         width: 100%;
@@ -82,7 +81,6 @@
         text-transform: uppercase;
     }
 
-    /* Responsividade igual a de pedidos */
     @media (max-width: 850px) {
         .triple-row, .address-main-row, .address-street-row {
             grid-template-columns: 1fr !important;
