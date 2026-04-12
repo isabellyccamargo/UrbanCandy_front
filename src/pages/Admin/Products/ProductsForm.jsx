@@ -52,6 +52,12 @@ const ProductsForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!editItem && !image) {
+            toast.error("A foto do produto é obrigatória! 📸");
+            return;
+        }
+
         setLoading(true);
 
         const formData = new FormData();
@@ -114,7 +120,7 @@ const ProductsForm = () => {
                     <div className="image-column">
                         <label>Imagem do Produto</label>
                         <div className="image-dropzone" onClick={() => document.getElementById('fileInput').click()}>
-                            {preview ? <img src={preview} alt="Preview" className="img-preview-full" /> : 
+                            {preview ? <img src={preview} alt="Preview" className="img-preview-full" /> :
                                 <div className="upload-msg"><i>+</i><p>Selecionar Foto</p></div>
                             }
                             <input id="fileInput" type="file" onChange={handleFile} accept="image/*" style={{ display: 'none' }} />

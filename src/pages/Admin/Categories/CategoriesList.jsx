@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api, { getAllCategory } from '../../../Services/Api'; 
+import api, { getAllCategory } from '../../../Services/Api';
 import { Button } from '../../../componentes/Button/Button';
 import { toast } from 'react-toastify';
 import './CategoriesList.css';
@@ -17,7 +17,7 @@ export const Categorias = () => {
     const load = async (page = 1) => {
         try {
             setLoading(true);
-            const res = await getAllCategory(page, 6); 
+            const res = await getAllCategory(page, 6);
             const { data, totalPages: total } = res.data;
             setCategorias(data || []);
             setTotalPages(total || 1);
@@ -60,27 +60,25 @@ export const Categorias = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? <tr><td colSpan="3">Carregando...</td></tr> : 
-                        categorias.map(cat => (
-                            <tr key={cat.id_category}>
-                                <td>#{cat.id_category}</td>
-                                <td>{cat.name_category}</td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <button className="btn-edit" onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}>Editar</button>
-                                    <button className="btn-delete" onClick={() => { setIdDel(cat.id_category); setShowModal(true); }}>Excluir</button>
-                                </td>
-                            </tr>
-                        ))}
+                        {loading ? <tr><td colSpan="3">Carregando...</td></tr> :
+                            categorias.map(cat => (
+                                <tr key={cat.id_category}>
+                                    <td>#{cat.id_category}</td>
+                                    <td>{cat.name_category}</td>
+                                    <td style={{ textAlign: 'right' }}>
+                                        <button className="btn-edit" onClick={() => navigate('/admin/categorias/form', { state: { categoria: cat } })}>Editar</button>
+                                        <button className="btn-delete" onClick={() => { setIdDel(cat.id_category); setShowModal(true); }}>Excluir</button>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
 
-                {totalPages > 1 && (
-                    <div className="pagination-controls">
-                        <Button variant="secondary" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Anterior</Button>
-                        <span>Página {currentPage} de {totalPages}</span>
-                        <Button variant="secondary" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Próximo</Button>
-                    </div>
-                )}
+                <div className="pagination-controls">
+                    <Button variant="secondary" disabled={currentPage === 1 || loading} onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}>Anterior</Button>
+                    <span className="page-info">Página <strong>{currentPage}</strong> de {totalPages}</span>
+                    <Button variant="secondary" disabled={currentPage === totalPages || loading || totalPages === 0} onClick={() => setCurrentPage(p => p + 1)}>Próximo</Button>
+                </div>
             </section>
 
             {showModal && (

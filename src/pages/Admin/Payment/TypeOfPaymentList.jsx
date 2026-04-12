@@ -59,27 +59,25 @@ export const TypeOfPaymentList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {loading ? <tr><td colSpan="3">Carregando...</td></tr> : 
-                        types.map(t => (
-                            <tr key={t.id_payment}>
-                                <td><strong>#{t.id_payment}</strong></td>
-                                <td>{t.name_payment}</td>
-                                <td style={{ textAlign: 'right' }}>
-                                    <button className="btn-edit" onClick={() => navigate("/admin/tipos-pagamento/form", { state: { paymentType: t } })}>Editar</button>
-                                    <button className="btn-delete" onClick={() => { setIdDel(t.id_payment); setShowModal(true); }}>Excluir</button>
-                                </td>
-                            </tr>
-                        ))}
+                        {loading ? <tr><td colSpan="3">Carregando...</td></tr> :
+                            types.map(t => (
+                                <tr key={t.id_payment}>
+                                    <td><strong>#{t.id_payment}</strong></td>
+                                    <td>{t.name_payment}</td>
+                                    <td style={{ textAlign: 'right' }}>
+                                        <button className="btn-edit" onClick={() => navigate("/admin/tipos-pagamento/form", { state: { paymentType: t } })}>Editar</button>
+                                        <button className="btn-delete" onClick={() => { setIdDel(t.id_payment); setShowModal(true); }}>Excluir</button>
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
 
-                {totalPages > 1 && (
-                    <div className="pagination-controls">
-                        <Button variant="secondary" disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>Anterior</Button>
-                        <span>Página {currentPage} de {totalPages}</span>
-                        <Button variant="secondary" disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>Próximo</Button>
-                    </div>
-                )}
+                <div className="pagination-controls">
+                    <Button variant="secondary" disabled={currentPage === 1 || loading} onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}>Anterior</Button>
+                    <span className="page-info">Página <strong>{currentPage}</strong> de {totalPages}</span>
+                    <Button variant="secondary" disabled={currentPage === totalPages || loading || totalPages === 0} onClick={() => setCurrentPage(p => p + 1)}>Próximo</Button>
+                </div>
             </section>
 
             {showModal && (
