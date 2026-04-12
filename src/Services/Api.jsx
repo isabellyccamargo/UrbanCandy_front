@@ -4,6 +4,24 @@ const api = axios.create({
   baseURL: 'http://localhost:3030',
 });
 
+// Função auxiliar para extrair mensagem de erro
+const extractErrorMessage = (errorData) => {
+  if (typeof errorData === 'object' && errorData !== null) {
+    return errorData.message || errorData.mensagem || 'Erro desconhecido';
+  }
+  if (typeof errorData === 'string') {
+    // Se for HTML, tenta extrair a mensagem de erro
+    const match = errorData.match(/<pre[^>]*>([^<]*)<\/pre>/);
+    if (match) {
+      const errorText = match[1];
+      const messageMatch = errorText.match(/Error: (.+?)(?:<br|\n|$)/);
+      return messageMatch ? messageMatch[1] : errorText;
+    }
+    return errorData;
+  }
+  return 'Erro desconhecido';
+};
+
 const token = localStorage.getItem('@UrbanCandy:token');
 if (token) {
   api.defaults.headers.Authorization = `Bearer ${token}`;
@@ -93,7 +111,8 @@ export const createUser = async (userData) => {
     const response = await api.post('/usuario/salvar', userData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao realizar cadastro" };
+    const errorMessage = extractErrorMessage(error.response?.data);
+    throw new Error(errorMessage);
   }
 };
 
@@ -102,7 +121,8 @@ export const updateUser = async (id_people, peopleData) => {
     const response = await api.put(`/pessoa/atualizar/${id_people}`, peopleData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Erro ao atualizar usuário" };
+    const errorMessage = extractErrorMessage(error.response?.data);
+    throw new Error(errorMessage);
   }
 };
 
@@ -188,7 +208,8 @@ export const updateAddress = async (id_address, addressData) => {
     const response = await api.put(`/endereco/atualizar/${id_address}`, addressData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { message: "Erro ao atualizar endereço" };
+    const errorMessage = extractErrorMessage(error.response?.data);
+    throw new Error(errorMessage);
   }
 };
 

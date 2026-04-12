@@ -104,7 +104,7 @@ const MyData = () => {
                 setTimeout(() => window.location.href = '/?login=true', 2000);
             }
         } catch (err) {
-            toast.error(err.response?.data?.message || "Erro na operação.");
+            toast.error(err.message || "Erro na operação.");
         } finally {
             setIsSaving(false);
         }

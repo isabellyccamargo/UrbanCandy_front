@@ -1,9 +1,10 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
   min-width: 100%;
-  overflow-x: hidden; 
+  overflow-x: hidden;
   position: relative;
   padding-top: 40px;
 }
@@ -14,4 +15,30 @@ html, body {
   padding: 0;
   display: flex;
   flex-direction: column;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+
+@media (max-width: 768px) {
+
+  html,
+  body {
+    padding-top: 35px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  html,
+  body {
+    padding-top: 30px;
+  }
+}
+
+@media (max-width: 320px) {
+
+  html,
+  body {
+    padding-top: 25px;
+  }
 }

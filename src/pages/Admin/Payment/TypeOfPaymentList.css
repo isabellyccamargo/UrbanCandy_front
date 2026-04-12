@@ -36,7 +36,7 @@
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .admin-table th {
@@ -77,4 +77,75 @@
 
 .btn-delete:hover {
     text-decoration: underline;
+}
+
+/* ===== RESPONSIVIDADE ===== */
+
+@media (max-width: 768px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .admin-header h1 {
+        font-size: 1.3rem;
+    }
+
+    .admin-header button {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+    }
+
+    .admin-table {
+        overflow-x: auto;
+    }
+
+    .admin-table th {
+        padding: 10px;
+        font-size: 0.7rem;
+    }
+
+    .admin-table td {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .admin-header h1 {
+        font-size: 1.1rem;
+    }
+
+    .admin-header p {
+        font-size: 0.85rem;
+    }
+
+    .admin-header button {
+        padding: 7px 12px;
+        font-size: 0.75rem;
+        width: 100%;
+    }
+
+    .admin-table {
+        overflow-x: auto;
+    }
+
+    .admin-table th {
+        padding: 8px;
+        font-size: 0.65rem;
+    }
+
+    .admin-table td {
+        padding: 8px;
+        font-size: 0.75rem;
+    }
 }

@@ -75,3 +75,145 @@
 .welcome-section p {
   color: #666;
 }
+
+/* ===== RESPONSIVIDADE ===== */
+
+@media (max-width: 1024px) {
+  .dash-container {
+    padding: 15px;
+  }
+
+  .dash-title {
+    font-size: 1.7rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+  }
+
+  .stat-card {
+    padding: 20px;
+    gap: 12px;
+  }
+
+  .stat-value {
+    font-size: 1.6rem;
+  }
+
+  .welcome-section {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dash-container {
+    padding: 12px;
+  }
+
+  .dash-title {
+    font-size: 1.5rem;
+    margin-bottom: 3px;
+  }
+
+  .dash-subtitle {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .stat-card {
+    padding: 15px;
+    gap: 10px;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .stat-label {
+    font-size: 0.85rem;
+  }
+
+  .stat-value {
+    font-size: 1.4rem;
+  }
+
+  .welcome-section {
+    padding: 15px;
+    border-left: 3px solid #ff2d78;
+  }
+
+  .welcome-section h3 {
+    font-size: 1rem;
+  }
+
+  .welcome-section p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dash-container {
+    padding: 10px;
+  }
+
+  .dash-title {
+    font-size: 1.2rem;
+  }
+
+  .dash-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .stat-icon {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.8rem;
+  }
+
+  .stat-value {
+    font-size: 1.2rem;
+  }
+
+  .welcome-section {
+    padding: 12px;
+    border-left: 2px solid #ff2d78;
+  }
+
+  .welcome-section h3 {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .dash-title {
+    font-size: 1rem;
+  }
+
+  .stat-value {
+    font-size: 1.1rem;
+  }
+}
