@@ -28,7 +28,8 @@ const MyData = () => {
     const masks = {
         cpf: (v) => v.replace(/\D/g, '').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d)/, '$1.$2').replace(/(\d{3})(\d{1,2})$/, '$1-$2').slice(0, 14),
         telephone: (v) => v.replace(/\D/g, '').replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2').slice(0, 15),
-        cep: (v) => v.replace(/\D/g, '').replace(/(\d{5})(\d)/, '$1-$2').slice(0, 9)
+        cep: (v) => v.replace(/\D/g, '').replace(/(\d{5})(\d)/, '$1-$2').slice(0, 9),
+        number: (v) => v.replace(/\D/g, '')
     };
 
     const handleChange = (e) => {
@@ -74,7 +75,7 @@ const MyData = () => {
             setLoading(false);
         };
         loadUserData();
-    }, []);
+    }, '[]');
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -83,8 +84,8 @@ const MyData = () => {
         const rawCep = formData.cep.replace(/\D/g, '');
 
         if (rawCpf.length !== 11) return toast.warning("CPF inválido. 🧐");
-        if (!/^[a-zA-Z0-9._%+-]+@(gmail\.com|icloud\.com)$/.test(formData.email))
-            return toast.warning("Use Gmail ou iCloud 📧");
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/.test(formData.email))
+            return toast.warning("O e-mail deve conter @ e terminar com .com");
         if (!isEditMode && formData.password !== formData.confirmPassword)
             return toast.warning("As senhas não coincidem! 🔑");
 
