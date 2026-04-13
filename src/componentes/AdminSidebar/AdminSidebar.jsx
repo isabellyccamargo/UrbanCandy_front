@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Tag, Package, LogOut } from 'lucide-react';
 import './AdminSidebar.css';
 
-export const AdminSidebar = () => {
+export const AdminSidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const isActive = (path) => {
@@ -14,35 +14,35 @@ export const AdminSidebar = () => {
   };
 
   return (
-    <aside className="admin-sidebar">
+    <aside className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
       <div className="sidebar-brand">
         <h2>Administração</h2>
       </div>
 
       <nav className="sidebar-nav">
-        <Link to="/admin" className={`nav-item ${isActive('/admin')}`}>
+        <Link to="/admin" className={`nav-item ${isActive('/admin')}`} onClick={onClose}>
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
         </Link>
 
-        <Link to="/admin/categorias" className={`nav-item ${isActive('/admin/categorias')}`}>
+        <Link to="/admin/categorias" className={`nav-item ${isActive('/admin/categorias')}`} onClick={onClose}>
           <Tag size={20} />
           <span>Categorias</span>
         </Link>
 
-        <Link to="/admin/produtos" className={`nav-item ${isActive('/admin/produtos')}`}>
+        <Link to="/admin/produtos" className={`nav-item ${isActive('/admin/produtos')}`} onClick={onClose}>
           <Package size={20} />
           <span>Produtos</span>
         </Link>
 
-        <Link to="/admin/tipos-pagamento" className={`nav-item ${isActive('/admin/tipos-pagamento')}`}>
+        <Link to="/admin/tipos-pagamento" className={`nav-item ${isActive('/admin/tipos-pagamento')}`} onClick={onClose}>
           <Package size={20} />
           <span>Tipo De Pagamento</span>
         </Link>
       </nav>
 
       <div className="sidebar-footer">
-        <Link to="/" className="nav-item logout">
+        <Link to="/" className="nav-item logout" onClick={onClose}>
           <LogOut size={20} />
           <span>Voltar ao Site</span>
         </Link>

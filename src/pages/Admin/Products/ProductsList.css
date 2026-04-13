@@ -229,10 +229,12 @@
 
     .admin-table-container {
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .admin-table {
         min-width: 600px;
+        overflow: visible;
     }
 
     .admin-table th {
@@ -254,10 +256,12 @@
     .admin-table-container {
         max-width: calc(100vw - 20px);
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .admin-table {
         min-width: 450px;
+        overflow: visible;
     }
 
     .admin-table th {
@@ -274,4 +278,31 @@
         gap: 8px;
         flex-wrap: wrap;
     }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+
+.admin-table-container::-webkit-scrollbar {
+    height: 12px;
+}
+
+.admin-table-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb {
+    background: #E91E63;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb:hover {
+    background: #d81b60;
+}
+
+/* Firefox */
+.admin-table-container {
+    scrollbar-width: thin;
+    scrollbar-color: #E91E63 #f0f0f0;
 }

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { CartContext } from "./CartContext";
 
-// usando uma função de inicialização onde vai dentro do navegador e busca @UrbanCandy:cart para ver se existe algo guardado
+//Essa função vai buscar itens que o ususario adcionou antes de logar, apartir do momento que ele loga esa função entra em ação para que o usuario
+//nao perca itens que adcionou antes de logar. 
 export const CartProvider = ({ children }) => {
     const [cart, setCart] = useState(() => {
         const localData = localStorage.getItem('@UrbanCandy:cart');

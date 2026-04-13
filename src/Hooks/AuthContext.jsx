@@ -1,16 +1,16 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
 import api from '../Services/Api';
-import { Button } from '../componentes/Button/Button'; // Importe seu componente de botão
+import { Button } from '../componentes/Button/Button'; 
 
 const AuthContext = createContext({});
 
+// O AuthContext cuida da identidade (quem é o usuário e se o token é válido)
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
-    // Estado para o seu Modal de Alerta Customizado
     const [showSessionModal, setShowSessionModal] = useState(false);
     const isAlerting = useRef(false);
 
@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
         const loadStorageData = () => {
             const savedUser = localStorage.getItem('@UrbanCandy:user');
             const savedToken = localStorage.getItem('@UrbanCandy:token');
+            
             if (savedUser && savedToken) {
                 api.defaults.headers.Authorization = `Bearer ${savedToken}`;
                 setUser(JSON.parse(savedUser));

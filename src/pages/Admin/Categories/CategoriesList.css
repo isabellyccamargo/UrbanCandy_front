@@ -103,10 +103,12 @@
     .admin-table-container {
         padding: 12px;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .admin-table {
         min-width: 500px;
+        overflow: visible;
     }
 
     .admin-table th {
@@ -145,11 +147,13 @@
     .admin-table-container {
         padding: 10px;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
         max-width: calc(100vw - 20px);
     }
 
     .admin-table {
         min-width: 400px;
+        overflow: visible;
     }
 
     .admin-table th {
@@ -170,6 +174,7 @@
         font-size: 0.85rem;
     }
 }
+}
 
 @media (max-width: 320px) {
     .admin-header h1 {
@@ -187,4 +192,31 @@
     .admin-table td {
         font-size: 0.75rem;
     }
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+
+.admin-table-container::-webkit-scrollbar {
+    height: 12px;
+}
+
+.admin-table-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb {
+    background: #E91E63;
+    border-radius: 10px;
+    border: 2px solid #f0f0f0;
+}
+
+.admin-table-container::-webkit-scrollbar-thumb:hover {
+    background: #d81b60;
+}
+
+/* Firefox */
+.admin-table-container {
+    scrollbar-width: thin;
+    scrollbar-color: #E91E63 #f0f0f0;
 }

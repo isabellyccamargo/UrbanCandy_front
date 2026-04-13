@@ -31,9 +31,6 @@ const Home = () => {
         const response = await getAllProducts(1, 300);
 
         const productsArray = response?.data?.data || [];
-        console.log("Produtos vindos da API:", productsArray);
-        console.log("Produtos vindos da API:", productsArray);
-        console.log("Produtos vindos da API:", productsArray);
 
         if (!Array.isArray(productsArray)) {
           throw new Error("Formato de dados inválido");
