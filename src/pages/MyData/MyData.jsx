@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { getUserProfile, createUser, updateUser, updateAddress } from '../../Services/Api';
+import { getUserProfile, createUser, updateUser, updateAddress } from '../../services/Api';
 import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../Hooks/AuthContext';
+import { useAuth } from '../../hooks/AuthContext';
 import './MyData.css';
 
 const FormField = ({ label, required, ...props }) => (

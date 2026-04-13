@@ -1,7 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useState, useContext, useEffect, useRef } from 'react';
-import api from '../Services/Api';
-import { Button } from '../componentes/Button/Button'; 
+import api from '../services/Api';
+import { Button } from '../componentes/Button/Button';
 
 const AuthContext = createContext({});
 
@@ -25,7 +25,7 @@ export const AuthProvider = ({ children }) => {
         const loadStorageData = () => {
             const savedUser = localStorage.getItem('@UrbanCandy:user');
             const savedToken = localStorage.getItem('@UrbanCandy:token');
-            
+
             if (savedUser && savedToken) {
                 api.defaults.headers.Authorization = `Bearer ${savedToken}`;
                 setUser(JSON.parse(savedUser));

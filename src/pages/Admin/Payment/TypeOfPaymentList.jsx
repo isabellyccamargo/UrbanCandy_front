@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllTypeOfPayment, deleteTypeOfPayment } from "../../../Services/Api";
+import { getAllTypeOfPayment, deleteTypeOfPayment } from "../../../services/Api";
 import { Button } from "../../../componentes/Button/Button";
 import { toast } from "react-toastify";
 import "./TypeOfPaymentList.css";

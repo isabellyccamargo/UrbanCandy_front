@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getAllCategory, createProduct, updateProduct } from '../../../Services/Api';
+import { getAllCategory, createProduct, updateProduct } from '../../../services/Api';
 import { Button } from '../../../componentes/Button/Button';
 import { toast } from 'react-toastify';
 import './ProductsForm.css';

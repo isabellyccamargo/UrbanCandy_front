@@ -15,7 +15,7 @@ import ProductList from './pages/Admin/Products/ProductsList';
 import {TypeOfPaymentForm} from './pages/Admin/Payment/TypeOfPaymentForm';
 import {TypeOfPaymentList} from './pages/Admin/Payment/TypeOfPaymentList';
 import ProductsForm from './pages/Admin/Products/ProductsForm';
-import { AuthProvider, useAuth } from './Hooks/AuthContext';
+import { AuthProvider, useAuth } from './hooks/AuthContext';
 import { ToastContainer } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 

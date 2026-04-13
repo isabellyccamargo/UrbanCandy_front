@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getAllCategory, getAllProducts, getAllOrdersForDashboard, getAllTypeOfPayment } from '../../../Services/Api';
+import { getAllCategory, getAllProducts, getAllOrdersForDashboard, getAllTypeOfPayment } from '../../../services/Api';
 
 import './Dashboard.css';
 
