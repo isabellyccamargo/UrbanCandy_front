@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getMyOrders } from '../../Services/Api';
+import { getMyOrders } from '../../services/Api';
 import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
 import './MyOrders.css';

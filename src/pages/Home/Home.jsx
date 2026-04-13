@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getAllProducts } from '../../Services/Api';
+import { getAllProducts } from '../../services/Api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 import { CategoryCard } from '../../componentes/Category/CategoryCard';
 import { FeatureCard } from '../../componentes/Featured/FeaturedCard';
@@ -113,8 +113,7 @@ const Home = () => {
                 <h2>Doces feitos com <span>amor e dedicação</span></h2>
                 <p>Na Urban Candy, cada doce é uma obra de arte artesanal. Utilizamos ingredientes premium e receitas exclusivas.</p>
                 <div className="about-buttons">
-                  <Link to="/cardapio/brigadeiros" className="btn-filled">Fazer Pedido</Link>
-                  <Link to="/cardapio/brigadeiros" className="btn-outline">Ver Cardápio</Link>
+                  <Link to="/cardapio/brigadeiros" className="btn-filled">Ver Cardápio</Link>
                 </div>
               </div>
 

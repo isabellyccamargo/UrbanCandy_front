@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { loginUser } from '../../Services/Api';
+import { loginUser, setHeaderToken } from '../../services/Api';
 import { Link } from 'react-router-dom';
 import { useCart } from '../../Hooks/UseCart';
 import { Button } from '../Button/Button';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../Hooks/AuthContext';
-import { setHeaderToken } from '../../Services/Api';
+import { useAuth } from '../../hooks/AuthContext';
 import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
@@ -15,16 +14,37 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
     const [showPass, setShowPass] = useState(false);
     const [error, setError] = useState('');
 
-    if (!isOpen) return null;
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCredentials(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleClose = () => {
+        setCredentials({ email: '', password: '' });
+        setError('');
+        setShowPass(false);
+        onClose();
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
 
+        if (!credentials.email || !credentials.password) {
+            setError('Por favor, preencha e-mail e senha');
+            return;
+        }
+
         const idToast = toast.loading("Autenticando...");
 
         try {
-            const data = await loginUser(credentials.email, credentials.password);
+            const email = credentials.email.trim();
+            const password = credentials.password.trim();
+
+            console.log('Tentando login com:', { email, password: '***' });
+            const data = await loginUser(email, password);
+
+            console.log('Resposta do login:', data);
 
             if (data.token) {
                 localStorage.setItem('@UrbanCandy:token', data.token);
@@ -48,7 +68,14 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
             onLoginSuccess(profile);
             handleClose();
         } catch (err) {
-            const msgErro = err.response?.data?.mensagem || 'E-mail ou senha inválidos';
+            console.error('Erro completo no login:', {
+                message: err?.message,
+                status: err?.response?.status,
+                data: err?.response?.data,
+                fullError: err
+            });
+
+            const msgErro = err?.message || err?.response?.data?.mensagem || 'E-mail ou senha inválidos';
 
             toast.update(idToast, {
                 render: msgErro,
@@ -61,17 +88,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         }
     };
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCredentials(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleClose = () => {
-        setCredentials({ email: '', password: '' });
-        setError('');
-        setShowPass(false);
-        onClose();
-    };
+    if (!isOpen) return null;
 
     return (
         <div className="modal-overlay">
@@ -109,6 +126,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
                             />
                             <span
                                 className="toggle-pass-modal"
+                                style={{ cursor: 'pointer' }}
                                 onClick={() => setShowPass(!showPass)}
                             >
                                 {showPass ? "Ocultar" : "Mostrar"}

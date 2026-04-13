@@ -4,7 +4,7 @@ import { ShoppingCart, User, Users } from 'lucide-react';
 import LoginModal from '../../componentes/Login/LoginModal';
 import { Button } from '../Button/Button';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../Hooks/AuthContext';
+import { useAuth } from '../../hooks/AuthContext';
 import './Header.css';
 import { useCart } from "../../Hooks/UseCart";
 

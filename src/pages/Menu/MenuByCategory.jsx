@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, NavLink } from 'react-router-dom';
-import { getProductsByCategory, getAllCategory } from '../../Services/Api';
+import { getProductsByCategory, getAllCategory } from '../../services/Api';
 import { CardProduct } from '../../componentes/CardProduct/CardProduct';
 import { toast } from 'react-toastify';
 import './MenuByCategory.css';

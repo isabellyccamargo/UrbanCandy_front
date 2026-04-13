@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../Hooks/UseCart';
-import { createOrder, getUserProfile, getAllTypeOfPayment } from '../../Services/Api';
+import { createOrder, getUserProfile, getAllTypeOfPayment } from '../../services/Api';
 import { Button } from '../../componentes/Button/Button';
 import { toast } from 'react-toastify';
-import { useAuth } from '../../Hooks/AuthContext';
+import { useAuth } from '../../hooks/AuthContext';
 import './Checkout.css';
 
 const Checkout = () => {

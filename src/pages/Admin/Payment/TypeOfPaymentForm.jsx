@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { createTypeOfPayment, updateTypeOfPayment } from "../../../Services/Api";
+import { createTypeOfPayment, updateTypeOfPayment } from "../../../services/Api";
 import { toast } from "react-toastify";
 
 export const TypeOfPaymentForm = () => {

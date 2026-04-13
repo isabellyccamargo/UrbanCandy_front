@@ -1,5 +1,5 @@
 import { Button } from '../Button/Button';
-import { useCart } from '../../Hooks/UseCart';
+import { useCart } from '../../hooks/UseCart';
 import { toast } from 'react-toastify';
 import './CardProduct.css';
 

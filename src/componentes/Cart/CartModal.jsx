@@ -2,7 +2,7 @@ import { useCart } from "../../Hooks/UseCart";
 import { useNavigate } from "react-router-dom";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "../Button/Button";
-import { useAuth } from "../../Hooks/AuthContext";
+import { useAuth } from "../../hooks/AuthContext";
 import "./CartModal.css";
 
 export const CartModal = () => {

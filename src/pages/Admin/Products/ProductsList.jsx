@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAllProducts, deleteProduct } from '../../../Services/Api';
+import { getAllProducts, deleteProduct } from '../../../services/Api';
 import { Button } from '../../../componentes/Button/Button';
 import { toast } from 'react-toastify';
 import './ProductsList.css';

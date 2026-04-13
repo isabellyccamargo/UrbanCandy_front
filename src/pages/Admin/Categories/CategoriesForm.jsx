@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import api, { createCategory } from '../../../Services/Api';
+import api, { createCategory } from '../../../services/Api';
 import { toast } from 'react-toastify';
 import './CategoriesForm.css';
 

@@ -93,7 +93,12 @@ export const loginUser = async (email, password) => {
     const response = await api.post('/login', { email, password });
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao conectar ao servidor" };
+    const errorData = error.response?.data || {};
+    const errorMessage = errorData.mensagem || errorData.message || "Erro ao conectar ao servidor";
+
+    const customError = new Error(errorMessage);
+    customError.response = error.response;
+    throw customError;
   }
 };
 
@@ -165,7 +170,7 @@ export const updateCategory = async (id_category, categoryData) => {
 
 export const getAllOrdersForDashboard = () => {
   return api.get(`/pedido/listar`, {
-    params: { page: 1, size: 0 } 
+    params: { page: 1, size: 0 }
   });
 };
 
@@ -221,8 +226,8 @@ export const getMyOrders = (id_people, page = 1, size = 6) => {
 
 export const getAllTypeOfPayment = async (page = 1, size = 6) => {
   return api.get(`/pagamento/listar`, {
-   params: { page, size }
- });
+    params: { page, size }
+  });
 };
 
 
