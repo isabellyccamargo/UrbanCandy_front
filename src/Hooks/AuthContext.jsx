@@ -5,7 +5,7 @@ import { Button } from '../componentes/Button/Button';
 
 const AuthContext = createContext({});
 
-// O AuthContext cuida da identidade (quem é o usuário e se o token é válido)
+// O AuthContext cuida da identidade (quem é o usuário e se o token é válido) controla globalmente a exibição de informações do usuário 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);

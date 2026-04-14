@@ -46,7 +46,7 @@ export const TypeOfPaymentList = () => {
                     <h1>Tipos de Pagamento</h1>
                     <p>Gerencie as formas de recebimento</p>
                 </div>
-                <Button variant="primary" onClick={() => navigate("/admin/tipos-pagamento/form")}>+ Novo</Button>
+                <Button variant="primary" onClick={() => navigate("/admin/tipos-pagamento/form")}>+ Novo Tipo de Pagamento</Button>
             </header>
 
             <section className="admin-table-container">

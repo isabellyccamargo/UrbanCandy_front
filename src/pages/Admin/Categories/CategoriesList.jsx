@@ -47,7 +47,7 @@ export const Categorias = () => {
                     <h1>Categorias</h1>
                     <p>Gerencie as categorias de produtos</p>
                 </div>
-                <Button variant="primary" onClick={() => navigate('/admin/categorias/form')}>+ Nova</Button>
+                <Button variant="primary" onClick={() => navigate('/admin/categorias/form')}>+ Nova Categoria</Button>
             </header>
 
             <section className="admin-table-container">

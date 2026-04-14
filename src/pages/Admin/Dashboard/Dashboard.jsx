@@ -7,7 +7,7 @@ const Dashboard = () => {
     const [statsData, setStatsData] = useState([
         { id: 1, label: 'Categorias', value: '0', icon: '🏷️', color: '#ff2d78' },
         { id: 2, label: 'Produtos', value: '0', icon: '📦', color: '#a855f7' },
-        { id: 3, label: 'Tipo de Pgamento', value: '0', icon: '🛒', color: '#f91616' },
+        { id: 3, label: 'Tipo de Pgamento', value: '0', icon: '💸', color: '#f91616' },
         { id: 4, label: 'Pedidos', value: '0', icon: '🛒', color: '#f97316' },
         { id: 5, label: 'Vendas', value: 'R$ 0,00', icon: '💰', color: '#22c55e' },
     ]);
@@ -50,7 +50,7 @@ const Dashboard = () => {
                 setStatsData([
                     { id: 1, label: 'Categorias', value: totalCats, icon: '🏷️', color: '#ff2d78' },
                     { id: 2, label: 'Produtos', value: totalProds, icon: '📦', color: '#a855f7' },
-                    { id: 3, label: 'Tipo de Pagamento', value: totalPayTypes, icon: '🛒', color: '#f97316' },
+                    { id: 3, label: 'Tipo de Pagamento', value: totalPayTypes, icon: '💸', color: '#f97316' },
                     { id: 4, label: 'Pedidos', value: totalOrdersCount, icon: '🛒', color: '#f97316' },
 
                     {

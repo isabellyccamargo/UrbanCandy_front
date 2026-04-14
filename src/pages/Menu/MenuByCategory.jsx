@@ -30,10 +30,10 @@ export const MenuByCategory = () => {
     (async () => {
       setLoading(true);
       try {
-        const response = await getProductsByCategory(categoryName);
+        const response = await getProductsByCategory(categoryName, 1, 100);
         const rawData = getData(response);
         const productList = Array.isArray(rawData) ? rawData : [];
-        
+
         setProducts(productList);
         if (productList.length === 0) {
           toast.info(`Ainda não temos doces em ${categoryName}. ✨`);

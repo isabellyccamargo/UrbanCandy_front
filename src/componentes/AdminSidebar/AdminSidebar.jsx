@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LayoutDashboard, Tag, Package, LogOut } from 'lucide-react';
+import { CreditCard } from 'lucide-react';
 import './AdminSidebar.css';
 
 export const AdminSidebar = ({ isOpen, onClose }) => {
@@ -36,7 +37,7 @@ export const AdminSidebar = ({ isOpen, onClose }) => {
         </Link>
 
         <Link to="/admin/tipos-pagamento" className={`nav-item ${isActive('/admin/tipos-pagamento')}`} onClick={onClose}>
-          <Package size={20} />
+          <CreditCard size={20} />
           <span>Tipo De Pagamento</span>
         </Link>
       </nav>

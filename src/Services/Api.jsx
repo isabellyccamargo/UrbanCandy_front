@@ -67,9 +67,11 @@ export const getFeaturedProducts = (page = 1, size = 6) => {
   });
 };
 
-export const getProductsByCategory = async (categoryName) => {
+export const getProductsByCategory = async (categoryName, page = 1, size = 50) => {
   try {
-    const response = await api.get(`/produto/categoria/${categoryName}`);
+    const response = await api.get(`/produto/categoria/${categoryName}`, {
+      params: { page, size } 
+    });
     return response.data;
   } catch (error) {
     console.error(`Erro ao buscar produtos da categoria ${categoryName}:`, error);
@@ -77,7 +79,7 @@ export const getProductsByCategory = async (categoryName) => {
   }
 };
 
-export const getAllCategory = async (page = 1, size = 6) => {
+export const getAllCategory = async (page = 1, size = 100) => { 
   try {
     return api.get(`/categoria/listar`, {
       params: { page, size }
