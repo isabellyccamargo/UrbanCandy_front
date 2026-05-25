@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import './CardProduct.css';
 
 export const CardProduct = ({ product, showDescription = false }) => {
-  const baseImgUrl = "http://localhost:3030/uploads/";
+  const baseImgUrl = 'http://localhost:3030/uploads/';
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
@@ -12,13 +12,13 @@ export const CardProduct = ({ product, showDescription = false }) => {
 
     // Exibe a mensagem de sucesso
     toast.success(`${product.name} adicionado ao carrinho! 🛒`, {
-      position: "top-right",
+      position: 'top-right',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      theme: "colored", 
+      theme: 'colored',
     });
   };
 
@@ -34,9 +34,7 @@ export const CardProduct = ({ product, showDescription = false }) => {
             {Number(product.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
           </p>
 
-          <Button onClick={handleAddToCart}>
-            Adicionar
-          </Button>
+          <Button onClick={handleAddToCart}>Adicionar</Button>
         </div>
       </div>
     </div>

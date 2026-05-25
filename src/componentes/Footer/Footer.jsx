@@ -4,7 +4,6 @@ export const Footer = () => {
   return (
     <footer className="main-footer">
       <div className="footer-container">
-
         <div className="footer-col">
           <h2 className="footer-logo">Urban Candy</h2>
           <p>Doces artesanais feitos com amor para adoçar os seus momentos especiais.</p>

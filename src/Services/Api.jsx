@@ -40,7 +40,6 @@ api.interceptors.response.use(
       localStorage.removeItem('@UrbanCandy:token');
       localStorage.removeItem('@UrbanCandy:user');
 
-
       if (openLoginModalCallback) {
         openLoginModalCallback();
       }
@@ -53,24 +52,24 @@ export const setHeaderToken = (token) => {
   if (token) {
     api.defaults.headers.Authorization = `Bearer ${token}`;
   }
-}
+};
 
 export const getAllProducts = (page = 1, size = 6) => {
   return api.get(`/produto/listar`, {
-    params: { page, size }
+    params: { page, size },
   });
 };
 
 export const getFeaturedProducts = (page = 1, size = 6) => {
   return api.get(`/produto/listar`, {
-    params: { page, size }
+    params: { page, size },
   });
 };
 
 export const getProductsByCategory = async (categoryName, page = 1, size = 50) => {
   try {
     const response = await api.get(`/produto/categoria/${categoryName}`, {
-      params: { page, size } 
+      params: { page, size },
     });
     return response.data;
   } catch (error) {
@@ -79,16 +78,16 @@ export const getProductsByCategory = async (categoryName, page = 1, size = 50) =
   }
 };
 
-export const getAllCategory = async (page = 1, size = 100) => { 
+export const getAllCategory = async (page = 1, size = 100) => {
   try {
     return api.get(`/categoria/listar`, {
-      params: { page, size }
+      params: { page, size },
     });
   } catch (error) {
-    console.error("Erro ao buscar categorias:", error);
+    console.error('Erro ao buscar categorias:', error);
     throw error;
   }
-}
+};
 
 export const loginUser = async (email, password) => {
   try {
@@ -96,7 +95,7 @@ export const loginUser = async (email, password) => {
     return response.data;
   } catch (error) {
     const errorData = error.response?.data || {};
-    const errorMessage = errorData.mensagem || errorData.message || "Erro ao conectar ao servidor";
+    const errorMessage = errorData.mensagem || errorData.message || 'Erro ao conectar ao servidor';
 
     const customError = new Error(errorMessage);
     customError.response = error.response;
@@ -109,7 +108,7 @@ export const getUserProfile = async (id_user) => {
     const response = await api.get(`/usuario/listarPorId/${id_user}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao carregar perfil" };
+    throw error.response?.data || { mensagem: 'Erro ao carregar perfil' };
   }
 };
 
@@ -138,17 +137,16 @@ export const createOrder = async (orderData) => {
     const response = await api.post('/pedido/checkout', orderData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao finalizar pedido" };
+    throw error.response?.data || { mensagem: 'Erro ao finalizar pedido' };
   }
 };
-
 
 export const createCategory = async (categoryData) => {
   try {
     const response = await api.post('/categoria/salvar', categoryData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao criar categoria" };
+    throw error.response?.data || { mensagem: 'Erro ao criar categoria' };
   }
 };
 
@@ -156,7 +154,7 @@ export const deleteCategory = async (id_category) => {
   try {
     await api.delete(`/categoria/excluir/${id_category}`);
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao excluir categoria" };
+    throw error.response?.data || { mensagem: 'Erro ao excluir categoria' };
   }
 };
 
@@ -165,14 +163,14 @@ export const updateCategory = async (id_category, categoryData) => {
     const response = await api.put(`/categoria/atualizar/${id_category}`, categoryData);
     return response.data;
   } catch (error) {
-    console.error("Erro ao atualizar categoria:", error);
-    throw error.response?.data || { mensagem: "Erro ao atualizar categoria" };
+    console.error('Erro ao atualizar categoria:', error);
+    throw error.response?.data || { mensagem: 'Erro ao atualizar categoria' };
   }
 };
 
 export const getAllOrdersForDashboard = () => {
   return api.get(`/pedido/listar`, {
-    params: { page: 1, size: 0 }
+    params: { page: 1, size: 0 },
   });
 };
 
@@ -180,7 +178,7 @@ export const deleteProduct = async (id_product) => {
   try {
     await api.delete(`/produto/excluir/${id_product}`);
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao excluir produto" };
+    throw error.response?.data || { mensagem: 'Erro ao excluir produto' };
   }
 };
 
@@ -193,7 +191,7 @@ export const createProduct = async (productFormData) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao criar produto" };
+    throw error.response?.data || { mensagem: 'Erro ao criar produto' };
   }
 };
 
@@ -206,7 +204,7 @@ export const updateProduct = async (id_product, productFormData) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao atualizar produto" };
+    throw error.response?.data || { mensagem: 'Erro ao atualizar produto' };
   }
 };
 
@@ -222,23 +220,22 @@ export const updateAddress = async (id_address, addressData) => {
 
 export const getMyOrders = (id_people, page = 1, size = 6) => {
   return api.get(`/pedido/usuario/${id_people}`, {
-    params: { page, size }
+    params: { page, size },
   });
 };
 
 export const getAllTypeOfPayment = async (page = 1, size = 6) => {
   return api.get(`/pagamento/listar`, {
-    params: { page, size }
+    params: { page, size },
   });
 };
-
 
 export const createTypeOfPayment = async (paymentData) => {
   try {
     const response = await api.post('/pagamento/salvar', paymentData);
     return response.data;
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao criar tipo de pagamento" };
+    throw error.response?.data || { mensagem: 'Erro ao criar tipo de pagamento' };
   }
 };
 
@@ -247,8 +244,8 @@ export const updateTypeOfPayment = async (id_type_of_payment, paymentData) => {
     const response = await api.put(`/pagamento/atualizar/${id_type_of_payment}`, paymentData);
     return response.data;
   } catch (error) {
-    console.error("Erro ao atualizar tipo de pagamento:", error);
-    throw error.response?.data || { mensagem: "Erro ao atualizar tipo de pagamento" };
+    console.error('Erro ao atualizar tipo de pagamento:', error);
+    throw error.response?.data || { mensagem: 'Erro ao atualizar tipo de pagamento' };
   }
 };
 
@@ -256,9 +253,8 @@ export const deleteTypeOfPayment = async (id_type_of_payment) => {
   try {
     await api.delete(`/pagamento/excluir/${id_type_of_payment}`);
   } catch (error) {
-    throw error.response?.data || { mensagem: "Erro ao excluir tipo de pagamento" };
+    throw error.response?.data || { mensagem: 'Erro ao excluir tipo de pagamento' };
   }
 };
 
 export default api;
-

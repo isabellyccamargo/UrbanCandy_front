@@ -1,0 +1,21 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Validando código com ESLint..."
+npm run lint:check
+
+if [ $? -ne 0 ]; then
+  echo "❌ Validação ESLint falhou. Execute 'npm run lint' para corrigir."
+  exit 1
+fi
+
+echo "✨ Validando formatação com Prettier..."
+npm run format:check
+
+if [ $? -ne 0 ]; then
+  echo "❌ Validação Prettier falhou. Execute 'npm run format' para corrigir."
+  exit 1
+fi
+
+echo "✅ Todas as validações passaram! Commit permitido."
+exit 0

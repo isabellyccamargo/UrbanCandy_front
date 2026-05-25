@@ -19,7 +19,7 @@ export const MenuByCategory = () => {
         const response = await getAllCategory();
         setCategoriesMenu(getData(response));
       } catch {
-        toast.error("Erro ao carregar menu de categorias. 🍫");
+        toast.error('Erro ao carregar menu de categorias. 🍫');
       }
     })();
   }, []);
@@ -57,7 +57,7 @@ export const MenuByCategory = () => {
             <li key={cat.id_category}>
               <NavLink
                 to={`/cardapio/${cat.name_category.toLowerCase()}`}
-                className={({ isActive }) => isActive ? "active-link" : ""}
+                className={({ isActive }) => (isActive ? 'active-link' : '')}
               >
                 {cat.name_category}
               </NavLink>

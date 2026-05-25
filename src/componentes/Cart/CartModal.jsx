@@ -1,35 +1,35 @@
-import { useCart } from "../../Hooks/UseCart";
-import { useNavigate } from "react-router-dom";
-import { ShoppingBag } from "lucide-react";
-import { Button } from "../Button/Button";
-import { useAuth } from "../../hooks/AuthContext";
-import "./CartModal.css";
+import { useCart } from '../../Hooks/UseCart';
+import { useNavigate } from 'react-router-dom';
+import { ShoppingBag } from 'lucide-react';
+import { Button } from '../Button/Button';
+import { useAuth } from '../../hooks/AuthContext';
+import './CartModal.css';
 
 export const CartModal = () => {
   const { setIsLoginModalOpen } = useAuth();
   const { cart, isCartOpen, setIsCartOpen, removeItem, updateQuantity } = useCart();
   const navigate = useNavigate();
-  const baseImgUrl = "http://localhost:3030/uploads/";
+  const baseImgUrl = 'http://localhost:3030/uploads/';
 
   if (!isCartOpen) return null;
 
   const isCartEmpty = !cart.items || cart.items.length === 0;
 
   const handleCheckout = () => {
-    const user = localStorage.getItem("@UrbanCandy:user");
+    const user = localStorage.getItem('@UrbanCandy:user');
 
-    setIsCartOpen(false); 
+    setIsCartOpen(false);
 
     if (!user) {
       setIsLoginModalOpen(true);
     } else {
-      navigate("/checkout");
+      navigate('/checkout');
     }
   };
 
   return (
     <div className="cart-overlay" onClick={() => setIsCartOpen(false)}>
-      <div className="cart-sidebar" onClick={e => e.stopPropagation()}>
+      <div className="cart-sidebar" onClick={(e) => e.stopPropagation()}>
         <div className="cart-header">
           <h2>🛒 Carrinho</h2>
           <button onClick={() => setIsCartOpen(false)}>X</button>
@@ -71,7 +71,9 @@ export const CartModal = () => {
                     </button>
                   </div>
                 </div>
-                <button className="remove-btn" onClick={() => removeItem(item.id_product)}>🗑️</button>
+                <button className="remove-btn" onClick={() => removeItem(item.id_product)}>
+                  🗑️
+                </button>
               </div>
             ))
           )}

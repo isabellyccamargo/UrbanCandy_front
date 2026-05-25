@@ -20,7 +20,6 @@ body {
 /* ===== RESPONSIVIDADE ===== */
 
 @media (max-width: 768px) {
-
   html,
   body {
     padding-top: 35px;
@@ -28,7 +27,6 @@ body {
 }
 
 @media (max-width: 480px) {
-
   html,
   body {
     padding-top: 30px;
@@ -36,7 +34,6 @@ body {
 }
 
 @media (max-width: 320px) {
-
   html,
   body {
     padding-top: 25px;

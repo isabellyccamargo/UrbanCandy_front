@@ -26,17 +26,29 @@ export const AdminSidebar = ({ isOpen, onClose }) => {
           <span>Dashboard</span>
         </Link>
 
-        <Link to="/admin/categorias" className={`nav-item ${isActive('/admin/categorias')}`} onClick={onClose}>
+        <Link
+          to="/admin/categorias"
+          className={`nav-item ${isActive('/admin/categorias')}`}
+          onClick={onClose}
+        >
           <Tag size={20} />
           <span>Categorias</span>
         </Link>
 
-        <Link to="/admin/produtos" className={`nav-item ${isActive('/admin/produtos')}`} onClick={onClose}>
+        <Link
+          to="/admin/produtos"
+          className={`nav-item ${isActive('/admin/produtos')}`}
+          onClick={onClose}
+        >
           <Package size={20} />
           <span>Produtos</span>
         </Link>
 
-        <Link to="/admin/tipos-pagamento" className={`nav-item ${isActive('/admin/tipos-pagamento')}`} onClick={onClose}>
+        <Link
+          to="/admin/tipos-pagamento"
+          className={`nav-item ${isActive('/admin/tipos-pagamento')}`}
+          onClick={onClose}
+        >
           <CreditCard size={20} />
           <span>Tipo De Pagamento</span>
         </Link>

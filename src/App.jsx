@@ -12,11 +12,11 @@ import { Categorias } from './pages/Admin/Categories/CategoriesList';
 import { CategoriesForm } from './pages/Admin/Categories/CategoriesForm';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 import ProductList from './pages/Admin/Products/ProductsList';
-import {TypeOfPaymentForm} from './pages/Admin/Payment/TypeOfPaymentForm';
-import {TypeOfPaymentList} from './pages/Admin/Payment/TypeOfPaymentList';
+import { TypeOfPaymentForm } from './pages/Admin/Payment/TypeOfPaymentForm';
+import { TypeOfPaymentList } from './pages/Admin/Payment/TypeOfPaymentList';
 import ProductsForm from './pages/Admin/Products/ProductsForm';
 import { AuthProvider, useAuth } from './hooks/AuthContext';
-import { ToastContainer } from 'react-toastify'; 
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const PrivateRoute = ({ children }) => {
@@ -28,22 +28,83 @@ const PrivateRoute = ({ children }) => {
 };
 
 function AppContent() {
-
   return (
     <Routes>
       {/* --- ROTAS PÚBLICAS --- */}
-      <Route path="/" element={<><Header /><CartModal /><Home /><Footer /></>} />
-      <Route path="/cardapio/:categoryName" element={<><Header /><CartModal /><MenuByCategory /><Footer /></>} />
-      <Route path="/perfil/cadastrar" element={<><Header /><MyData /><Footer /></>} />
+      <Route
+        path="/"
+        element={
+          <>
+            <Header />
+            <CartModal />
+            <Home />
+            <Footer />
+          </>
+        }
+      />
+      <Route
+        path="/cardapio/:categoryName"
+        element={
+          <>
+            <Header />
+            <CartModal />
+            <MenuByCategory />
+            <Footer />
+          </>
+        }
+      />
+      <Route
+        path="/perfil/cadastrar"
+        element={
+          <>
+            <Header />
+            <MyData />
+            <Footer />
+          </>
+        }
+      />
 
       {/* --- ROTAS PROTEGIDAS --- */}
-      <Route path="/perfil" element={<PrivateRoute><Header /><MyData /><Footer /></PrivateRoute>} />
-      <Route path="/pedidos" element={<PrivateRoute><Header /><MyOrders /><Footer /></PrivateRoute>} />
-      <Route path="/checkout" element={<PrivateRoute><Header /><Checkout /><Footer /></PrivateRoute>} />
-      
+      <Route
+        path="/perfil"
+        element={
+          <PrivateRoute>
+            <Header />
+            <MyData />
+            <Footer />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/pedidos"
+        element={
+          <PrivateRoute>
+            <Header />
+            <MyOrders />
+            <Footer />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <PrivateRoute>
+            <Header />
+            <Checkout />
+            <Footer />
+          </PrivateRoute>
+        }
+      />
 
       {/* ADMIN PROTEGIDO */}
-      <Route path="/admin" element={<PrivateRoute><AdminLayout /></PrivateRoute>}>
+      <Route
+        path="/admin"
+        element={
+          <PrivateRoute>
+            <AdminLayout />
+          </PrivateRoute>
+        }
+      >
         <Route index element={<Dashboard />} />
         <Route path="categorias" element={<Categorias />} />
         <Route path="categorias/form" element={<CategoriesForm />} />
