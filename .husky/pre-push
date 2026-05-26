@@ -1,0 +1,14 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🧪 Validação final antes do push: Executando testes..."
+npm test -- --passWithNoTests
+
+if [ $? -ne 0 ]; then
+  echo "❌ Testes falharam! Push bloqueado."
+  echo "📋 Execute 'npm test' localmente e corrija os erros."
+  exit 1
+fi
+
+echo "✅ Testes aprovados! Push permitido."
+exit 0
