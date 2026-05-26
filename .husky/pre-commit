@@ -1,21 +1,30 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-echo "🔍 Validando código com ESLint..."
+echo "🔍 Etapa 1/3: Validando código com ESLint..."
 npm run lint:check
 
 if [ $? -ne 0 ]; then
-  echo "❌ Validação ESLint falhou. Execute 'npm run lint' para corrigir."
+  echo "❌ ESLint encontrou erros. Execute 'npm run lint --fix' para corrigir."
   exit 1
 fi
 
-echo "✨ Validando formatação com Prettier..."
+echo "✨ Etapa 2/3: Validando formatação com Prettier..."
 npm run format:check
 
 if [ $? -ne 0 ]; then
-  echo "❌ Validação Prettier falhou. Execute 'npm run format' para corrigir."
+  echo "❌ Prettier encontrou erros de formatação. Execute 'npm run format' para corrigir."
+  exit 1
+fi
+
+echo "🧪 Etapa 3/3: Executando testes com Jest..."
+npm test -- --passWithNoTests
+
+if [ $? -ne 0 ]; then
+  echo "❌ Testes falharam. Verifique os erros acima."
   exit 1
 fi
 
 echo "✅ Todas as validações passaram! Commit permitido."
 exit 0
+
