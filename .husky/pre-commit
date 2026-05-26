@@ -21,7 +21,7 @@ echo "🧪 Etapa 3/4: Executando testes com Jest..."
 npm test -- --passWithNoTests
 
 if [ $? -ne 0 ]; then
-  echo "❌ Testes falharam. Verifique os erros acima."
+  echo "❌ Testes do Jest falharam. Verifique os erros acima."
   exit 1
 fi
 
