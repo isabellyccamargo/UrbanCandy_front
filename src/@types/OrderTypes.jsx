@@ -17,4 +17,4 @@
  * @property {OrderItem[]} items
  */
 
-export const OrderModel = {}; 
+export const OrderModel = {};

@@ -22,11 +22,11 @@ Call log:
 
 ```ts
   1 | import { test, expect } from '@playwright/test';
-  2 | 
+  2 |
   3 | test('login page should have title', async ({ page }) => {
 > 4 |   await page.goto('http://localhost:5173/login');
     |              ^ Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:5173/login
   5 |   await expect(page).toHaveTitle(/login/i);
   6 | });
-  7 | 
+  7 |
 ```
