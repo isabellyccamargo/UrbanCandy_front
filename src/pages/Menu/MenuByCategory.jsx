@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, NavLink } from 'react-router-dom';
-import { getProductsByCategory, getAllCategory } from '../../services/Api';
-import { CardProduct } from '../../componentes/CardProduct/CardProduct';
-import { toast } from 'react-toastify';
-import './MenuByCategory.css';
+import React, { useEffect, useState } from "react";
+import { useParams, NavLink } from "react-router-dom";
+import { getProductsByCategory, getAllCategory } from "../../services/Api";
+import { CardProduct } from "../../componentes/CardProduct/CardProduct";
+import { toast } from "react-toastify";
+import "./MenuByCategory.css";
 
 export const MenuByCategory = () => {
   const { categoryName } = useParams();
@@ -57,7 +57,7 @@ export const MenuByCategory = () => {
             <li key={cat.id_category}>
               <NavLink
                 to={`/cardapio/${cat.name_category.toLowerCase()}`}
-                className={({ isActive }) => isActive ? "active-link" : ""}
+                className={({ isActive }) => (isActive ? "active-link" : "")}
               >
                 {cat.name_category}
               </NavLink>
@@ -67,7 +67,7 @@ export const MenuByCategory = () => {
       </nav>
 
       <header className="menu-header">
-        <h1 style={{ textTransform: 'capitalize' }}>{categoryName}</h1>
+        <h1 style={{ textTransform: "capitalize" }}>{categoryName}</h1>
         <div className="divider"></div>
         <h2 className="menu-subtitle">Escolha seu sabor favorito</h2>
       </header>
@@ -81,12 +81,18 @@ export const MenuByCategory = () => {
         <section className="products-grid">
           {products.length > 0 ? (
             products.map((p) => (
-              <CardProduct key={p.id_product} product={p} showDescription={true} />
+              <CardProduct
+                key={p.id_product}
+                product={p}
+                showDescription={true}
+              />
             ))
           ) : (
             <div className="no-products-feedback">
               <p>Nenhum doce encontrado nesta categoria. ✨</p>
-              <span className="hint">Que tal explorar outras categorias acima?</span>
+              <span className="hint">
+                Que tal explorar outras categorias acima?
+              </span>
             </div>
           )}
         </section>
