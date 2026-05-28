@@ -1,6 +1,12 @@
-import './Button.css';
+import "./Button.css";
 
-export const Button = ({ children, onClick, variant = 'primary', type = 'button', disabled }) => {
+export const Button = ({
+  children,
+  onClick,
+  variant = "primary",
+  type = "button",
+  disabled,
+}) => {
   return (
     <button
       type={type}

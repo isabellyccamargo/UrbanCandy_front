@@ -1,4 +1,4 @@
-import './FeaturedCard.css';
+import "./FeaturedCard.css";
 
 export const FeatureCard = ({ icon, title, description, image }) => {
   return (

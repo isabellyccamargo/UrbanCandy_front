@@ -7,7 +7,8 @@ import "./CartModal.css";
 
 export const CartModal = () => {
   const { setIsLoginModalOpen } = useAuth();
-  const { cart, isCartOpen, setIsCartOpen, removeItem, updateQuantity } = useCart();
+  const { cart, isCartOpen, setIsCartOpen, removeItem, updateQuantity } =
+    useCart();
   const navigate = useNavigate();
   const baseImgUrl = "http://localhost:3030/uploads/";
 
@@ -18,7 +19,7 @@ export const CartModal = () => {
   const handleCheckout = () => {
     const user = localStorage.getItem("@UrbanCandy:user");
 
-    setIsCartOpen(false); 
+    setIsCartOpen(false);
 
     if (!user) {
       setIsLoginModalOpen(true);
@@ -29,7 +30,7 @@ export const CartModal = () => {
 
   return (
     <div className="cart-overlay" onClick={() => setIsCartOpen(false)}>
-      <div className="cart-sidebar" onClick={e => e.stopPropagation()}>
+      <div className="cart-sidebar" onClick={(e) => e.stopPropagation()}>
         <div className="cart-header">
           <h2>🛒 Carrinho</h2>
           <button onClick={() => setIsCartOpen(false)}>X</button>
@@ -45,7 +46,10 @@ export const CartModal = () => {
           ) : (
             cart.items.map((item) => (
               <div key={item.id_product} className="cart-item">
-                <img src={`${baseImgUrl}${item.products.image}`} alt={item.products.name} />
+                <img
+                  src={`${baseImgUrl}${item.products.image}`}
+                  alt={item.products.name}
+                />
                 <div className="item-info">
                   <h4>{item.products.name}</h4>
                   <p>R$ {Number(item.products.price).toFixed(2)}</p>
@@ -65,13 +69,20 @@ export const CartModal = () => {
 
                     <button
                       className="qty-btn"
-                      onClick={() => updateQuantity(item.id_product, item.quantity + 1)}
+                      onClick={() =>
+                        updateQuantity(item.id_product, item.quantity + 1)
+                      }
                     >
                       +
                     </button>
                   </div>
                 </div>
-                <button className="remove-btn" onClick={() => removeItem(item.id_product)}>🗑️</button>
+                <button
+                  className="remove-btn"
+                  onClick={() => removeItem(item.id_product)}
+                >
+                  🗑️
+                </button>
               </div>
             ))
           )}
@@ -82,7 +93,9 @@ export const CartModal = () => {
           <div className="cart-footer">
             <div className="total-row">
               <span>Total do Pedido:</span>
-              <span className="total-price">R$ {Number(cart.total).toFixed(2)}</span>
+              <span className="total-price">
+                R$ {Number(cart.total).toFixed(2)}
+              </span>
             </div>
             <Button onClick={handleCheckout} variant="primary">
               Fechar Pedido
