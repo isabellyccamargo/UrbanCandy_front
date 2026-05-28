@@ -14,3 +14,20 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## Ambiente de Teste Isolado para E2E
+
+Para rodar os testes E2E sem afetar dados reais, utilize variáveis de ambiente específicas para testes.
+
+1. Copie o arquivo `.env.example` para `.env` e ajuste as variáveis conforme necessário.
+2. Defina `VITE_API_URL_TEST` para apontar para a API de teste (ex: backend rodando com banco de teste).
+3. Os testes E2E devem rodar sempre usando `VITE_API_URL_TEST`.
+4. Nunca rode testes E2E apontando para a API de produção!
+
+### Rodando os testes E2E
+
+```bash
+npm run test:e2e
+```
+
+Os scripts de pre-push garantem que os testes E2E passem antes de permitir push para o repositório.

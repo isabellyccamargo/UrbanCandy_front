@@ -31,7 +31,10 @@ export const CardProduct = ({ product, showDescription = false }) => {
 
         <div className="product-footer">
           <p className="product-price">
-            {Number(product.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            {Number(product.price).toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            })}
           </p>
 
           <Button onClick={handleAddToCart}>Adicionar</Button>
