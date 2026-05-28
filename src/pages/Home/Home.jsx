@@ -10,7 +10,7 @@ import sobre1 from "../../assets/sobre1.png";
 import sobre2 from "../../assets/sobre2.png";
 import sobre3 from "../../assets/sobre3.png";
 import imginicio from "../../assets/imgInicio.jpg";
-import imginicio2 from "../../assets/imginicio2.jpg"; 
+import imginicio2 from "../../assets/imginicio2.jpg";
 import imginicio3 from "../../assets/imginicio3.png";
 import "./Home.css";
 
@@ -32,7 +32,7 @@ const Home = () => {
     if (loading) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroImages.length);
-    }, 5000); 
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [loading, heroImages.length]);
@@ -95,7 +95,6 @@ const Home = () => {
       {!loading && (
         <>
           <section className="hero-section animate-entrance">
-
             {heroImages.map((img, index) => (
               <div
                 key={index}
@@ -105,21 +104,26 @@ const Home = () => {
             ))}
 
             <div className="hero-overlay">
-
               <div className="hero-badge">
                 <span>✨ Doçaria Artesanal Premium</span>
               </div>
 
               <div className="hero-content">
-                <h1>Doces que <br /><span>Conquistam Corações</span></h1>
+                <h1>
+                  Doces que <br />
+                  <span>Conquistam Corações</span>
+                </h1>
                 <p className="hero-subtitle">Macios, úmidos e irresistíveis</p>
                 <p className="hero-description">
-                  Ingredientes nobres, receitas exclusivas e muito amor em cada criação.
-                  Descubra o sabor da verdadeira confeitaria artesanal.
+                  Ingredientes nobres, receitas exclusivas e muito amor em cada
+                  criação. Descubra o sabor da verdadeira confeitaria artesanal.
                 </p>
 
                 <div className="hero-actions">
-                  <Link to="../cardapio/brigadeiros" className="btn-hero-filled">
+                  <Link
+                    to="../cardapio/brigadeiros"
+                    className="btn-hero-filled"
+                  >
                     Explorar Cardápio <span className="arrow">➔</span>
                   </Link>
                   <Link to="/ofertas" className="btn-hero-outline">
@@ -134,7 +138,7 @@ const Home = () => {
                     key={index}
                     className={`dot ${index === currentSlide ? "active" : ""}`}
                     onClick={() => setCurrentSlide(index)}
-                    style={{ cursor: 'pointer' }}
+                    style={{ cursor: "pointer" }}
                   />
                 ))}
               </div>
@@ -153,7 +157,6 @@ const Home = () => {
                   <p>Artesanal</p>
                 </div>
               </div>
-
             </div>
           </section>
           <section className="welcome-highlight">
