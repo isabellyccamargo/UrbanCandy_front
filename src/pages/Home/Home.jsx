@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { getAllProducts } from "../../services/Api";
 import { CardProduct } from "../../componentes/CardProduct/CardProduct";
 import { CategoryCard } from "../../componentes/Category/CategoryCard";
@@ -27,6 +27,15 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const heroImages = [imginicio, imginicio2, imginicio3];
+  
+  // 1. Referência criada corretamente aqui
+  const destaquesRef = useRef(null);
+
+  // 2. Função de scroll suave mapeada
+  const scrollToDestaques = (e) => {
+    e.preventDefault(); 
+    destaquesRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
     if (loading) return;
@@ -126,9 +135,14 @@ const Home = () => {
                   >
                     Explorar Cardápio <span className="arrow">➔</span>
                   </Link>
-                  <Link to="/ofertas" className="btn-hero-outline">
-                    Ver Ofertas Especiais
-                  </Link>
+                  {/* Botão configurado com o clique para scroll */}
+                  <a
+                    href="#destaques"
+                    className="btn-hero-outline"
+                    onClick={scrollToDestaques}
+                  >
+                    Ver Favoritos
+                  </a>
                 </div>
               </div>
 
@@ -159,6 +173,7 @@ const Home = () => {
               </div>
             </div>
           </section>
+
           <section className="welcome-highlight">
             <span className="welcome-tag">Artesanal & Urbano</span>
             <h2>
@@ -166,7 +181,9 @@ const Home = () => {
             </h2>
             <div className="divider-candy"></div>
           </section>
-          <section className="highlights-section animate-entrance">
+
+          {/* AJUSTADO: Adicionado ref={destaquesRef} aqui embaixo para receber a rolagem */}
+          <section ref={destaquesRef} className="highlights-section animate-entrance" id="destaques">
             <SectionHeader
               title="Destaques da Casa"
               sub="Os produtos mais amados pelos nossos clientes"
