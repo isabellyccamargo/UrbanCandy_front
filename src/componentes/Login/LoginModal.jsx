@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { loginUser, setHeaderToken } from "../../services/Api";
-import { Link } from "react-router-dom";
-import { useCart } from "../../Hooks/UseCart";
-import { Button } from "../Button/Button";
-import { toast } from "react-toastify";
-import { useAuth } from "../../hooks/AuthContext";
-import "./LoginModal.css";
+import React, { useState } from 'react';
+import { loginUser, setHeaderToken } from '../../services/Api';
+import { Link } from 'react-router-dom';
+import { useCart } from '../../Hooks/UseCart';
+import { Button } from '../Button/Button';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../hooks/AuthContext';
+import './LoginModal.css';
 
 const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const { login } = useAuth();
   const { syncCart } = useCart();
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
   const [showPass, setShowPass] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -20,34 +20,34 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
   };
 
   const handleClose = () => {
-    setCredentials({ email: "", password: "" });
-    setError("");
+    setCredentials({ email: '', password: '' });
+    setError('');
     setShowPass(false);
     onClose();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
 
     if (!credentials.email || !credentials.password) {
-      setError("Por favor, preencha e-mail e senha");
+      setError('Por favor, preencha e-mail e senha');
       return;
     }
 
-    const idToast = toast.loading("Autenticando...");
+    const idToast = toast.loading('Autenticando...');
 
     try {
       const email = credentials.email.trim();
       const password = credentials.password.trim();
 
-      console.log("Tentando login com:", { email, password: "***" });
+      console.log('Tentando login com:', { email, password: '***' });
       const data = await loginUser(email, password);
 
-      console.log("Resposta do login:", data);
+      console.log('Resposta do login:', data);
 
       if (data.token) {
-        localStorage.setItem("@UrbanCandy:token", data.token);
+        localStorage.setItem('@UrbanCandy:token', data.token);
         setHeaderToken(data.token);
       }
 
@@ -59,8 +59,8 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
       }
 
       toast.update(idToast, {
-        render: `Bem-vindo(a), ${profile?.nome || "Candy Lover"}! 🍬`,
-        type: "success",
+        render: `Bem-vindo(a), ${profile?.nome || 'Candy Lover'}! 🍬`,
+        type: 'success',
         isLoading: false,
         autoClose: 3000,
       });
@@ -68,21 +68,18 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
       onLoginSuccess(profile);
       handleClose();
     } catch (err) {
-      console.error("Erro completo no login:", {
+      console.error('Erro completo no login:', {
         message: err?.message,
         status: err?.response?.status,
         data: err?.response?.data,
         fullError: err,
       });
 
-      const msgErro =
-        err?.message ||
-        err?.response?.data?.mensagem ||
-        "E-mail ou senha inválidos";
+      const msgErro = err?.message || err?.response?.data?.mensagem || 'E-mail ou senha inválidos';
 
       toast.update(idToast, {
         render: msgErro,
-        type: "error",
+        type: 'error',
         isLoading: false,
         autoClose: 3000,
       });
@@ -124,28 +121,23 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
             <div className="password-wrapper-modal">
               <input
                 name="password"
-                type={showPass ? "text" : "password"}
+                type={showPass ? 'text' : 'password'}
                 value={credentials.password}
                 onChange={handleChange}
                 required
               />
               <span
                 className="toggle-pass-modal"
-                style={{ cursor: "pointer" }}
+                style={{ cursor: 'pointer' }}
                 onClick={() => setShowPass(!showPass)}
               >
-                {showPass ? "Ocultar" : "Mostrar"}
+                {showPass ? 'Ocultar' : 'Mostrar'}
               </span>
             </div>
           </div>
 
           <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              width: "100%",
-              marginTop: "10px",
-            }}
+            style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}
           >
             <Button type="submit" variant="primary">
               Entrar
@@ -156,7 +148,7 @@ const LoginModal = ({ isOpen, onClose, onLoginSuccess }) => {
         <p className="footer-text">
           Não tem cadastro?
           <Link to="/perfil/cadastrar" onClick={handleClose}>
-            {" "}
+            {' '}
             Crie sua conta aqui
           </Link>
         </p>

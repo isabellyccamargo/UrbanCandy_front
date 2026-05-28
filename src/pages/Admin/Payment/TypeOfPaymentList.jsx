@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  getAllTypeOfPayment,
-  deleteTypeOfPayment,
-} from "../../../services/Api";
-import { Button } from "../../../componentes/Button/Button";
-import { toast } from "react-toastify";
-import "./TypeOfPaymentList.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAllTypeOfPayment, deleteTypeOfPayment } from '../../../services/Api';
+import { Button } from '../../../componentes/Button/Button';
+import { toast } from 'react-toastify';
+import './TypeOfPaymentList.css';
 
 export const TypeOfPaymentList = () => {
   const [types, setTypes] = useState([]);
@@ -25,7 +22,7 @@ export const TypeOfPaymentList = () => {
       setTypes(data);
       setTotalPages(res.data?.totalPages || 1);
     } catch {
-      toast.error("Erro ao carregar pagamentos.");
+      toast.error('Erro ao carregar pagamentos.');
     } finally {
       setLoading(false);
     }
@@ -36,22 +33,20 @@ export const TypeOfPaymentList = () => {
   }, [currentPage]);
 
   const confirmDelete = async () => {
-    const idT = toast.loading("Removendo...");
+    const idT = toast.loading('Removendo...');
     try {
       await deleteTypeOfPayment(idDel);
       toast.update(idT, {
-        render: "Removido! ✨",
-        type: "success",
+        render: 'Removido! ✨',
+        type: 'success',
         isLoading: false,
         autoClose: 2000,
       });
-      types.length === 1 && currentPage > 1
-        ? setCurrentPage((p) => p - 1)
-        : load(currentPage);
+      types.length === 1 && currentPage > 1 ? setCurrentPage((p) => p - 1) : load(currentPage);
     } catch {
       toast.update(idT, {
-        render: "Erro ao excluir",
-        type: "error",
+        render: 'Erro ao excluir',
+        type: 'error',
         isLoading: false,
         autoClose: 3000,
       });
@@ -68,10 +63,7 @@ export const TypeOfPaymentList = () => {
           <h1>Tipos de Pagamento</h1>
           <p>Gerencie as formas de recebimento</p>
         </div>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/admin/tipos-pagamento/form")}
-        >
+        <Button variant="primary" onClick={() => navigate('/admin/tipos-pagamento/form')}>
           + Novo Tipo de Pagamento
         </Button>
       </header>
@@ -82,7 +74,7 @@ export const TypeOfPaymentList = () => {
             <tr>
               <th>ID</th>
               <th>Nome do Método</th>
-              <th style={{ textAlign: "right" }}>Ações</th>
+              <th style={{ textAlign: 'right' }}>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -97,13 +89,11 @@ export const TypeOfPaymentList = () => {
                     <strong>#{t.id_payment}</strong>
                   </td>
                   <td>{t.name_payment}</td>
-                  <td style={{ textAlign: "right" }}>
+                  <td style={{ textAlign: 'right' }}>
                     <button
                       className="btn-edit"
                       onClick={() =>
-                        navigate("/admin/tipos-pagamento/form", {
-                          state: { paymentType: t },
-                        })
+                        navigate('/admin/tipos-pagamento/form', { state: { paymentType: t } })
                       }
                     >
                       Editar

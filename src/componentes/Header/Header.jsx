@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ShoppingCart, User, Users } from "lucide-react";
-import LoginModal from "../../componentes/Login/LoginModal";
-import { Button } from "../Button/Button";
-import { toast } from "react-toastify";
-import { useAuth } from "../../hooks/AuthContext";
-import "./Header.css";
-import { useCart } from "../../Hooks/UseCart";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { ShoppingCart, User, Users } from 'lucide-react';
+import LoginModal from '../../componentes/Login/LoginModal';
+import { Button } from '../Button/Button';
+import { toast } from 'react-toastify';
+import { useAuth } from '../../hooks/AuthContext';
+import './Header.css';
+import { useCart } from '../../Hooks/UseCart';
 
 export const Header = () => {
-  const { user, setUser, logout, isLoginModalOpen, setIsLoginModalOpen } =
-    useAuth();
+  const { user, setUser, logout, isLoginModalOpen, setIsLoginModalOpen } = useAuth();
 
   const { setIsCartOpen, cart, clearCart } = useCart();
 
@@ -23,7 +22,7 @@ export const Header = () => {
     const params = new URLSearchParams(location.search);
 
     // 2. Se o parâmetro "login" for "true", abre o modal
-    if (params.get("login") === "true") {
+    if (params.get('login') === 'true') {
       setIsLoginModalOpen(true);
 
       navigate(location.pathname, { replace: true });
@@ -41,43 +40,39 @@ export const Header = () => {
   };
 
   const handleLogout = () => {
-    toast.info("Até logo! Sua sessão foi encerrada. 👋", {
-      position: "top-right",
+    toast.info('Até logo! Sua sessão foi encerrada. 👋', {
+      position: 'top-right',
       autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
-      theme: "colored",
+      theme: 'colored',
     });
 
     // 2. Limpa os dados (como você já fazia)
-    localStorage.removeItem("@UrbanCandy:user");
-    localStorage.removeItem("@UrbanCandy:token");
+    localStorage.removeItem('@UrbanCandy:user');
+    localStorage.removeItem('@UrbanCandy:token');
     clearCart();
     setUser(null);
 
     // 3. Redireciona para a Home
     logout();
-    navigate("/");
+    navigate('/');
   };
 
   return (
     <header className="main-header">
       <div className="header-container">
         <Link to="/" className="logo-area">
-          <img
-            src="/src/assets/logo.png"
-            alt="SugarBeat Logo"
-            className="logo-image"
-          />
+          <img src="/src/assets/logo.png" alt="SugarBeat Logo" className="logo-image" />
         </Link>
 
         <div className="header-actions">
           <div
             className="icon-btn"
             onClick={() => setIsCartOpen(true)}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
           >
             <ShoppingCart size={24} color="#5D4037" />
             <span className="cart-badge">{cart.items.length}</span>
@@ -86,30 +81,28 @@ export const Header = () => {
           <div className="user-menu-container">
             <div className="user-menu-trigger">
               <User size={24} color="#5D4037" />
-              {user && (
-                <span>Olá, {user.nome?.split(" ")[0] || "Usuário"}</span>
-              )}
+              {user && <span>Olá, {user.nome?.split(' ')[0] || 'Usuário'}</span>}
               <span className="arrow-down">▼</span>
             </div>
 
             <div className="dropdown-menu">
               <a
                 href="#"
-                onClick={(e) => handleProtectedLink(e, "/perfil")}
+                onClick={(e) => handleProtectedLink(e, '/perfil')}
                 className="dropdown-item"
               >
                 Meu Perfil
               </a>
               <a
                 href="#"
-                onClick={(e) => handleProtectedLink(e, "/pedidos")}
+                onClick={(e) => handleProtectedLink(e, '/pedidos')}
                 className="dropdown-item"
               >
                 Meus Pedidos
               </a>
               <a
                 href="#"
-                onClick={(e) => handleProtectedLink(e, "/admin")}
+                onClick={(e) => handleProtectedLink(e, '/admin')}
                 className="dropdown-item"
               >
                 Área Administrador
@@ -120,10 +113,7 @@ export const Header = () => {
                   Sair
                 </Button>
               ) : (
-                <Button
-                  onClick={() => setIsLoginModalOpen(true)}
-                  variant="primary"
-                >
+                <Button onClick={() => setIsLoginModalOpen(true)} variant="primary">
                   Entrar
                 </Button>
               )}

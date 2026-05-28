@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAllProducts, deleteProduct } from "../../../services/Api";
-import { Button } from "../../../componentes/Button/Button";
-import { toast } from "react-toastify";
-import "./ProductsList.css";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getAllProducts, deleteProduct } from '../../../services/Api';
+import { Button } from '../../../componentes/Button/Button';
+import { toast } from 'react-toastify';
+import './ProductsList.css';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -22,7 +22,7 @@ const ProductList = () => {
       setProducts(data || []);
       setTotalPages(total || 1);
     } catch {
-      toast.error("Erro ao carregar produtos. 🍬");
+      toast.error('Erro ao carregar produtos. 🍬');
     } finally {
       setLoading(false);
     }
@@ -35,13 +35,11 @@ const ProductList = () => {
   const confirmDelete = async () => {
     try {
       await deleteProduct(idDel);
-      toast.success("Produto removido! ✨");
+      toast.success('Produto removido! ✨');
       // Volta uma página se apagar o único item da página atual
-      products.length === 1 && currentPage > 1
-        ? setCurrentPage((p) => p - 1)
-        : load(currentPage);
+      products.length === 1 && currentPage > 1 ? setCurrentPage((p) => p - 1) : load(currentPage);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Erro ao excluir.");
+      toast.error(err.response?.data?.message || 'Erro ao excluir.');
     } finally {
       setShowModal(false);
       setIdDel(null);
@@ -55,10 +53,7 @@ const ProductList = () => {
           <h1>Produtos</h1>
           <p>Gerencie os doces da sua vitrine</p>
         </div>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/admin/produtos/form")}
-        >
+        <Button variant="primary" onClick={() => navigate('/admin/produtos/form')}>
           + Novo Produto
         </Button>
       </header>
@@ -73,7 +68,7 @@ const ProductList = () => {
               <th>Categoria</th>
               <th>Preço</th>
               <th>Destaque</th>
-              <th style={{ textAlign: "right" }}>Ações</th>
+              <th style={{ textAlign: 'right' }}>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -91,41 +86,32 @@ const ProductList = () => {
                       alt={p.name}
                       className="product-img-table"
                       onError={(e) => {
-                        e.target.src =
-                          "https://via.placeholder.com/40?text=Doce";
+                        e.target.src = 'https://via.placeholder.com/40?text=Doce';
                       }}
                     />
                   </td>
                   <td>
                     <div className="product-info-cell">
                       <strong>{p.name}</strong>
-                      <span className="product-desc-short">
-                        {p.description}
-                      </span>
+                      <span className="product-desc-short">{p.description}</span>
                     </div>
                   </td>
-                  <td>{p.category?.name_category || "Geral"}</td>
+                  <td>{p.category?.name_category || 'Geral'}</td>
                   <td>
-                    {Number(p.price).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
+                    {Number(p.price).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
                     })}
                   </td>
                   <td>
-                    <span
-                      className={`badge ${p.featured ? "featured" : "normal"}`}
-                    >
-                      {p.featured ? "Sim" : "Não"}
+                    <span className={`badge ${p.featured ? 'featured' : 'normal'}`}>
+                      {p.featured ? 'Sim' : 'Não'}
                     </span>
                   </td>
-                  <td style={{ textAlign: "right" }}>
+                  <td style={{ textAlign: 'right' }}>
                     <button
                       className="btn-edit"
-                      onClick={() =>
-                        navigate(`/admin/produtos/form`, {
-                          state: { produto: p },
-                        })
-                      }
+                      onClick={() => navigate(`/admin/produtos/form`, { state: { produto: p } })}
                     >
                       Editar
                     </button>
@@ -143,7 +129,7 @@ const ProductList = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center" }}>
+                <td colSpan="7" style={{ textAlign: 'center' }}>
                   Nenhum produto encontrado.
                 </td>
               </tr>
@@ -179,9 +165,7 @@ const ProductList = () => {
           <div className="modal-confirmacao">
             <div className="modal-icon">⚠️</div>
             <h3>Confirmar Exclusão</h3>
-            <p>
-              Deseja realmente excluir este produto? Esta ação é irreversível.
-            </p>
+            <p>Deseja realmente excluir este produto? Esta ação é irreversível.</p>
             <div className="modal-buttons">
               <Button variant="secondary" onClick={() => setShowModal(false)}>
                 Cancelar

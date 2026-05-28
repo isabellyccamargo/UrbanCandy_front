@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import api, { getAllCategory } from "../../../services/Api";
-import { Button } from "../../../componentes/Button/Button";
-import { toast } from "react-toastify";
-import "./CategoriesList.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api, { getAllCategory } from '../../../services/Api';
+import { Button } from '../../../componentes/Button/Button';
+import { toast } from 'react-toastify';
+import './CategoriesList.css';
 
 export const Categorias = () => {
   const [categorias, setCategorias] = useState([]);
@@ -22,7 +22,7 @@ export const Categorias = () => {
       setCategorias(data || []);
       setTotalPages(total || 1);
     } catch {
-      toast.error("Erro ao carregar categorias. 🍬");
+      toast.error('Erro ao carregar categorias. 🍬');
     } finally {
       setLoading(false);
     }
@@ -33,26 +33,19 @@ export const Categorias = () => {
   }, [currentPage]);
 
   const confirmDelete = async () => {
-    const idT = toast.loading("Removendo...");
+    const idT = toast.loading('Removendo...');
     try {
       await api.delete(`/categoria/excluir/${idDel}`);
       toast.update(idT, {
-        render: "Removida! ✨",
-        type: "success",
+        render: 'Removida! ✨',
+        type: 'success',
         isLoading: false,
         autoClose: 2000,
       });
-      categorias.length === 1 && currentPage > 1
-        ? setCurrentPage((p) => p - 1)
-        : load(currentPage);
+      categorias.length === 1 && currentPage > 1 ? setCurrentPage((p) => p - 1) : load(currentPage);
     } catch (err) {
-      const msg = err.response?.data?.message || "Erro ao excluir.";
-      toast.update(idT, {
-        render: msg,
-        type: "error",
-        isLoading: false,
-        autoClose: 3000,
-      });
+      const msg = err.response?.data?.message || 'Erro ao excluir.';
+      toast.update(idT, { render: msg, type: 'error', isLoading: false, autoClose: 3000 });
     } finally {
       setShowModal(false);
       setIdDel(null);
@@ -66,10 +59,7 @@ export const Categorias = () => {
           <h1>Categorias</h1>
           <p>Gerencie as categorias de produtos</p>
         </div>
-        <Button
-          variant="primary"
-          onClick={() => navigate("/admin/categorias/form")}
-        >
+        <Button variant="primary" onClick={() => navigate('/admin/categorias/form')}>
           + Nova Categoria
         </Button>
       </header>
@@ -80,7 +70,7 @@ export const Categorias = () => {
             <tr>
               <th>ID</th>
               <th>Nome da Categoria</th>
-              <th style={{ textAlign: "right" }}>Ações</th>
+              <th style={{ textAlign: 'right' }}>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -93,13 +83,11 @@ export const Categorias = () => {
                 <tr key={cat.id_category}>
                   <td>#{cat.id_category}</td>
                   <td>{cat.name_category}</td>
-                  <td style={{ textAlign: "right" }}>
+                  <td style={{ textAlign: 'right' }}>
                     <button
                       className="btn-edit"
                       onClick={() =>
-                        navigate("/admin/categorias/form", {
-                          state: { categoria: cat },
-                        })
+                        navigate('/admin/categorias/form', { state: { categoria: cat } })
                       }
                     >
                       Editar

@@ -20,3 +20,4 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "✅ Todos os testes (unitários e E2E) aprovados! Push permitido."
+0

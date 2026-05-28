@@ -1,23 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import {
-  getAllCategory,
-  createProduct,
-  updateProduct,
-} from "../../../services/Api";
-import { Button } from "../../../componentes/Button/Button";
-import { toast } from "react-toastify";
-import "./ProductsForm.css";
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { getAllCategory, createProduct, updateProduct } from '../../../services/Api';
+import { Button } from '../../../componentes/Button/Button';
+import { toast } from 'react-toastify';
+import './ProductsForm.css';
 
 const ProductsForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const editItem = location.state?.produto;
 
-  const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
-  const [idCat, setIdCat] = useState("");
-  const [desc, setDesc] = useState("");
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [idCat, setIdCat] = useState('');
+  const [desc, setDesc] = useState('');
   const [feat, setFeat] = useState(false);
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -32,7 +28,7 @@ const ProductsForm = () => {
         const data = res.data?.data || res.data || [];
         setCategories(Array.isArray(data) ? data : []);
       } catch {
-        toast.error("Erro ao carregar categorias.");
+        toast.error('Erro ao carregar categorias.');
       }
     })();
 
@@ -40,7 +36,7 @@ const ProductsForm = () => {
       setName(editItem.name);
       setPrice(editItem.price);
       setIdCat(editItem.id_category);
-      setDesc(editItem.description || "");
+      setDesc(editItem.description || '');
       setFeat(editItem.featured || false);
       setPreview(`http://localhost:3030/uploads/${editItem.image}`);
     }
@@ -58,31 +54,31 @@ const ProductsForm = () => {
     e.preventDefault();
 
     if (!editItem && !image) {
-      toast.error("A foto do produto é obrigatória! 📸");
+      toast.error('A foto do produto é obrigatória! 📸');
       return;
     }
 
     setLoading(true);
 
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", Math.max(0, parseFloat(price)));
-    formData.append("id_category", idCat);
-    formData.append("description", desc);
-    formData.append("featured", feat);
-    if (image) formData.append("image", image);
+    formData.append('name', name);
+    formData.append('price', Math.max(0, parseFloat(price)));
+    formData.append('id_category', idCat);
+    formData.append('description', desc);
+    formData.append('featured', feat);
+    if (image) formData.append('image', image);
 
     try {
       if (editItem) {
         await updateProduct(editItem.id_product, formData);
-        toast.success("Produto atualizado! 🍫");
+        toast.success('Produto atualizado! 🍫');
       } else {
         await createProduct(formData);
-        toast.success("Produto salvo! ✨");
+        toast.success('Produto salvo! ✨');
       }
-      navigate("/admin/produtos");
+      navigate('/admin/produtos');
     } catch (err) {
-      toast.error(err.response?.data?.message || "Erro ao salvar.");
+      toast.error(err.response?.data?.message || 'Erro ao salvar.');
     } finally {
       setLoading(false);
     }
@@ -90,7 +86,7 @@ const ProductsForm = () => {
 
   return (
     <div className="category-form-container">
-      <h1 className="form-title">{editItem ? "Editar Doce" : "Novo Doce"}</h1>
+      <h1 className="form-title">{editItem ? 'Editar Doce' : 'Novo Doce'}</h1>
       <p className="form-subtitle">Cadastre as delícias da UrbanCandy</p>
 
       <form onSubmit={handleSubmit} className="category-card-form">
@@ -98,12 +94,7 @@ const ProductsForm = () => {
           <div className="fields-column">
             <div className="input-group">
               <label>Nome do Produto</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+              <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
             <div className="input-group">
               <label>Descrição Curta</label>
@@ -115,7 +106,7 @@ const ProductsForm = () => {
                 maxLength="255"
               />
             </div>
-            <div className="input-row" style={{ display: "flex", gap: "20px" }}>
+            <div className="input-row" style={{ display: 'flex', gap: '20px' }}>
               <div className="input-group" style={{ flex: 1 }}>
                 <label>Preço (R$)</label>
                 <input
@@ -145,9 +136,7 @@ const ProductsForm = () => {
               </select>
             </div>
             <div className="featured-toggle-box" onClick={() => setFeat(!feat)}>
-              <div className={`custom-check ${feat ? "active" : ""}`}>
-                {feat && "✓"}
-              </div>
+              <div className={`custom-check ${feat ? 'active' : ''}`}>{feat && '✓'}</div>
               <span>Produto em Destaque na vitrine?</span>
             </div>
           </div>
@@ -156,7 +145,7 @@ const ProductsForm = () => {
             <label>Imagem do Produto</label>
             <div
               className="image-dropzone"
-              onClick={() => document.getElementById("fileInput").click()}
+              onClick={() => document.getElementById('fileInput').click()}
             >
               {preview ? (
                 <img src={preview} alt="Preview" className="img-preview-full" />
@@ -171,22 +160,18 @@ const ProductsForm = () => {
                 type="file"
                 onChange={handleFile}
                 accept="image/*"
-                style={{ display: "none" }}
+                style={{ display: 'none' }}
               />
             </div>
           </div>
         </div>
 
-        <div className="form-actions" style={{ marginTop: "30px" }}>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() => navigate("/admin/produtos")}
-          >
+        <div className="form-actions" style={{ marginTop: '30px' }}>
+          <Button type="button" variant="secondary" onClick={() => navigate('/admin/produtos')}>
             Cancelar
           </Button>
           <Button type="submit" variant="primary" disabled={loading}>
-            {loading ? "Salvando..." : "Salvar Produto"}
+            {loading ? 'Salvando...' : 'Salvar Produto'}
           </Button>
         </div>
       </form>

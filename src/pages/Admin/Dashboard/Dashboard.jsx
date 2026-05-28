@@ -1,26 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   getAllCategory,
   getAllProducts,
   getAllOrdersForDashboard,
   getAllTypeOfPayment,
-} from "../../../services/Api";
+} from '../../../services/Api';
 
-import "./Dashboard.css";
+import './Dashboard.css';
 
 const Dashboard = () => {
   const [statsData, setStatsData] = useState([
-    { id: 1, label: "Categorias", value: "0", icon: "🏷️", color: "#ff2d78" },
-    { id: 2, label: "Produtos", value: "0", icon: "📦", color: "#a855f7" },
-    {
-      id: 3,
-      label: "Tipo de Pgamento",
-      value: "0",
-      icon: "💸",
-      color: "#f91616",
-    },
-    { id: 4, label: "Pedidos", value: "0", icon: "🛒", color: "#f97316" },
-    { id: 5, label: "Vendas", value: "R$ 0,00", icon: "💰", color: "#22c55e" },
+    { id: 1, label: 'Categorias', value: '0', icon: '🏷️', color: '#ff2d78' },
+    { id: 2, label: 'Produtos', value: '0', icon: '📦', color: '#a855f7' },
+    { id: 3, label: 'Tipo de Pgamento', value: '0', icon: '💸', color: '#f91616' },
+    { id: 4, label: 'Pedidos', value: '0', icon: '🛒', color: '#f97316' },
+    { id: 5, label: 'Vendas', value: 'R$ 0,00', icon: '💰', color: '#22c55e' },
   ]);
   const [loading, setLoading] = useState(true);
 
@@ -44,9 +38,7 @@ const Dashboard = () => {
 
         const totalProds =
           resProducts.data?.totalItems ||
-          (Array.isArray(resProducts.data?.data)
-            ? resProducts.data.data.length
-            : 0) ||
+          (Array.isArray(resProducts.data?.data) ? resProducts.data.data.length : 0) ||
           (Array.isArray(resProducts.data) ? resProducts.data.length : 0);
 
         const totalPayTypes =
@@ -58,56 +50,29 @@ const Dashboard = () => {
           const valorBruto = curr.total;
 
           const valorNumerico =
-            typeof valorBruto === "string"
-              ? parseFloat(valorBruto)
-              : Number(valorBruto);
+            typeof valorBruto === 'string' ? parseFloat(valorBruto) : Number(valorBruto);
 
           return acc + (valorNumerico || 0);
         }, 0);
 
         setStatsData([
-          {
-            id: 1,
-            label: "Categorias",
-            value: totalCats,
-            icon: "🏷️",
-            color: "#ff2d78",
-          },
-          {
-            id: 2,
-            label: "Produtos",
-            value: totalProds,
-            icon: "📦",
-            color: "#a855f7",
-          },
-          {
-            id: 3,
-            label: "Tipo de Pagamento",
-            value: totalPayTypes,
-            icon: "💸",
-            color: "#f97316",
-          },
-          {
-            id: 4,
-            label: "Pedidos",
-            value: totalOrdersCount,
-            icon: "🛒",
-            color: "#f97316",
-          },
+          { id: 1, label: 'Categorias', value: totalCats, icon: '🏷️', color: '#ff2d78' },
+          { id: 2, label: 'Produtos', value: totalProds, icon: '📦', color: '#a855f7' },
+          { id: 3, label: 'Tipo de Pagamento', value: totalPayTypes, icon: '💸', color: '#f97316' },
+          { id: 4, label: 'Pedidos', value: totalOrdersCount, icon: '🛒', color: '#f97316' },
 
           {
             id: 5,
-            label: "Vendas",
-            value: new Intl.NumberFormat("pt-BR", {
-              style: "currency",
-              currency: "BRL",
-            }).format(totalVendas),
-            icon: "💰",
-            color: "#22c55e",
+            label: 'Vendas',
+            value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+              totalVendas
+            ),
+            icon: '💰',
+            color: '#22c55e',
           },
         ]);
       } catch (error) {
-        console.error("Erro ao carregar dashboard:", error);
+        console.error('Erro ao carregar dashboard:', error);
       } finally {
         setLoading(false);
       }
@@ -116,8 +81,7 @@ const Dashboard = () => {
     loadData();
   }, []);
 
-  if (loading)
-    return <div className="dash-container">Carregando dados reais...</div>;
+  if (loading) return <div className="dash-container">Carregando dados reais...</div>;
 
   return (
     <div className="dash-container">
@@ -135,7 +99,7 @@ const Dashboard = () => {
           >
             <div
               className="stat-icon"
-              style={{ backgroundColor: item.color + "15", color: item.color }}
+              style={{ backgroundColor: item.color + '15', color: item.color }}
             >
               {item.icon}
             </div>
@@ -147,21 +111,18 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div
-        className="welcome-section animate-entrance"
-        style={{ animationDelay: "0.5s" }}
-      >
+      <div className="welcome-section animate-entrance" style={{ animationDelay: '0.5s' }}>
         <h3>Bem-vindo ao Painel Administrativo</h3>
         <div className="welcome-story">
           <p>
-            A <strong>UrbanCandy</strong> nasceu do desejo de transformar
-            momentos simples em experiências inesquecíveis através do açúcar.
-            Desde o nosso primeiro brigadeiro em <strong>2022</strong>, nossa
-            missão tem sido espalhar doçura e cor pelas ruas da cidade! 🍬✨
+            A <strong>UrbanCandy</strong> nasceu do desejo de transformar momentos simples em
+            experiências inesquecíveis através do açúcar. Desde o nosso primeiro brigadeiro em{' '}
+            <strong>2022</strong>, nossa missão tem sido espalhar doçura e cor pelas ruas da cidade!
+            🍬✨
           </p>
           <p className="welcome-status">
-            Hoje, sua vitrine brilha com várias delícias cadastradas. Prepare o
-            avental: tem pedidos esperando por você! 🚀
+            Hoje, sua vitrine brilha com várias delícias cadastradas. Prepare o avental: tem pedidos
+            esperando por você! 🚀
           </p>
         </div>
       </div>

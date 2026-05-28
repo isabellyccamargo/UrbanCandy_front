@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { CartContext } from "./CartContext";
+import { useState, useEffect } from 'react';
+import { CartContext } from './CartContext';
 
 //Essa função vai buscar itens que o ususario adcionou antes de logar, apartir do momento que ele loga esa função entra em ação para que o usuario
 //nao perca itens que adcionou antes de logar.
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
-    const localData = localStorage.getItem("@UrbanCandy:cart");
+    const localData = localStorage.getItem('@UrbanCandy:cart');
     return localData ? JSON.parse(localData) : { items: [], total: 0 };
   });
 
@@ -13,14 +13,12 @@ export const CartProvider = ({ children }) => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem("@UrbanCandy:cart", JSON.stringify(cart));
+    localStorage.setItem('@UrbanCandy:cart', JSON.stringify(cart));
   }, [cart]);
 
   const addToCart = (product) => {
     setCart((prevCart) => {
-      const index = prevCart.items.findIndex(
-        (i) => i.id_product === product.id_product,
-      );
+      const index = prevCart.items.findIndex((i) => i.id_product === product.id_product);
       let newItems = [...prevCart.items];
 
       if (index > -1) {
@@ -38,10 +36,7 @@ export const CartProvider = ({ children }) => {
         });
       }
 
-      const newTotal = newItems.reduce(
-        (acc, item) => acc + Number(item.sub_total),
-        0,
-      );
+      const newTotal = newItems.reduce((acc, item) => acc + Number(item.sub_total), 0);
       return { items: newItems, total: Number(newTotal.toFixed(2)) };
     });
   };
@@ -49,10 +44,7 @@ export const CartProvider = ({ children }) => {
   const removeItem = (idProduct) => {
     setCart((prevCart) => {
       const newItems = prevCart.items.filter((i) => i.id_product !== idProduct);
-      const newTotal = newItems.reduce(
-        (acc, item) => acc + Number(item.sub_total),
-        0,
-      );
+      const newTotal = newItems.reduce((acc, item) => acc + Number(item.sub_total), 0);
       return { items: newItems, total: newTotal };
     });
   };
@@ -71,17 +63,14 @@ export const CartProvider = ({ children }) => {
         return item;
       });
 
-      const newTotal = newItems.reduce(
-        (acc, item) => acc + Number(item.sub_total),
-        0,
-      );
+      const newTotal = newItems.reduce((acc, item) => acc + Number(item.sub_total), 0);
       return { items: newItems, total: Number(newTotal.toFixed(2)) };
     });
   };
 
   const clearCart = () => {
     setCart({ items: [], total: 0 });
-    localStorage.removeItem("@UrbanCandy:cart");
+    localStorage.removeItem('@UrbanCandy:cart');
   };
 
   return (

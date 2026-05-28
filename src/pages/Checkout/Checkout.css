@@ -5,7 +5,7 @@
   padding: 40px 8%;
   background-color: #f9fafb;
   min-height: 100vh;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
 }
 
 .checkout-content {
@@ -137,7 +137,7 @@
   background-color: #fff0f6;
 }
 
-input[type="radio"] {
+input[type='radio'] {
   accent-color: #d63384;
 }
 
