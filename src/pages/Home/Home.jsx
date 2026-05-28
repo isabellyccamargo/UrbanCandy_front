@@ -10,6 +10,8 @@ import sobre1 from "../../assets/sobre1.png";
 import sobre2 from "../../assets/sobre2.png";
 import sobre3 from "../../assets/sobre3.png";
 import imginicio from "../../assets/imgInicio.jpg";
+import imginicio2 from "../../assets/imginicio2.jpg"; 
+import imginicio3 from "../../assets/imginicio3.png";
 import "./Home.css";
 
 const SectionHeader = ({ title, sub }) => (
@@ -23,6 +25,17 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const heroImages = [imginicio, imginicio2, imginicio3];
+
+  useEffect(() => {
+    if (loading) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000); 
+
+    return () => clearInterval(interval);
+  }, [loading, heroImages.length]);
 
   useEffect(() => {
     const loadHomeData = async () => {
@@ -81,14 +94,68 @@ const Home = () => {
     <main className="home-container">
       {!loading && (
         <>
-          <section className="hero-banner-full animate-entrance">
-            <img
-              src={imginicio}
-              alt="Destaque Urban Candy"
-              className="banner-img"
-            />
-          </section>
+          <section className="hero-section animate-entrance">
 
+            {heroImages.map((img, index) => (
+              <div
+                key={index}
+                className={`hero-bg-image ${index === currentSlide ? "active" : ""}`}
+                style={{ backgroundImage: `url(${img})` }}
+              />
+            ))}
+
+            <div className="hero-overlay">
+
+              <div className="hero-badge">
+                <span>✨ Doçaria Artesanal Premium</span>
+              </div>
+
+              <div className="hero-content">
+                <h1>Doces que <br /><span>Conquistam Corações</span></h1>
+                <p className="hero-subtitle">Macios, úmidos e irresistíveis</p>
+                <p className="hero-description">
+                  Ingredientes nobres, receitas exclusivas e muito amor em cada criação.
+                  Descubra o sabor da verdadeira confeitaria artesanal.
+                </p>
+
+                <div className="hero-actions">
+                  <Link to="../cardapio/brigadeiros" className="btn-hero-filled">
+                    Explorar Cardápio <span className="arrow">➔</span>
+                  </Link>
+                  <Link to="/ofertas" className="btn-hero-outline">
+                    Ver Ofertas Especiais
+                  </Link>
+                </div>
+              </div>
+
+              <div className="hero-carousel-dots">
+                {heroImages.map((_, index) => (
+                  <span
+                    key={index}
+                    className={`dot ${index === currentSlide ? "active" : ""}`}
+                    onClick={() => setCurrentSlide(index)}
+                    style={{ cursor: 'pointer' }}
+                  />
+                ))}
+              </div>
+
+              <div className="hero-stats">
+                <div className="stat-item">
+                  <h3>100+</h3>
+                  <p>Clientes Felizes</p>
+                </div>
+                <div className="stat-item">
+                  <h3>4.9 ★</h3>
+                  <p>Avaliação Média</p>
+                </div>
+                <div className="stat-item">
+                  <h3>100%</h3>
+                  <p>Artesanal</p>
+                </div>
+              </div>
+
+            </div>
+          </section>
           <section className="welcome-highlight">
             <span className="welcome-tag">Artesanal & Urbano</span>
             <h2>
